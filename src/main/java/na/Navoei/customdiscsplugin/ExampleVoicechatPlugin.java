@@ -1,4 +1,4 @@
-package com.example.voicechatplugin;
+package na.Navoei.customdiscsplugin;
 
 import de.maxhenkel.voicechat.api.VoicechatApi;
 import de.maxhenkel.voicechat.api.VoicechatPlugin;
@@ -11,7 +11,7 @@ public class ExampleVoicechatPlugin implements VoicechatPlugin {
      */
     @Override
     public String getPluginId() {
-        return ExamplePlugin.PLUGIN_ID;
+        return CustomDiscs.PLUGIN_ID;
     }
 
     /**

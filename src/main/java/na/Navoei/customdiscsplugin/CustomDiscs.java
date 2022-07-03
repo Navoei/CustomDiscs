@@ -1,4 +1,4 @@
-package com.example.voicechatplugin;
+package na.Navoei.customdiscsplugin;
 
 import de.maxhenkel.voicechat.api.BukkitVoicechatService;
 import org.apache.logging.log4j.LogManager;
@@ -7,7 +7,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import javax.annotation.Nullable;
 
-public final class ExamplePlugin extends JavaPlugin {
+public final class CustomDiscs extends JavaPlugin {
 
     public static final String PLUGIN_ID = "example_plugin";
     public static final Logger LOGGER = LogManager.getLogger(PLUGIN_ID);

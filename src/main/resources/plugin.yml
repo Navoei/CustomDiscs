@@ -1,9 +1,8 @@
-name: example_plugin
+name: CustomDiscs
 version: ${version}
-main: com.example.voicechatplugin.ExamplePlugin
+main: CustomDiscs
 api-version: ${bukkit_api_version}
-prefix: example_plugin
-authors: [ "Example Author" ]
-description: A Simple Voice Chat API plugin example
-website: https://example.com
+prefix: CustomDiscs
+authors: [ "Navoei" ]
+description: A plugin which used the Simple Voice Chat API to add custom music discs.
 depend: [ voicechat ]
