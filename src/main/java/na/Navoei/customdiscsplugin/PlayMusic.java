@@ -4,7 +4,7 @@ import de.maxhenkel.voicechat.api.VoicechatApi;
 import de.maxhenkel.voicechat.api.VoicechatPlugin;
 import de.maxhenkel.voicechat.api.events.EventRegistration;
 
-public class ExampleVoicechatPlugin implements VoicechatPlugin {
+public class PlayMusic implements VoicechatPlugin {
 
     /**
      * @return the unique ID for this voice chat plugin

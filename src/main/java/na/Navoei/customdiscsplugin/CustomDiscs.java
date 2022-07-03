@@ -6,6 +6,7 @@ import org.apache.logging.log4j.Logger;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import javax.annotation.Nullable;
+import java.io.File;
 
 public final class CustomDiscs extends JavaPlugin {
 
@@ -13,17 +14,25 @@ public final class CustomDiscs extends JavaPlugin {
     public static final Logger LOGGER = LogManager.getLogger(PLUGIN_ID);
 
     @Nullable
-    private ExampleVoicechatPlugin voicechatPlugin;
+    private PlayMusic voicechatPlugin;
 
     @Override
     public void onEnable() {
         BukkitVoicechatService service = getServer().getServicesManager().load(BukkitVoicechatService.class);
+
+        if (!new File(this.getDataFolder(), "config.yml").exists()) {
+            this.getConfig().options().copyDefaults(true);
+        }
+        this.saveConfig();
+
+
+
         if (service != null) {
-            voicechatPlugin = new ExampleVoicechatPlugin();
+            voicechatPlugin = new PlayMusic();
             service.registerPlugin(voicechatPlugin);
-            LOGGER.info("Successfully registered example plugin");
+            LOGGER.info("Successfully registered CustomDiscs plugin");
         } else {
-            LOGGER.info("Failed to register example plugin");
+            LOGGER.info("Failed to register CustomDiscs plugin");
         }
     }
 
@@ -31,7 +40,7 @@ public final class CustomDiscs extends JavaPlugin {
     public void onDisable() {
         if (voicechatPlugin != null) {
             getServer().getServicesManager().unregister(voicechatPlugin);
-            LOGGER.info("Successfully unregistered example plugin");
+            LOGGER.info("Successfully unregistered CustomDiscs plugin");
         }
     }
 }
