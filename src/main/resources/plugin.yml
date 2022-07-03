@@ -1,0 +1,9 @@
+name: example_plugin
+version: ${version}
+main: com.example.voicechatplugin.ExamplePlugin
+api-version: ${bukkit_api_version}
+prefix: example_plugin
+authors: [ "Example Author" ]
+description: A Simple Voice Chat API plugin example
+website: https://example.com
+depend: [ voicechat ]
