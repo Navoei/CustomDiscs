@@ -1,9 +1,12 @@
 package na.Navoei.customdiscsplugin.command;
 
+import
+import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+
 import org.jetbrains.annotations.NotNull;
 
 public class CustomDisc implements CommandExecutor {
@@ -12,17 +15,22 @@ public class CustomDisc implements CommandExecutor {
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
 
         if (!(sender instanceof Player)) {
-            sender.sendMessage("§cOnly players can use this command!");
+            sender.sendMessage(ChatColor.RED + "Only players can use this command!");
             return true;
         }
 
         Player p = (Player) sender;
 
+        // /customdisc wewontbealone "We wont be alone"
         if (command.getName().equalsIgnoreCase("customdisc")) {
             if (args.length == 2) {
 
+
+
+                p.sendMessage("Your filename is:" + args[0]);
+                p.sendMessage("Your custom name is " + args[1]);
             } else {
-                sender.sendMessage("§cIncorrect arguments! ( /customdiscs <filename> [customname] )");
+                p.sendMessage(ChatColor.RED + "Incorrect arguments! ( /customdisc <filename> [customname] )");
             }
         }
 
