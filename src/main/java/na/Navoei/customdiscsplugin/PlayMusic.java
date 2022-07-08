@@ -2,12 +2,7 @@ package na.Navoei.customdiscsplugin;
 
 import de.maxhenkel.voicechat.api.VoicechatApi;
 import de.maxhenkel.voicechat.api.VoicechatPlugin;
-import de.maxhenkel.voicechat.api.audiochannel.AudioChannel;
-import de.maxhenkel.voicechat.api.audiochannel.AudioPlayer;
-import de.maxhenkel.voicechat.api.events.Event;
 import de.maxhenkel.voicechat.api.events.EventRegistration;
-
-import java.util.function.Consumer;
 
 public class PlayMusic implements VoicechatPlugin {
 
@@ -36,10 +31,6 @@ public class PlayMusic implements VoicechatPlugin {
      */
     @Override
     public void registerEvents(final EventRegistration registration) {
-
-    }
-
-    public void playSoundFile() {
 
     }
 

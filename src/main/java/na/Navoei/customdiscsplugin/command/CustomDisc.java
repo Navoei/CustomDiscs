@@ -1,5 +1,6 @@
 package na.Navoei.customdiscsplugin.command;
 
+import com.google.common.io.Files;
 import na.Navoei.customdiscsplugin.CustomDiscs;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
@@ -18,6 +19,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,9 +40,22 @@ public class CustomDisc implements CommandExecutor {
             if (isMusicDisc(p)) {
                 if (args.length >= 2) {
 
-
                     //Find file, if file not there then say "file not there"
+                    String songname = "";
                     String filename = args[0];
+
+                    File file = new File(CustomDiscs.getInstance().getDataFolder() + "\\musicdata\\" + filename);
+                    if (file.exists()) {
+                        if (getFileExtension(filename).equals("wav")) {
+                            songname = args[0];
+                        } else {
+                            p.sendMessage(ChatColor.RED + "File is not in wav format!");
+                            return true;
+                        }
+                    } else {
+                        p.sendMessage(ChatColor.RED + "File not found!");
+                        return true;
+                    }
 
                     //Reads the command for quotations.
                     ArrayList<String> quotes = new ArrayList<>();
@@ -86,7 +101,7 @@ public class CustomDisc implements CommandExecutor {
                     p.getInventory().getItemInMainHand().setItemMeta(meta);
 
 
-                    p.sendMessage("Your filename is: " + filename);
+                    p.sendMessage("Your filename is: " + songname);
                     p.sendMessage("Your custom name is: " + customName(quotes));
 
                     return true;
@@ -101,6 +116,15 @@ public class CustomDisc implements CommandExecutor {
         }
 
         return false;
+    }
+
+    private String getFileExtension(String s) {
+        int index = s.lastIndexOf(".");
+        if (index > 0) {
+            return s.substring(index + 1);
+        } else {
+            return "";
+        }
     }
 
     private String customName(ArrayList<String> q) {
