@@ -1,16 +1,18 @@
-package na.Navoei.customdiscsplugin.command;
+package me.Navoei.customdiscsplugin.command;
 
-import com.google.common.io.Files;
-import na.Navoei.customdiscsplugin.CustomDiscs;
+import me.Navoei.customdiscsplugin.CustomDiscs;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.attribute.Attribute;
+import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 
 import org.bukkit.inventory.ItemFlag;
@@ -98,6 +100,7 @@ public class CustomDisc implements CommandExecutor {
                         itemLore.add(customLoreFile);
                     meta.lore(itemLore);
                     meta.addItemFlags(ItemFlag.values());
+                    meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
                     p.getInventory().getItemInMainHand().setItemMeta(meta);
 
 

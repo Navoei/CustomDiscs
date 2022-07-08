@@ -1,10 +1,19 @@
-package na.Navoei.customdiscsplugin;
+package me.Navoei.customdiscsplugin;
 
 import de.maxhenkel.voicechat.api.VoicechatApi;
 import de.maxhenkel.voicechat.api.VoicechatPlugin;
+import de.maxhenkel.voicechat.api.VoicechatServerApi;
 import de.maxhenkel.voicechat.api.events.EventRegistration;
+import de.maxhenkel.voicechat.api.events.VoicechatServerStartedEvent;
 
-public class PlayMusic implements VoicechatPlugin {
+import javax.annotation.Nullable;
+
+public class VoicePlugin implements VoicechatPlugin {
+
+    public static VoicechatApi voicechatApi;
+
+    @Nullable
+    public static VoicechatServerApi voicechatServerApi;
 
     /**
      * @return the unique ID for this voice chat plugin
@@ -21,7 +30,7 @@ public class PlayMusic implements VoicechatPlugin {
      */
     @Override
     public void initialize(final VoicechatApi api) {
-
+        VoicePlugin.voicechatApi = api;
     }
 
     /**
@@ -31,7 +40,14 @@ public class PlayMusic implements VoicechatPlugin {
      */
     @Override
     public void registerEvents(final EventRegistration registration) {
-
+        registration.registerEvent(VoicechatServerStartedEvent.class, this::onServerStarted);
     }
 
+    public void onServerStarted(final VoicechatServerStartedEvent event) {
+        VoicePlugin.voicechatServerApi = event.getVoicechat();
+    }
+
+    public void playAudio() {
+
+    }
 }

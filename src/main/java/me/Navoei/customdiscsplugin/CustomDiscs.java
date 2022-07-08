@@ -1,14 +1,14 @@
-package na.Navoei.customdiscsplugin;
+package me.Navoei.customdiscsplugin;
 
 import de.maxhenkel.voicechat.api.BukkitVoicechatService;
-import na.Navoei.customdiscsplugin.command.CustomDisc;
+import me.Navoei.customdiscsplugin.command.CustomDisc;
+import me.Navoei.customdiscsplugin.event.JukeBox;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import javax.annotation.Nullable;
 import java.io.File;
-import java.net.URI;
 
 public final class CustomDiscs extends JavaPlugin {
 
@@ -17,7 +17,7 @@ public final class CustomDiscs extends JavaPlugin {
     static CustomDiscs instance;
 
     @Nullable
-    private PlayMusic voicechatPlugin;
+    private VoicePlugin voicechatPlugin;
 
     @Override
     public void onEnable() {
@@ -39,14 +39,14 @@ public final class CustomDiscs extends JavaPlugin {
         }
 
         if (service != null) {
-            voicechatPlugin = new PlayMusic();
+            voicechatPlugin = new VoicePlugin();
             service.registerPlugin(voicechatPlugin);
             LOGGER.info("Successfully registered CustomDiscs plugin");
         } else {
             LOGGER.info("Failed to register CustomDiscs plugin");
         }
 
-
+        getServer().getPluginManager().registerEvents(new JukeBox(), this);
         getCommand("customdisc").setExecutor(command);
 
     }
