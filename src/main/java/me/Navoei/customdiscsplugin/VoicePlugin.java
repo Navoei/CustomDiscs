@@ -46,8 +46,4 @@ public class VoicePlugin implements VoicechatPlugin {
     public void onServerStarted(final VoicechatServerStartedEvent event) {
         VoicePlugin.voicechatServerApi = event.getVoicechat();
     }
-
-    public void playAudio() {
-
-    }
 }
