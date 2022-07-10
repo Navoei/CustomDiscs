@@ -43,8 +43,9 @@ public class CustomDisc implements CommandExecutor {
                     String songname = "";
                     String filename = args[0];
 
-                    File file = new File(CustomDiscs.getInstance().getDataFolder() + "\\musicdata\\" + filename);
-                    if (file.exists()) {
+                    File getDirectory = new File(CustomDiscs.getInstance().getDataFolder(), "musicdata");
+                    File songFile = new File(getDirectory.getPath(), filename);
+                    if (songFile.exists()) {
                         if (getFileExtension(filename).equals("wav")) {
                             songname = args[0];
                         } else {

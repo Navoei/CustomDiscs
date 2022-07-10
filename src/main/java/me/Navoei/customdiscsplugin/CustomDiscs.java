@@ -33,7 +33,7 @@ public final class CustomDiscs extends JavaPlugin {
         }
         this.saveConfig();
 
-        File musicData = new File(this.getDataFolder() + "\\musicdata\\");
+        File musicData = new File(this.getDataFolder(), "musicdata");
         if (!(musicData.exists())) {
             musicData.mkdirs();
         }
