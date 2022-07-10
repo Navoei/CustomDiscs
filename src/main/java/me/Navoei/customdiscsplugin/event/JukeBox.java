@@ -16,7 +16,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
-import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemFlag;
 
@@ -36,7 +35,7 @@ public class JukeBox implements Listener {
 
     private final Map<UUID, AudioPlayer> playerMap = new ConcurrentHashMap<>();
     public static AudioFormat FORMAT = new AudioFormat(AudioFormat.Encoding.PCM_SIGNED, 48000.0F, 16, 1, 2, 48000.0F, false);
-    private UUID id;
+    private static UUID id;
 
     @EventHandler
     public void onInsert(PlayerInteractEvent event) throws IOException {
@@ -44,14 +43,15 @@ public class JukeBox implements Listener {
         Player player = event.getPlayer();
         Block block = event.getClickedBlock();
 
-        if (event.getAction() != Action.RIGHT_CLICK_BLOCK || event.getClickedBlock() == null || event.getItem() == null || event.getItem().getItemMeta() == null) return;
+        if (event.getAction() != Action.RIGHT_CLICK_BLOCK || event.getClickedBlock() == null || event.getItem() == null || event.getItem().getItemMeta() == null || block == null) return;
         if (event.getClickedBlock().getType() != Material.JUKEBOX) return;
-        id = UUID.randomUUID();
 
         if (isCustomMusicDisc(event)) {
 
             Component soundFileNameComponent = Objects.requireNonNull(event.getItem().getItemMeta().lore()).get(1).asComponent();
             String soundFileName = PlainTextComponentSerializer.plainText().serialize(soundFileNameComponent);
+
+            id = UUID.randomUUID();
 
             Path soundFilePath = Path.of(CustomDiscs.getInstance().getDataFolder() + "\\musicdata\\" + soundFileName);
             if (soundFilePath.toFile().exists()) {
@@ -71,7 +71,7 @@ public class JukeBox implements Listener {
             } else {
                 player.sendMessage(ChatColor.RED + "Sound file not found.");
                 event.setCancelled(true);
-                throw new FileNotFoundException("ERROR: Sound file is missing!");
+                throw new FileNotFoundException("Sound file is missing!");
             }
         }
     }
@@ -100,11 +100,6 @@ public class JukeBox implements Listener {
         } else {
             return false;
         }
-    }
-
-    @EventHandler
-    public void onJukeboxBreak(BlockBreakEvent Event) {
-
     }
 
     public static short[] readSoundFile(Path file) throws UnsupportedAudioFileException, IOException {
