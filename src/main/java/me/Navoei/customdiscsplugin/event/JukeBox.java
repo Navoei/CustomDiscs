@@ -5,18 +5,18 @@ import de.maxhenkel.voicechat.api.audiochannel.AudioPlayer;
 import de.maxhenkel.voicechat.api.audiochannel.LocationalAudioChannel;
 import me.Navoei.customdiscsplugin.CustomDiscs;
 import me.Navoei.customdiscsplugin.VoicePlugin;
-import net.kyori.adventure.sound.Sound;
-import net.kyori.adventure.sound.SoundStop;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
-import org.bukkit.block.TileState;
+import org.bukkit.block.Jukebox;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
+import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemFlag;
 
@@ -36,22 +36,26 @@ public class JukeBox implements Listener {
 
     private final Map<UUID, AudioPlayer> playerMap = new ConcurrentHashMap<>();
     public static AudioFormat FORMAT = new AudioFormat(AudioFormat.Encoding.PCM_SIGNED, 48000.0F, 16, 1, 2, 48000.0F, false);
+    private UUID id;
 
     @EventHandler
     public void onInsert(PlayerInteractEvent event) throws IOException {
 
         Player player = event.getPlayer();
         Block block = event.getClickedBlock();
-        UUID id = UUID.randomUUID();
 
-        if (event.getAction().isRightClick() && isCustomMusicDisc(player) && Objects.requireNonNull(block).getType().equals(Material.JUKEBOX)) {
+        if (event.getAction() != Action.RIGHT_CLICK_BLOCK || event.getClickedBlock() == null || event.getItem() == null || event.getItem().getItemMeta() == null) return;
+        if (event.getClickedBlock().getType() != Material.JUKEBOX) return;
+        id = UUID.randomUUID();
 
-            Component soundFileComponent = Objects.requireNonNull(player.getInventory().getItemInMainHand().getItemMeta().lore()).get(1).asComponent();
-            String soundFileName = PlainTextComponentSerializer.plainText().serialize(soundFileComponent);
+        if (isCustomMusicDisc(event)) {
+
+            Component soundFileNameComponent = Objects.requireNonNull(event.getItem().getItemMeta().lore()).get(1).asComponent();
+            String soundFileName = PlainTextComponentSerializer.plainText().serialize(soundFileNameComponent);
 
             Path soundFilePath = Path.of(CustomDiscs.getInstance().getDataFolder() + "\\musicdata\\" + soundFileName);
             if (soundFilePath.toFile().exists()) {
-                Component songNameComponent = Objects.requireNonNull(player.getInventory().getItemInMainHand().getItemMeta().lore()).get(0).asComponent();
+                Component songNameComponent = Objects.requireNonNull(event.getItem().getItemMeta().lore()).get(0).asComponent();
                 String songName = PlainTextComponentSerializer.plainText().serialize(songNameComponent);
 
                 LocationalAudioChannel audioChannel = VoicePlugin.voicechatServerApi.createLocationalAudioChannel(id, VoicePlugin.voicechatApi.fromServerLevel(block.getLocation().getWorld()), VoicePlugin.voicechatApi.createPosition(block.getLocation().getX() + 0.5d, block.getLocation().getY() + 0.5d, block.getLocation().getZ() + 0.5d));
@@ -70,20 +74,38 @@ public class JukeBox implements Listener {
                 throw new FileNotFoundException("ERROR: Sound file is missing!");
             }
         }
-
-        //if (event.getAction().isRightClick() && Objects.requireNonNull(block).getType().equals(Material.JUKEBOX) && jukeboxContainsDisc(block)) {
-        //
-        //}
     }
 
-    //private boolean jukeboxContainsDisc(Block block) {
-    //    Block b = block;
-    //    BlockState blockState = b.getState();
-    //    if (blockState instanceof TileState) {
-    //
-    //    }
-    //    return false;
-    //}
+    @EventHandler
+    public void onEject(PlayerInteractEvent event) {
+
+        Player player = event.getPlayer();
+        Block block = event.getClickedBlock();
+
+        if (event.getAction() != Action.RIGHT_CLICK_BLOCK || event.getClickedBlock() == null) return;
+        if (event.getClickedBlock().getType() != Material.JUKEBOX) return;
+
+        if (jukeboxContainsCustomDisc(block)) {
+            stopAudioPlayer(playerMap);
+        }
+
+    }
+
+    private boolean jukeboxContainsCustomDisc(Block b) {
+        BlockState blockState = b.getState();
+        Jukebox jukebox = (Jukebox) blockState;
+
+        if (jukebox.getRecord().hasItemMeta()) {
+            return jukebox.getRecord().getItemMeta().hasItemFlag(ItemFlag.HIDE_ENCHANTS);
+        } else {
+            return false;
+        }
+    }
+
+    @EventHandler
+    public void onJukeboxBreak(BlockBreakEvent Event) {
+
+    }
 
     public static short[] readSoundFile(Path file) throws UnsupportedAudioFileException, IOException {
         AudioInputStream inputStream = AudioSystem.getAudioInputStream(file.toFile());
@@ -91,31 +113,48 @@ public class JukeBox implements Listener {
         return VoicePlugin.voicechatApi.getAudioConverter().bytesToShorts(convertedInputStream.readAllBytes());
     }
 
-    public boolean isCustomMusicDisc(Player p) {
+    public boolean isCustomMusicDisc(PlayerInteractEvent e) {
 
         if (
-                p.getInventory().getItemInMainHand().hasItemFlag(ItemFlag.HIDE_ENCHANTS) &&
+                e.getItem().getItemMeta().hasItemFlag(ItemFlag.HIDE_ENCHANTS) &&
                 (
-                p.getInventory().getItemInMainHand().getType().equals(Material.MUSIC_DISC_13) ||
-                p.getInventory().getItemInMainHand().getType().equals(Material.MUSIC_DISC_CAT) ||
-                p.getInventory().getItemInMainHand().getType().equals(Material.MUSIC_DISC_BLOCKS) ||
-                p.getInventory().getItemInMainHand().getType().equals(Material.MUSIC_DISC_CHIRP) ||
-                p.getInventory().getItemInMainHand().getType().equals(Material.MUSIC_DISC_FAR) ||
-                p.getInventory().getItemInMainHand().getType().equals(Material.MUSIC_DISC_MALL) ||
-                p.getInventory().getItemInMainHand().getType().equals(Material.MUSIC_DISC_MELLOHI) ||
-                p.getInventory().getItemInMainHand().getType().equals(Material.MUSIC_DISC_STAL) ||
-                p.getInventory().getItemInMainHand().getType().equals(Material.MUSIC_DISC_STRAD) ||
-                p.getInventory().getItemInMainHand().getType().equals(Material.MUSIC_DISC_WARD) ||
-                p.getInventory().getItemInMainHand().getType().equals(Material.MUSIC_DISC_11) ||
-                p.getInventory().getItemInMainHand().getType().equals(Material.MUSIC_DISC_WAIT) ||
-                p.getInventory().getItemInMainHand().getType().equals(Material.MUSIC_DISC_OTHERSIDE) ||
-                p.getInventory().getItemInMainHand().getType().equals(Material.MUSIC_DISC_5) ||
-                p.getInventory().getItemInMainHand().getType().equals(Material.MUSIC_DISC_PIGSTEP)
+                        e.getItem().getType().equals(Material.MUSIC_DISC_13) ||
+                        e.getItem().getType().equals(Material.MUSIC_DISC_CAT) ||
+                        e.getItem().getType().equals(Material.MUSIC_DISC_BLOCKS) ||
+                        e.getItem().getType().equals(Material.MUSIC_DISC_CHIRP) ||
+                        e.getItem().getType().equals(Material.MUSIC_DISC_FAR) ||
+                        e.getItem().getType().equals(Material.MUSIC_DISC_MALL) ||
+                        e.getItem().getType().equals(Material.MUSIC_DISC_MELLOHI) ||
+                        e.getItem().getType().equals(Material.MUSIC_DISC_STAL) ||
+                        e.getItem().getType().equals(Material.MUSIC_DISC_STRAD) ||
+                        e.getItem().getType().equals(Material.MUSIC_DISC_WARD) ||
+                        e.getItem().getType().equals(Material.MUSIC_DISC_11) ||
+                        e.getItem().getType().equals(Material.MUSIC_DISC_WAIT) ||
+                        e.getItem().getType().equals(Material.MUSIC_DISC_OTHERSIDE) ||
+                        e.getItem().getType().equals(Material.MUSIC_DISC_5) ||
+                        e.getItem().getType().equals(Material.MUSIC_DISC_PIGSTEP)
                 )
         ) {
             return true;
         }
         return false;
+    }
+
+    private boolean isAudioPlayerPlaying(Map<UUID, AudioPlayer> playerMap, UUID id) {
+        AudioPlayer audioPlayer = playerMap.get(id);
+        System.out.println("Is music disc playing???");
+        if (audioPlayer == null) {
+            return false;
+        } else {
+            return audioPlayer.isPlaying();
+        }
+    }
+
+    private void stopAudioPlayer(Map<UUID, AudioPlayer> playerMap) {
+        AudioPlayer audioPlayer = playerMap.get(id);
+        if (audioPlayer != null) {
+            audioPlayer.stopPlaying();
+        }
     }
 
 }
