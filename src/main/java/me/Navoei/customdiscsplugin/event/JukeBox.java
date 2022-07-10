@@ -17,8 +17,12 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockExplodeEvent;
+import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemFlag;
+import org.bukkit.inventory.ItemStack;
 
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
@@ -27,9 +31,7 @@ import javax.sound.sampled.UnsupportedAudioFileException;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Path;
-import java.util.Map;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class JukeBox implements Listener {
@@ -46,7 +48,7 @@ public class JukeBox implements Listener {
         if (event.getAction() != Action.RIGHT_CLICK_BLOCK || event.getClickedBlock() == null || event.getItem() == null || event.getItem().getItemMeta() == null || block == null) return;
         if (event.getClickedBlock().getType() != Material.JUKEBOX) return;
 
-        if (isCustomMusicDisc(event)) {
+        if (isCustomMusicDisc(event) && !jukeboxContainsDisc(block)) {
 
             Component soundFileNameComponent = Objects.requireNonNull(event.getItem().getItemMeta().lore()).get(1).asComponent();
             String soundFileName = PlainTextComponentSerializer.plainText().serialize(soundFileNameComponent);
@@ -56,12 +58,16 @@ public class JukeBox implements Listener {
             Path soundFilePath = Path.of(CustomDiscs.getInstance().getDataFolder().getPath(), "musicdata", soundFileName);
 
             if (soundFilePath.toFile().exists()) {
+
                 Component songNameComponent = Objects.requireNonNull(event.getItem().getItemMeta().lore()).get(0).asComponent();
                 String songName = PlainTextComponentSerializer.plainText().serialize(songNameComponent);
 
                 LocationalAudioChannel audioChannel = VoicePlugin.voicechatServerApi.createLocationalAudioChannel(id, VoicePlugin.voicechatApi.fromServerLevel(block.getLocation().getWorld()), VoicePlugin.voicechatApi.createPosition(block.getLocation().getX() + 0.5d, block.getLocation().getY() + 0.5d, block.getLocation().getZ() + 0.5d));
 
                 try {
+
+                    
+
                     AudioPlayer audioPlayer = VoicePlugin.voicechatServerApi.createAudioPlayer((AudioChannel) audioChannel, VoicePlugin.voicechatApi.createEncoder(), readSoundFile(soundFilePath));
                     playerMap.put(id, audioPlayer);
                     audioPlayer.startPlaying();
@@ -80,7 +86,6 @@ public class JukeBox implements Listener {
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onEject(PlayerInteractEvent event) {
 
-        Player player = event.getPlayer();
         Block block = event.getClickedBlock();
 
         if (event.getAction() != Action.RIGHT_CLICK_BLOCK || event.getClickedBlock() == null || block == null) return;
@@ -91,8 +96,47 @@ public class JukeBox implements Listener {
             UUID id = UUID.nameUUIDFromBytes(block.getLocation().toString().getBytes());
 
             stopAudioPlayer(playerMap, id);
+
         }
 
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void onJukeboxBreak(BlockBreakEvent event) {
+
+        Block block = event.getBlock();
+
+        if (block.getType() != Material.JUKEBOX) return;
+
+        if (jukeboxContainsCustomDisc(block)) {
+
+            UUID id = UUID.nameUUIDFromBytes(block.getLocation().toString().getBytes());
+
+                stopAudioPlayer(playerMap, id);
+
+        }
+
+    }
+
+    @EventHandler
+    public void onJukeBoxExplode(EntityExplodeEvent event) {
+
+        for (Block explodedBlock : event.blockList()) {
+            if (explodedBlock.getType() == Material.JUKEBOX) {
+                if (jukeboxContainsCustomDisc(explodedBlock)) {
+                    UUID id = UUID.nameUUIDFromBytes(explodedBlock.getLocation().toString().getBytes());
+                    stopAudioPlayer(playerMap, id);
+                }
+            }
+        }
+
+    }
+
+    private boolean jukeboxContainsDisc(Block b) {
+        BlockState blockState = b.getState();
+        Jukebox jukebox = (Jukebox) blockState;
+
+        return jukebox.getRecord().getType() != Material.AIR;
     }
 
     private boolean jukeboxContainsCustomDisc(Block b) {
@@ -137,16 +181,6 @@ public class JukeBox implements Listener {
             return true;
         }
         return false;
-    }
-
-    private boolean isAudioPlayerPlaying(Map<UUID, AudioPlayer> playerMap, UUID id) {
-        AudioPlayer audioPlayer = playerMap.get(id);
-        System.out.println("Is music disc playing???");
-        if (audioPlayer == null) {
-            return false;
-        } else {
-            return audioPlayer.isPlaying();
-        }
     }
 
     private void stopAudioPlayer(Map<UUID, AudioPlayer> playerMap, UUID id) {

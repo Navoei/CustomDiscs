@@ -17,6 +17,8 @@ processResources {
 }
 
 dependencies {
+    compileOnly group: "com.comphenix.protocol", name: "ProtocolLib", version: "5.0.0-SNAPSHOT"
+
     implementation 'com.google.code.findbugs:jsr305:3.0.2'
 
     // To use this dependency, you need to compile bukkit by yourself
@@ -31,6 +33,7 @@ dependencies {
 
 repositories {
     mavenCentral()
+    maven { url "https://repo.dmulloy2.net/repository/public/" }
     maven {
         name = "henkelmax.public"
         url = 'https://maven.maxhenkel.de/repository/public'
