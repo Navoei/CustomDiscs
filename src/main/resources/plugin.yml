@@ -9,5 +9,6 @@ depend: [ voicechat ]
 
 commands:
   customdisc:
+    permission: customdiscs.command
     description: Create a custom disc!
     aliases: cd

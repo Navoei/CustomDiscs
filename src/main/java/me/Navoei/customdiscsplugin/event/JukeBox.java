@@ -65,9 +65,6 @@ public class JukeBox implements Listener {
                 LocationalAudioChannel audioChannel = VoicePlugin.voicechatServerApi.createLocationalAudioChannel(id, VoicePlugin.voicechatApi.fromServerLevel(block.getLocation().getWorld()), VoicePlugin.voicechatApi.createPosition(block.getLocation().getX() + 0.5d, block.getLocation().getY() + 0.5d, block.getLocation().getZ() + 0.5d));
 
                 try {
-
-                    
-
                     AudioPlayer audioPlayer = VoicePlugin.voicechatServerApi.createAudioPlayer((AudioChannel) audioChannel, VoicePlugin.voicechatApi.createEncoder(), readSoundFile(soundFilePath));
                     playerMap.put(id, audioPlayer);
                     audioPlayer.startPlaying();

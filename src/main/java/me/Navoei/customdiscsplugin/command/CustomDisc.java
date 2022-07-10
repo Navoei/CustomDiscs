@@ -35,7 +35,7 @@ public class CustomDisc implements CommandExecutor {
         Player p = (Player) sender;
 
         // /customdisc wewontbealone "We wont be alone"
-        if (command.getName().equalsIgnoreCase("customdisc")) {
+        if (command.getName().equalsIgnoreCase("customdisc") && p.hasPermission("customdiscs.command")) {
             if (isMusicDisc(p)) {
                 if (args.length >= 2) {
 
