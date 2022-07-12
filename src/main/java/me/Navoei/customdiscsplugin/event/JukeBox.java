@@ -132,8 +132,9 @@ public class JukeBox implements Listener {
             container.remove(key);
             tileState.update();
 
-        if (isAudioPlayerPlaying(playerMap, id)) {
             player.swingMainHand();
+
+        if (isAudioPlayerPlaying(playerMap, id)) {
             stopAudioPlayer(playerMap, id);
         }
 
