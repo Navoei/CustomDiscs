@@ -1,4 +1,4 @@
-# Custom Discs
+# Custom Discs 1.19
 
 A spigot/bukkit fork of henkelmax's Audio Player.
 - Play custom music discs using the Simple Voice Chat API. (The voice chat mod is required on the client and server.)
