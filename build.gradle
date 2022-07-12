@@ -17,7 +17,6 @@ processResources {
 }
 
 dependencies {
-    compileOnly group: "com.comphenix.protocol", name: "ProtocolLib", version: "5.0.0-SNAPSHOT"
 
     implementation 'com.google.code.findbugs:jsr305:3.0.2'
 

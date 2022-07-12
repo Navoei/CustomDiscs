@@ -7,22 +7,23 @@ import me.Navoei.customdiscsplugin.CustomDiscs;
 import me.Navoei.customdiscsplugin.VoicePlugin;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
-import org.bukkit.ChatColor;
-import org.bukkit.Material;
+import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.Jukebox;
+import org.bukkit.block.TileState;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
-import org.bukkit.event.block.BlockExplodeEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.persistence.PersistentDataContainer;
+import org.bukkit.persistence.PersistentDataType;
 
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
@@ -39,6 +40,7 @@ public class JukeBox implements Listener {
     private final Map<UUID, AudioPlayer> playerMap = new ConcurrentHashMap<>();
     public static AudioFormat FORMAT = new AudioFormat(AudioFormat.Encoding.PCM_SIGNED, 48000.0F, 16, 1, 2, 48000.0F, false);
 
+
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onInsert(PlayerInteractEvent event) throws IOException {
 
@@ -48,7 +50,16 @@ public class JukeBox implements Listener {
         if (event.getAction() != Action.RIGHT_CLICK_BLOCK || event.getClickedBlock() == null || event.getItem() == null || event.getItem().getItemMeta() == null || block == null) return;
         if (event.getClickedBlock().getType() != Material.JUKEBOX) return;
 
-        if (isCustomMusicDisc(event) && !jukeboxContainsDisc(block)) {
+        if (isCustomMusicDisc(event) && !jukeboxContainsPersistentData(block)) {
+
+            TileState tileState = (TileState) block.getState();
+            PersistentDataContainer container = tileState.getPersistentDataContainer();
+            NamespacedKey key = new NamespacedKey(CustomDiscs.getInstance(),
+                    "CustomDisc");
+            if (container.has(key, PersistentDataType.BYTE_ARRAY)) return;
+            event.setCancelled(true);
+            container.set(key, PersistentDataType.BYTE_ARRAY, event.getItem().serializeAsBytes());
+            tileState.update();
 
             Component soundFileNameComponent = Objects.requireNonNull(event.getItem().getItemMeta().lore()).get(1).asComponent();
             String soundFileName = PlainTextComponentSerializer.plainText().serialize(soundFileNameComponent);
@@ -59,16 +70,16 @@ public class JukeBox implements Listener {
 
             if (soundFilePath.toFile().exists()) {
 
-                Component songNameComponent = Objects.requireNonNull(event.getItem().getItemMeta().lore()).get(0).asComponent();
-                String songName = PlainTextComponentSerializer.plainText().serialize(songNameComponent);
+                //Component songNameComponent = Objects.requireNonNull(event.getItem().getItemMeta().lore()).get(0).asComponent();
+                //String songName = PlainTextComponentSerializer.plainText().serialize(songNameComponent);
 
                 LocationalAudioChannel audioChannel = VoicePlugin.voicechatServerApi.createLocationalAudioChannel(id, VoicePlugin.voicechatApi.fromServerLevel(block.getLocation().getWorld()), VoicePlugin.voicechatApi.createPosition(block.getLocation().getX() + 0.5d, block.getLocation().getY() + 0.5d, block.getLocation().getZ() + 0.5d));
 
                 try {
-                    AudioPlayer audioPlayer = VoicePlugin.voicechatServerApi.createAudioPlayer((AudioChannel) audioChannel, VoicePlugin.voicechatApi.createEncoder(), readSoundFile(soundFilePath));
+                    AudioPlayer audioPlayer = VoicePlugin.voicechatServerApi.createAudioPlayer(audioChannel, VoicePlugin.voicechatApi.createEncoder(), readSoundFile(soundFilePath));
                     playerMap.put(id, audioPlayer);
                     audioPlayer.startPlaying();
-                    player.sendMessage(ChatColor.GOLD + "Now playing: " + songName);
+                    player.getInventory().setItem(Objects.requireNonNull(event.getHand()), null);
                 } catch (Exception e) {
                     player.sendMessage(ChatColor.RED + "An error occurred while trying to play the music!");
                 }
@@ -78,22 +89,36 @@ public class JukeBox implements Listener {
                 throw new FileNotFoundException("Sound file is missing!");
             }
         }
+
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onEject(PlayerInteractEvent event) {
 
+        Player player = event.getPlayer();
         Block block = event.getClickedBlock();
 
         if (event.getAction() != Action.RIGHT_CLICK_BLOCK || event.getClickedBlock() == null || block == null) return;
         if (event.getClickedBlock().getType() != Material.JUKEBOX) return;
 
-        if (jukeboxContainsCustomDisc(block)) {
+        UUID id = UUID.nameUUIDFromBytes(block.getLocation().toString().getBytes());
 
-            UUID id = UUID.nameUUIDFromBytes(block.getLocation().toString().getBytes());
+            //Spawn in item at the block position
+            TileState tileState = (TileState) block.getState();
+            PersistentDataContainer container = tileState.getPersistentDataContainer();
+            NamespacedKey key = new NamespacedKey(CustomDiscs.getInstance(),
+                    "CustomDisc");
+            if (!container.has(key, PersistentDataType.BYTE_ARRAY)) return;
+            container.get(key, PersistentDataType.BYTE_ARRAY);
 
+            block.getWorld().dropItemNaturally(block.getLocation(), ItemStack.deserializeBytes(container.get(key, PersistentDataType.BYTE_ARRAY)));
+
+            container.remove(key);
+            tileState.update();
+
+        if (isAudioPlayerPlaying(playerMap, id)) {
+            player.swingMainHand();
             stopAudioPlayer(playerMap, id);
-
         }
 
     }
@@ -105,12 +130,23 @@ public class JukeBox implements Listener {
 
         if (block.getType() != Material.JUKEBOX) return;
 
-        if (jukeboxContainsCustomDisc(block)) {
+        UUID id = UUID.nameUUIDFromBytes(block.getLocation().toString().getBytes());
 
-            UUID id = UUID.nameUUIDFromBytes(block.getLocation().toString().getBytes());
+            //Spawn in item at the block position
+            TileState tileState = (TileState) block.getState();
+            PersistentDataContainer container = tileState.getPersistentDataContainer();
+            NamespacedKey key = new NamespacedKey(CustomDiscs.getInstance(),
+                    "CustomDisc");
+            if (!container.has(key, PersistentDataType.BYTE_ARRAY)) return;
+            container.get(key, PersistentDataType.BYTE_ARRAY);
 
-                stopAudioPlayer(playerMap, id);
+            block.getWorld().dropItemNaturally(block.getLocation(), ItemStack.deserializeBytes(container.get(key, PersistentDataType.BYTE_ARRAY)));
 
+            container.remove(key);
+            tileState.update();
+
+        if (isAudioPlayerPlaying(playerMap, id)) {
+            stopAudioPlayer(playerMap, id);
         }
 
     }
@@ -120,8 +156,23 @@ public class JukeBox implements Listener {
 
         for (Block explodedBlock : event.blockList()) {
             if (explodedBlock.getType() == Material.JUKEBOX) {
-                if (jukeboxContainsCustomDisc(explodedBlock)) {
-                    UUID id = UUID.nameUUIDFromBytes(explodedBlock.getLocation().toString().getBytes());
+
+                UUID id = UUID.nameUUIDFromBytes(explodedBlock.getLocation().toString().getBytes());
+
+                    //Spawn in item at the block position
+                    TileState tileState = (TileState) explodedBlock.getState();
+                    PersistentDataContainer container = tileState.getPersistentDataContainer();
+                    NamespacedKey key = new NamespacedKey(CustomDiscs.getInstance(),
+                            "CustomDisc");
+                    if (!container.has(key, PersistentDataType.BYTE_ARRAY)) return;
+                    container.get(key, PersistentDataType.BYTE_ARRAY);
+
+                    explodedBlock.getWorld().dropItemNaturally(explodedBlock.getLocation(), ItemStack.deserializeBytes(container.get(key, PersistentDataType.BYTE_ARRAY)));
+
+                    container.remove(key);
+                    tileState.update();
+
+                if (isAudioPlayerPlaying(playerMap, id)) {
                     stopAudioPlayer(playerMap, id);
                 }
             }
@@ -129,22 +180,18 @@ public class JukeBox implements Listener {
 
     }
 
-    private boolean jukeboxContainsDisc(Block b) {
-        BlockState blockState = b.getState();
-        Jukebox jukebox = (Jukebox) blockState;
-
-        return jukebox.getRecord().getType() != Material.AIR;
+    public boolean isAudioPlayerPlaying(Map<UUID, AudioPlayer> playerMap, UUID id) {
+        AudioPlayer audioPlayer = playerMap.get(id);
+        if (audioPlayer == null) return false;
+        return audioPlayer.isPlaying();
     }
 
-    private boolean jukeboxContainsCustomDisc(Block b) {
-        BlockState blockState = b.getState();
-        Jukebox jukebox = (Jukebox) blockState;
-
-        if (jukebox.getRecord().hasItemMeta()) {
-            return jukebox.getRecord().getItemMeta().hasItemFlag(ItemFlag.HIDE_ENCHANTS);
-        } else {
-            return false;
-        }
+    private boolean jukeboxContainsPersistentData(Block b) {
+        TileState tileState = (TileState) b.getState();
+        PersistentDataContainer container = tileState.getPersistentDataContainer();
+        NamespacedKey key = new NamespacedKey(CustomDiscs.getInstance(),
+                "CustomDisc");
+        return container.has(key, PersistentDataType.BYTE_ARRAY);
     }
 
     public static short[] readSoundFile(Path file) throws UnsupportedAudioFileException, IOException {
