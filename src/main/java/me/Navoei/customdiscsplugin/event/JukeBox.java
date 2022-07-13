@@ -65,9 +65,6 @@ public class JukeBox implements Listener {
 
             event.setCancelled(true);
 
-            container.set(key, PersistentDataType.BYTE_ARRAY, event.getItem().serializeAsBytes());
-            tileState.update();
-
             Component soundFileNameComponent = Objects.requireNonNull(event.getItem().getItemMeta().lore()).get(1).asComponent();
             String soundFileName = PlainTextComponentSerializer.plainText().serialize(soundFileNameComponent);
 
@@ -86,6 +83,10 @@ public class JukeBox implements Listener {
                     AudioPlayer audioPlayer = VoicePlugin.voicechatServerApi.createAudioPlayer(audioChannel, VoicePlugin.voicechatApi.createEncoder(), readSoundFile(soundFilePath));
                     playerMap.put(id, audioPlayer);
                     audioPlayer.startPlaying();
+
+                    //set the persistent data container and remove the item from the player's hand
+                    container.set(key, PersistentDataType.BYTE_ARRAY, event.getItem().serializeAsBytes());
+                    tileState.update();
                     player.getInventory().setItem(Objects.requireNonNull(event.getHand()), null);
 
                     //Send Player Action Bar
@@ -93,7 +94,6 @@ public class JukeBox implements Listener {
                             .content("Now Playing: " + songName)
                             .color(NamedTextColor.GOLD)
                             .build();
-
                     player.sendActionBar(customLoreSong.asComponent());
 
                 } catch (Exception e) {
