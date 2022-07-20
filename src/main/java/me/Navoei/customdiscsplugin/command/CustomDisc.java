@@ -46,10 +46,10 @@ public class CustomDisc implements CommandExecutor {
                     File getDirectory = new File(CustomDiscs.getInstance().getDataFolder(), "musicdata");
                     File songFile = new File(getDirectory.getPath(), filename);
                     if (songFile.exists()) {
-                        if (getFileExtension(filename).equals("wav")) {
+                        if (getFileExtension(filename).equals("wav") || getFileExtension(filename).equals("mp3")) {
                             songname = args[0];
                         } else {
-                            p.sendMessage(ChatColor.RED + "File is not in wav format!");
+                            p.sendMessage(ChatColor.RED + "File is not in wav or mp3 format!");
                             return true;
                         }
                     } else {

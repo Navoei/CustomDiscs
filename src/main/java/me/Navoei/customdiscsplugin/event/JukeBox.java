@@ -7,7 +7,6 @@ import me.Navoei.customdiscsplugin.VoicePlugin;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.format.NamedTextColor;
-import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.*;
 import org.bukkit.block.Block;
@@ -39,8 +38,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class JukeBox implements Listener {
 
     private final Map<UUID, AudioPlayer> playerMap = new ConcurrentHashMap<>();
-    public static AudioFormat FORMAT = new AudioFormat(AudioFormat.Encoding.PCM_SIGNED, 48000.0F, 16, 1, 2, 48000.0F, false);
-
+    public static AudioFormat FORMAT = new AudioFormat(AudioFormat.Encoding.PCM_SIGNED, 48000F, 16, 1, 2, 48000F, false);
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onInsert(PlayerInteractEvent event) throws IOException {
@@ -98,6 +96,7 @@ public class JukeBox implements Listener {
 
                 } catch (Exception e) {
                     player.sendMessage(ChatColor.RED + "An error occurred while trying to play the music!");
+                    e.printStackTrace();
                 }
             } else {
                 player.sendMessage(ChatColor.RED + "Sound file not found.");
@@ -217,9 +216,17 @@ public class JukeBox implements Listener {
     }
 
     public static short[] readSoundFile(Path file) throws UnsupportedAudioFileException, IOException {
-        AudioInputStream inputStream = AudioSystem.getAudioInputStream(file.toFile());
-        AudioInputStream convertedInputStream = AudioSystem.getAudioInputStream(FORMAT, inputStream);
-        return VoicePlugin.voicechatApi.getAudioConverter().bytesToShorts(convertedInputStream.readAllBytes());
+        return VoicePlugin.voicechatApi.getAudioConverter().bytesToShorts(convertFormat(file, FORMAT));
+    }
+
+    public static byte[] convertFormat(Path file, AudioFormat audioFormat) throws UnsupportedAudioFileException, IOException {
+        try (AudioInputStream source = AudioSystem.getAudioInputStream(file.toFile())) {
+            AudioFormat sourceFormat = source.getFormat();
+            AudioFormat convertFormat = new AudioFormat(AudioFormat.Encoding.PCM_SIGNED, sourceFormat.getSampleRate(), 16, sourceFormat.getChannels(), sourceFormat.getChannels() * 2, sourceFormat.getSampleRate(), false);
+            AudioInputStream stream1 = AudioSystem.getAudioInputStream(convertFormat, source);
+            AudioInputStream stream2 = AudioSystem.getAudioInputStream(audioFormat, stream1);
+            return stream2.readAllBytes();
+        }
     }
 
     public boolean isCustomMusicDisc(PlayerInteractEvent e) {
