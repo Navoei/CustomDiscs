@@ -2,6 +2,9 @@ package me.Navoei.customdiscsplugin.event;
 
 import de.maxhenkel.voicechat.api.audiochannel.AudioPlayer;
 import de.maxhenkel.voicechat.api.audiochannel.LocationalAudioChannel;
+import javazoom.spi.mpeg.sampled.convert.MpegFormatConversionProvider;
+import javazoom.spi.mpeg.sampled.file.MpegAudioFileReader;
+import javazoom.spi.mpeg.sampled.file.MpegEncoding;
 import me.Navoei.customdiscsplugin.CustomDiscs;
 import me.Navoei.customdiscsplugin.VoicePlugin;
 import net.kyori.adventure.text.Component;
@@ -29,13 +32,14 @@ import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.UnsupportedAudioFileException;
+import java.io.BufferedInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class JukeBox implements Listener {
+public class JukeBox implements Listener{
 
     private final Map<UUID, AudioPlayer> playerMap = new ConcurrentHashMap<>();
     public static AudioFormat FORMAT = new AudioFormat(AudioFormat.Encoding.PCM_SIGNED, 48000F, 16, 1, 2, 48000F, false);
@@ -126,7 +130,9 @@ public class JukeBox implements Listener {
             if (!container.has(key, PersistentDataType.BYTE_ARRAY)) return;
             container.get(key, PersistentDataType.BYTE_ARRAY);
 
-            block.getWorld().dropItemNaturally(block.getLocation(), ItemStack.deserializeBytes(container.get(key, PersistentDataType.BYTE_ARRAY)));
+            Location dropItemLocation = new Location(block.getWorld(), block.getLocation().getX(), block.getLocation().getY()+0.5d, block.getLocation().getZ());
+
+            block.getWorld().dropItemNaturally(dropItemLocation, ItemStack.deserializeBytes(container.get(key, PersistentDataType.BYTE_ARRAY)));
 
             container.remove(key);
             tileState.update();
@@ -220,13 +226,23 @@ public class JukeBox implements Listener {
     }
 
     public static byte[] convertFormat(Path file, AudioFormat audioFormat) throws UnsupportedAudioFileException, IOException {
-        try (AudioInputStream source = AudioSystem.getAudioInputStream(file.toFile())) {
-            AudioFormat sourceFormat = source.getFormat();
-            AudioFormat convertFormat = new AudioFormat(AudioFormat.Encoding.PCM_SIGNED, sourceFormat.getSampleRate(), 16, sourceFormat.getChannels(), sourceFormat.getChannels() * 2, sourceFormat.getSampleRate(), false);
-            AudioInputStream stream1 = AudioSystem.getAudioInputStream(convertFormat, source);
-            AudioInputStream stream2 = AudioSystem.getAudioInputStream(audioFormat, stream1);
-            return stream2.readAllBytes();
+        AudioInputStream finalInputStream = null;
+
+        if (getFileExtension(file.toFile().toString()).equals("wav")) {
+            AudioInputStream inputStream = AudioSystem.getAudioInputStream(file.toFile());
+            finalInputStream = AudioSystem.getAudioInputStream(audioFormat, inputStream);
+        } else if (getFileExtension(file.toFile().toString()).equals("mp3")) {
+
+            AudioInputStream inputStream = new MpegAudioFileReader().getAudioInputStream(file.toFile());
+            AudioFormat baseFormat = inputStream.getFormat();
+            AudioFormat decodedFormat = new AudioFormat(AudioFormat.Encoding.PCM_SIGNED, baseFormat.getSampleRate(), 16, baseFormat.getChannels(), baseFormat.getChannels() * 2, baseFormat.getFrameRate(), false);
+            AudioInputStream convertedInputStream = new MpegFormatConversionProvider().getAudioInputStream(decodedFormat, inputStream);
+            finalInputStream = AudioSystem.getAudioInputStream(audioFormat, convertedInputStream);
+
         }
+
+        assert finalInputStream != null;
+        return finalInputStream.readAllBytes();
     }
 
     public boolean isCustomMusicDisc(PlayerInteractEvent e) {
@@ -282,6 +298,15 @@ public class JukeBox implements Listener {
         AudioPlayer audioPlayer = playerMap.get(id);
         if (audioPlayer != null && audioPlayer.isPlaying()) {
             audioPlayer.stopPlaying();
+        }
+    }
+
+    private static String getFileExtension(String s) {
+        int index = s.lastIndexOf(".");
+        if (index > 0) {
+            return s.substring(index + 1);
+        } else {
+            return "";
         }
     }
 
