@@ -4,7 +4,6 @@ import de.maxhenkel.voicechat.api.audiochannel.AudioPlayer;
 import de.maxhenkel.voicechat.api.audiochannel.LocationalAudioChannel;
 import javazoom.spi.mpeg.sampled.convert.MpegFormatConversionProvider;
 import javazoom.spi.mpeg.sampled.file.MpegAudioFileReader;
-import javazoom.spi.mpeg.sampled.file.MpegEncoding;
 import me.Navoei.customdiscsplugin.CustomDiscs;
 import me.Navoei.customdiscsplugin.VoicePlugin;
 import net.kyori.adventure.text.Component;
@@ -32,7 +31,6 @@ import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.UnsupportedAudioFileException;
-import java.io.BufferedInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Path;
@@ -81,27 +79,39 @@ public class JukeBox implements Listener{
 
                 LocationalAudioChannel audioChannel = VoicePlugin.voicechatServerApi.createLocationalAudioChannel(id, VoicePlugin.voicechatApi.fromServerLevel(block.getLocation().getWorld()), VoicePlugin.voicechatApi.createPosition(block.getLocation().getX() + 0.5d, block.getLocation().getY() + 0.5d, block.getLocation().getZ() + 0.5d));
 
-                try {
-                    AudioPlayer audioPlayer = VoicePlugin.voicechatServerApi.createAudioPlayer(audioChannel, VoicePlugin.voicechatApi.createEncoder(), readSoundFile(soundFilePath));
-                    playerMap.put(id, audioPlayer);
-                    audioPlayer.startPlaying();
+                //Run the audio player asynchronously to prevent lag when inserting discs.
+                    Bukkit.getScheduler().runTaskAsynchronously(CustomDiscs.getInstance(), () -> {
+                        AudioPlayer audioPlayer = null;
+                        //Try playing the voice chat audio player.
+                        try {
+                            audioPlayer = VoicePlugin.voicechatServerApi.createAudioPlayer(audioChannel, VoicePlugin.voicechatApi.createEncoder(), readSoundFile(soundFilePath));
+                        } catch (UnsupportedAudioFileException | IOException e) {
+                            e.printStackTrace();
+                            player.sendMessage(ChatColor.RED + "An error occurred while trying to play the music!");
+                            return;
+                        }
+                        playerMap.put(id, audioPlayer);
+                        assert audioPlayer != null;
+                        audioPlayer.startPlaying();
 
-                    //set the persistent data container and remove the item from the player's hand
-                    container.set(key, PersistentDataType.BYTE_ARRAY, event.getItem().serializeAsBytes());
-                    tileState.update();
+                        //Run this in sync with the main thread after the disc is done loading.
+                        Bukkit.getScheduler().runTask(CustomDiscs.getInstance(), () -> {
+                            //set the persistent data container
+                            container.set(key, PersistentDataType.BYTE_ARRAY, event.getItem().serializeAsBytes());
+                            tileState.update();
+
+                            //Send Player Action Bar
+                            TextComponent customLoreSong = Component.text()
+                                    .content("Now Playing: " + songName)
+                                    .color(NamedTextColor.GOLD)
+                                    .build();
+                            player.sendActionBar(customLoreSong.asComponent());
+                        });
+
+                    });
+                    //Remove the item from the player's hand in sync to prevent players from glitching the jukebox.
                     player.getInventory().setItem(Objects.requireNonNull(event.getHand()), null);
 
-                    //Send Player Action Bar
-                    TextComponent customLoreSong = Component.text()
-                            .content("Now Playing: " + songName)
-                            .color(NamedTextColor.GOLD)
-                            .build();
-                    player.sendActionBar(customLoreSong.asComponent());
-
-                } catch (Exception e) {
-                    player.sendMessage(ChatColor.RED + "An error occurred while trying to play the music!");
-                    e.printStackTrace();
-                }
             } else {
                 player.sendMessage(ChatColor.RED + "Sound file not found.");
                 event.setCancelled(true);
