@@ -305,7 +305,6 @@ public class JukeBox implements Listener{
     public boolean isAsyncTaskRunning(Map<Location, BukkitRunnable> asyncTaskMap, Location blockLocation) {
         if (!asyncTaskMap.containsKey(blockLocation)) return false;
         int taskId = asyncTaskMap.get(blockLocation).getTaskId();
-        System.out.println("Task is currently:" + Bukkit.getScheduler().isCurrentlyRunning(taskId) + " Task#" + taskId);
         return Bukkit.getScheduler().isCurrentlyRunning(taskId);
     }
 
