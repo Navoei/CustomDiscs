@@ -1,10 +1,19 @@
 package me.Navoei.customdiscsplugin;
 
+import com.comphenix.protocol.PacketType;
+import com.comphenix.protocol.ProtocolLibrary;
+import com.comphenix.protocol.ProtocolManager;
+import com.comphenix.protocol.events.ListenerPriority;
+import com.comphenix.protocol.events.PacketAdapter;
+import com.comphenix.protocol.events.PacketContainer;
+import com.comphenix.protocol.events.PacketEvent;
 import de.maxhenkel.voicechat.api.BukkitVoicechatService;
 import me.Navoei.customdiscsplugin.command.CustomDisc;
 import me.Navoei.customdiscsplugin.event.JukeBox;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.bukkit.block.Jukebox;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import javax.annotation.Nullable;
@@ -47,7 +56,28 @@ public final class CustomDiscs extends JavaPlugin {
         }
 
         getServer().getPluginManager().registerEvents(new JukeBox(), this);
+        getServer().getPluginManager().registerEvents(new HopperManager(), this);
         getCommand("customdisc").setExecutor(command);
+
+        ProtocolManager protocolManager = ProtocolLibrary.getProtocolManager();
+
+        protocolManager.addPacketListener(new PacketAdapter(this, ListenerPriority.NORMAL, PacketType.Play.Server.WORLD_EVENT) {
+            @Override
+            public void onPacketSending(PacketEvent event) {
+                PacketContainer packet = event.getPacket();
+
+                if (packet.getIntegers().read(0).toString().equals("1010")) {
+                    Jukebox jukebox = (Jukebox) packet.getBlockPositionModifier().read(0).toLocation(event.getPlayer().getWorld()).getBlock().getState();
+
+                    if (!jukebox.getRecord().hasItemMeta()) return;
+
+                    if (jukebox.getRecord().getItemMeta().hasItemFlag(ItemFlag.HIDE_ENCHANTS)) {
+                        event.setCancelled(true);
+                    }
+
+                }
+            }
+        });
 
     }
 

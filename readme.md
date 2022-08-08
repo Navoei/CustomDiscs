@@ -5,6 +5,7 @@ A spigot/bukkit fork of henkelmax's Audio Player.
 - Use ```/customdisc``` or ```/cd``` to create a custom disc. 
 - Music files should go into ```plugins/CustomDiscs/musicdata/```
 - Music files must be in the ```.wav``` or ```.mp3``` format.
+- Only custom discs are compatible with hoppers.
 
 Permission Node (Required to run the command. Playing discs does not require a permission.):
 - ```customdiscs.command```
