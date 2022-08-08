@@ -10,6 +10,9 @@ A spigot/bukkit fork of henkelmax's Audio Player.
 Permission Node (Required to run the command. Playing discs does not require a permission.):
 - ```customdiscs.command```
 
+Dependencies:
+- This plugin depends on the latest version of ProtocolLib for 1.19
+
 
 https://user-images.githubusercontent.com/64107368/178426026-c454ac66-5133-4f3a-9af9-7f674e022423.mp4
 
