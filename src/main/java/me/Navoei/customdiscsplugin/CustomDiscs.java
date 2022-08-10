@@ -18,6 +18,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import javax.annotation.Nullable;
 import java.io.File;
+import java.util.Objects;
 
 public final class CustomDiscs extends JavaPlugin {
 
@@ -28,6 +29,9 @@ public final class CustomDiscs extends JavaPlugin {
     @Nullable
     private VoicePlugin voicechatPlugin;
 
+    public float musicDiscDistance;
+    public float musicDiscVolume;
+
     @Override
     public void onEnable() {
 
@@ -37,10 +41,7 @@ public final class CustomDiscs extends JavaPlugin {
 
         CustomDisc command = new CustomDisc();
 
-        if (!new File(this.getDataFolder(), "config.yml").exists()) {
-            this.getConfig().options().copyDefaults(true);
-        }
-        this.saveConfig();
+        this.saveDefaultConfig();
 
         File musicData = new File(this.getDataFolder(), "musicdata");
         if (!(musicData.exists())) {
@@ -58,6 +59,9 @@ public final class CustomDiscs extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new JukeBox(), this);
         getServer().getPluginManager().registerEvents(new HopperManager(), this);
         getCommand("customdisc").setExecutor(command);
+
+        musicDiscDistance = getConfig().getInt("music-disc-distance");
+        musicDiscVolume = Float.parseFloat(Objects.requireNonNull(getConfig().getString("music-disc-volume")));
 
         ProtocolManager protocolManager = ProtocolLibrary.getProtocolManager();
 

@@ -1,1 +1,7 @@
-#Might add config options in the future.
+# [Music Disc Config]
+
+# The distance from which music discs can be heard in blocks.
+music-disc-distance: 16
+
+# The master volume of music discs from 0-1. (You can set values like 0.5 for 50% volume).
+music-disc-volume: 1

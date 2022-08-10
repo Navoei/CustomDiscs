@@ -13,10 +13,7 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
 import javax.annotation.Nullable;
-import javax.sound.sampled.AudioFormat;
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.UnsupportedAudioFileException;
+import javax.sound.sampled.*;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Map;
@@ -48,6 +45,9 @@ public class PlayerManager {
         LocationalAudioChannel audioChannel = api.createLocationalAudioChannel(id, api.fromServerLevel(block.getWorld()), api.createPosition(block.getLocation().getX() + 0.5d, block.getLocation().getY() + 0.5d, block.getLocation().getZ() + 0.5d));
 
         if (audioChannel == null) return;
+
+        audioChannel.setCategory(VoicePlugin.MUSIC_DISC_CATEGORY);
+        audioChannel.setDistance(CustomDiscs.getInstance().musicDiscDistance);
 
         AtomicBoolean stopped = new AtomicBoolean();
         AtomicReference<de.maxhenkel.voicechat.api.audiochannel.AudioPlayer> player = new AtomicReference<>();
@@ -103,11 +103,11 @@ public class PlayerManager {
         }
     }
 
-    private static short[] readSoundFile(Path file) throws UnsupportedAudioFileException, IOException {
+    private static short[] readSoundFile(Path file) throws UnsupportedAudioFileException, IOException, LineUnavailableException {
         return VoicePlugin.voicechatApi.getAudioConverter().bytesToShorts(convertFormat(file, FORMAT));
     }
 
-    private static byte[] convertFormat(Path file, AudioFormat audioFormat) throws UnsupportedAudioFileException, IOException {
+    private static byte[] convertFormat(Path file, AudioFormat audioFormat) throws UnsupportedAudioFileException, IOException, LineUnavailableException {
         AudioInputStream finalInputStream = null;
 
         if (getFileExtension(file.toFile().toString()).equals("wav")) {
@@ -124,8 +124,37 @@ public class PlayerManager {
         }
 
         assert finalInputStream != null;
-        return finalInputStream.readAllBytes();
+
+        return adjustVolume(finalInputStream.readAllBytes(), CustomDiscs.getInstance().musicDiscVolume);
     }
+
+    private static byte[] adjustVolume(byte[] audioSamples, double volume) {
+
+        if (volume > 1d || volume < 0d) {
+            CustomDiscs.getInstance().getServer().getLogger().info("Error: The volume must be between 0 and 1 in the config!");
+            return null;
+        }
+
+        byte[] array = new byte[audioSamples.length];
+        for (int i = 0; i < array.length; i+=2) {
+            // convert byte pair to int
+            short buf1 = audioSamples[i+1];
+            short buf2 = audioSamples[i];
+
+            buf1 = (short) ((buf1 & 0xff) << 8);
+            buf2 = (short) (buf2 & 0xff);
+
+            short res= (short) (buf1 | buf2);
+            res = (short) (res * volume);
+
+            // convert back
+            array[i] = (byte) res;
+            array[i+1] = (byte) (res >> 8);
+
+        }
+        return array;
+    }
+
 
     public void stopLocationalAudio(Location blockLocation) {
         UUID id = UUID.nameUUIDFromBytes(blockLocation.toString().getBytes());
@@ -136,7 +165,7 @@ public class PlayerManager {
         playerMap.remove(id);
     }
 
-    public static float getLengthSeconds(Path file) throws UnsupportedAudioFileException, IOException {
+    public static float getLengthSeconds(Path file) throws UnsupportedAudioFileException, IOException, LineUnavailableException {
         short[] audio = readSoundFile(file);
         return (float) audio.length / FORMAT.getSampleRate();
     }
