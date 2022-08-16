@@ -79,10 +79,9 @@ public class JukeBox implements Listener{
 
         if (jukeboxContainsDisc(block)) {
             stopDisc(block, player);
-
             Bukkit.getScheduler().runTaskLater(CustomDiscs.getInstance(), () -> HopperManager.instance().getNextDiscFromHopperIntoJukebox(block), 1L);
-
         }
+
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)

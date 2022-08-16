@@ -28,7 +28,8 @@ public class HopperManager implements Listener {
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onHopperPickupFromOtherSource(InventoryMoveItemEvent event) {
 
-        if (!Objects.requireNonNull(event.getDestination().getLocation()).getChunk().isLoaded()) return;
+        if (event.getDestination().getLocation() == null) return;
+        if (!event.getDestination().getLocation().getChunk().isLoaded()) return;
         if (!event.getDestination().getLocation().getBlock().getType().equals(Material.HOPPER)) return;
         if (!isCustomMusicDisc(event.getItem())) return;
 
@@ -225,7 +226,8 @@ public class HopperManager implements Listener {
 
     public void itemJukeboxToHopper (Block block) {
 
-        if (!Objects.requireNonNull(block.getLocation()).getChunk().isLoaded()) return;
+        if (block == null) return;
+        if (!block.getLocation().getChunk().isLoaded()) return;
         if (!block.getType().equals(Material.JUKEBOX)) return;
         if (!block.getRelative(BlockFace.DOWN).getType().equals(Material.HOPPER)) return;
 
