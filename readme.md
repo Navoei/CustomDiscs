@@ -1,4 +1,4 @@
-# Custom Discs 1.19
+# Custom Discs 1.19.x
 
 A spigot/bukkit fork of henkelmax's Audio Player.
 - Play custom music discs using the Simple Voice Chat API. (The voice chat mod is required on the client and server.)
@@ -11,7 +11,7 @@ Permission Node (Required to run the command. Playing discs does not require a p
 - ```customdiscs.command```
 
 Dependencies:
-- This plugin depends on the latest version of ProtocolLib for 1.19
+- This plugin depends on the latest version of ProtocolLib for 1.19.x
 
 
 https://user-images.githubusercontent.com/64107368/178426026-c454ac66-5133-4f3a-9af9-7f674e022423.mp4
