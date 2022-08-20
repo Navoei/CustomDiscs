@@ -11,6 +11,7 @@ import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.block.Block;
 import org.bukkit.block.Jukebox;
 import org.bukkit.entity.Player;
@@ -22,6 +23,7 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemFlag;
+import org.bukkit.persistence.PersistentDataType;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -41,8 +43,7 @@ public class JukeBox implements Listener{
 
         if (isCustomMusicDisc(event) && !jukeboxContainsDisc(block)) {
 
-            Component soundFileNameComponent = Objects.requireNonNull(event.getItem().getItemMeta().lore()).get(1).asComponent();
-            String soundFileName = PlainTextComponentSerializer.plainText().serialize(soundFileNameComponent);
+            String soundFileName = event.getItem().getItemMeta().getPersistentDataContainer().get(new NamespacedKey(CustomDiscs.getInstance(), "customdisc"), PersistentDataType.STRING);
 
             Path soundFilePath = Path.of(CustomDiscs.getInstance().getDataFolder().getPath(), "musicdata", soundFileName);
 
@@ -113,7 +114,9 @@ public class JukeBox implements Listener{
 
     public boolean isCustomMusicDisc(PlayerInteractEvent e) {
 
-        return e.getItem().getItemMeta().hasItemFlag(ItemFlag.HIDE_ENCHANTS) &&
+        if (e.getItem()==null) return false;
+
+        return e.getItem().getItemMeta().getPersistentDataContainer().has(new NamespacedKey(CustomDiscs.getInstance(), "customdisc")) &&
                 (
                         e.getItem().getType().equals(Material.MUSIC_DISC_13) ||
                                 e.getItem().getType().equals(Material.MUSIC_DISC_CAT) ||

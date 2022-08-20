@@ -8,7 +8,7 @@ import com.comphenix.protocol.events.PacketAdapter;
 import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.events.PacketEvent;
 import de.maxhenkel.voicechat.api.BukkitVoicechatService;
-import me.Navoei.customdiscsplugin.command.CustomDisc;
+import me.Navoei.customdiscsplugin.command.CommandManager;
 import me.Navoei.customdiscsplugin.event.JukeBox;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -39,8 +39,6 @@ public final class CustomDiscs extends JavaPlugin {
 
         BukkitVoicechatService service = getServer().getServicesManager().load(BukkitVoicechatService.class);
 
-        CustomDisc command = new CustomDisc();
-
         this.saveDefaultConfig();
 
         File musicData = new File(this.getDataFolder(), "musicdata");
@@ -58,7 +56,7 @@ public final class CustomDiscs extends JavaPlugin {
 
         getServer().getPluginManager().registerEvents(new JukeBox(), this);
         getServer().getPluginManager().registerEvents(new HopperManager(), this);
-        getCommand("customdisc").setExecutor(command);
+        getCommand("customdisc").setExecutor(new CommandManager());
 
         musicDiscDistance = getConfig().getInt("music-disc-distance");
         musicDiscVolume = Float.parseFloat(Objects.requireNonNull(getConfig().getString("music-disc-volume")));
