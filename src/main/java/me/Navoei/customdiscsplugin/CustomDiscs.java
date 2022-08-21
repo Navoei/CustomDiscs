@@ -12,8 +12,10 @@ import me.Navoei.customdiscsplugin.command.CommandManager;
 import me.Navoei.customdiscsplugin.event.JukeBox;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.bukkit.NamespacedKey;
 import org.bukkit.block.Jukebox;
 import org.bukkit.inventory.ItemFlag;
+import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import javax.annotation.Nullable;
@@ -73,7 +75,7 @@ public final class CustomDiscs extends JavaPlugin {
 
                     if (!jukebox.getRecord().hasItemMeta()) return;
 
-                    if (jukebox.getRecord().getItemMeta().hasItemFlag(ItemFlag.HIDE_ENCHANTS)) {
+                    if (jukebox.getRecord().getItemMeta().getPersistentDataContainer().has(new NamespacedKey(String.valueOf(this), "customdisc"), PersistentDataType.STRING)) {
                         event.setCancelled(true);
                     }
 
