@@ -10,6 +10,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
@@ -34,7 +35,7 @@ public class CreateCommand extends SubCommand {
 
     @Override
     public String getSyntax() {
-        return ChatColor.GREEN + "/customdisc create <filename> \"Custom Lore\".";
+        return ChatColor.GREEN + "/customdisc create <filename> \"Custom Lore\"";
     }
 
     @Override
@@ -46,6 +47,11 @@ public class CreateCommand extends SubCommand {
                 //Find file, if file not there then say "file not there"
                 String songname = "";
                 String filename = args[1];
+
+                if (customName(readQuotes(args)).equalsIgnoreCase("")) {
+                    player.sendMessage(ChatColor.RED + "You must provide a name for your disc.");
+                    return;
+                }
 
                 File getDirectory = new File(CustomDiscs.getInstance().getDataFolder(), "musicdata");
                 File songFile = new File(getDirectory.getPath(), filename);
@@ -71,6 +77,7 @@ public class CreateCommand extends SubCommand {
                         .color(NamedTextColor.GRAY)
                         .build();
                 itemLore.add(customLoreSong);
+                meta.addItemFlags(ItemFlag.values());
                 meta.lore(itemLore);
 
                 PersistentDataContainer data = meta.getPersistentDataContainer();

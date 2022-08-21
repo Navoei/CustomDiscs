@@ -54,8 +54,7 @@ public class HopperManager implements Listener {
             hopper.getInventory().removeItem(event.getItem());
         }, 1L);
 
-        Component soundFileNameComponent = Objects.requireNonNull(event.getItem().getItemMeta().lore()).get(1).asComponent();
-        String soundFileName = PlainTextComponentSerializer.plainText().serialize(soundFileNameComponent);
+        String soundFileName = event.getItem().getItemMeta().getPersistentDataContainer().get(new NamespacedKey(CustomDiscs.getInstance(), "customdisc"), PersistentDataType.STRING);
 
         Path soundFilePath = Path.of(CustomDiscs.getInstance().getDataFolder().getPath(), "musicdata", soundFileName);
 

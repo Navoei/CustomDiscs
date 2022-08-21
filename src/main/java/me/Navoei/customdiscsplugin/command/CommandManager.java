@@ -39,7 +39,7 @@ public class CommandManager implements CommandExecutor {
         } else {
             player.sendMessage(ChatColor.AQUA + "---[ Custom Discs ]---");
             for (int i = 0; i < getSubCommands().size(); i++) {
-                player.sendMessage(getSubCommands().get(i).getSyntax() + ChatColor.DARK_GRAY + "-" + getSubCommands().get(i).getDescription());
+                player.sendMessage(getSubCommands().get(i).getSyntax() + ChatColor.DARK_GRAY + " - " + getSubCommands().get(i).getDescription());
             }
             player.sendMessage(ChatColor.AQUA + "----------------------");
         }

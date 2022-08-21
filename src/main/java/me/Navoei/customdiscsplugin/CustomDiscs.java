@@ -75,7 +75,7 @@ public final class CustomDiscs extends JavaPlugin {
 
                     if (!jukebox.getRecord().hasItemMeta()) return;
 
-                    if (jukebox.getRecord().getItemMeta().getPersistentDataContainer().has(new NamespacedKey(String.valueOf(this), "customdisc"), PersistentDataType.STRING)) {
+                    if (jukebox.getRecord().getItemMeta().getPersistentDataContainer().has(new NamespacedKey(CustomDiscs.getInstance(), "customdisc"), PersistentDataType.STRING)) {
                         event.setCancelled(true);
                     }
 

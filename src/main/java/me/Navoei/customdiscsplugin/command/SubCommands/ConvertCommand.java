@@ -14,7 +14,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 
-import java.util.Objects;
+import java.util.List;
 
 public class ConvertCommand extends SubCommand {
 
@@ -39,14 +39,17 @@ public class ConvertCommand extends SubCommand {
         if (isOldCustomMusicDisc(player.getInventory().getItemInMainHand())) {
             ItemMeta customDiscMeta = player.getInventory().getItemInMainHand().getItemMeta();
 
-            Component soundFileNameComponent = Objects.requireNonNull(customDiscMeta.lore()).get(1).asComponent();
+            Component soundFileNameComponent = customDiscMeta.lore().get(1).asComponent();
             String soundFileName = PlainTextComponentSerializer.plainText().serialize(soundFileNameComponent);
+            List<Component> songName = customDiscMeta.lore();
 
             PersistentDataContainer data = customDiscMeta.getPersistentDataContainer();
             data.set(new NamespacedKey(CustomDiscs.getInstance(), "customdisc"), PersistentDataType.STRING, soundFileName);
 
-            customDiscMeta.lore().remove(1);
-            customDiscMeta.removeItemFlags(ItemFlag.values());
+            songName.remove(1);
+
+            customDiscMeta.lore(songName);
+
             customDiscMeta.removeItemFlags(ItemFlag.HIDE_ENCHANTS);
 
             player.getInventory().getItemInMainHand().setItemMeta(customDiscMeta);
