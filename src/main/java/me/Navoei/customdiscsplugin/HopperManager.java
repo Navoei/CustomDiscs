@@ -17,7 +17,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.inventory.*;
 import org.bukkit.event.world.ChunkLoadEvent;
-import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
 
@@ -223,6 +222,18 @@ public class HopperManager implements Listener {
         if (!event.getBlock().getType().equals(Material.JUKEBOX)) return;
 
         getNextDiscFromHopperIntoJukebox(event.getBlock());
+
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void onHopperPlace(BlockPlaceEvent event) {
+        if (!event.getBlock().getType().equals(Material.HOPPER)) return;
+
+        Block hopperBlock = event.getBlock();
+
+        if (!PlayerManager.instance().isAudioPlayerPlaying(hopperBlock.getRelative(BlockFace.UP).getLocation())) {
+            itemJukeboxToHopper(hopperBlock.getRelative(BlockFace.UP));
+        }
 
     }
 
