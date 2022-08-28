@@ -36,6 +36,11 @@ public class ConvertCommand extends SubCommand {
     @Override
     public void perform(Player player, String[] args) {
 
+        if (!player.hasPermission("customdiscs.convert")) {
+            player.sendMessage(ChatColor.RED + "You do not have permission to execute this command!");
+            return;
+        }
+
         if (isOldCustomMusicDisc(player.getInventory().getItemInMainHand())) {
             ItemMeta customDiscMeta = player.getInventory().getItemInMainHand().getItemMeta();
 
@@ -53,6 +58,8 @@ public class ConvertCommand extends SubCommand {
             customDiscMeta.removeItemFlags(ItemFlag.HIDE_ENCHANTS);
 
             player.getInventory().getItemInMainHand().setItemMeta(customDiscMeta);
+
+            player.sendMessage(ChatColor.GREEN + "The new format has been applied.");
 
         } else {
             player.sendMessage(ChatColor.RED + "The new format could not be applied.");

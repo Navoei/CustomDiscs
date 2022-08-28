@@ -9,6 +9,5 @@ depend: [ voicechat, ProtocolLib ]
 
 commands:
   customdisc:
-    permission: customdiscs.command
     description: The custom discs command.
     aliases: cd

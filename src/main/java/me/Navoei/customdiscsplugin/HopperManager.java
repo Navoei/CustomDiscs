@@ -212,6 +212,7 @@ public class HopperManager implements Listener {
             if (blockState instanceof Jukebox) {
                 if (!PlayerManager.instance().isAudioPlayerPlaying(blockState.getLocation())) {
                     itemJukeboxToHopper(blockState.getBlock());
+                    getNextDiscFromHopperIntoJukebox(blockState.getBlock());
                 }
             }
         }

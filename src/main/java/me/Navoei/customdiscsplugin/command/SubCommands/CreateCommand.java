@@ -43,7 +43,13 @@ public class CreateCommand extends SubCommand {
         if (isMusicDisc(player)) {
             if (args.length == 3) {
 
+                if (!player.hasPermission("customdiscs.create")) {
+                    player.sendMessage(ChatColor.RED + "You do not have permission to execute this command!");
+                    return;
+                }
+
                 // /cd create test.mp3 "test"
+                //      [0]     [1]     [2]
                 //Find file, if file not there then say "file not there"
                 String songname = "";
                 String filename = args[1];
@@ -88,7 +94,7 @@ public class CreateCommand extends SubCommand {
                 player.sendMessage("Your filename is: " + ChatColor.GRAY + songname);
                 player.sendMessage("Your custom name is: " + ChatColor.GRAY + customName(readQuotes(args)));
 
-            } else if (args.length <= 3) {
+            } else if (args.length < 3) {
                 player.sendMessage(ChatColor.RED + "Insufficient arguments! ( /customdisc create <filename> \"Custom Lore\" )");
             } else {
                 player.sendMessage(ChatColor.RED + "Too many arguments! ( /customdisc create <filename> \"Custom Lore\" )");
@@ -152,7 +158,7 @@ public class CreateCommand extends SubCommand {
 
     private boolean isMusicDisc(Player p) {
 
-        if (    p.getInventory().getItemInMainHand().getType().equals(Material.MUSIC_DISC_13) ||
+        return p.getInventory().getItemInMainHand().getType().equals(Material.MUSIC_DISC_13) ||
                 p.getInventory().getItemInMainHand().getType().equals(Material.MUSIC_DISC_CAT) ||
                 p.getInventory().getItemInMainHand().getType().equals(Material.MUSIC_DISC_BLOCKS) ||
                 p.getInventory().getItemInMainHand().getType().equals(Material.MUSIC_DISC_CHIRP) ||
@@ -166,13 +172,7 @@ public class CreateCommand extends SubCommand {
                 p.getInventory().getItemInMainHand().getType().equals(Material.MUSIC_DISC_WAIT) ||
                 p.getInventory().getItemInMainHand().getType().equals(Material.MUSIC_DISC_OTHERSIDE) ||
                 p.getInventory().getItemInMainHand().getType().equals(Material.MUSIC_DISC_5) ||
-                p.getInventory().getItemInMainHand().getType().equals(Material.MUSIC_DISC_PIGSTEP)
-        )
-        {
-            return true;
-        }
-
-        return false;
+                p.getInventory().getItemInMainHand().getType().equals(Material.MUSIC_DISC_PIGSTEP);
     }
 
 }
