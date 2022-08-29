@@ -88,7 +88,7 @@ public class HopperManager implements Listener {
             hopper.getInventory().removeItem(event.getItem().getItemStack());
         }, 1L);
 
-        String soundFileName = event.getItem().getPersistentDataContainer().get(new NamespacedKey(CustomDiscs.getInstance(), "customdisc"), PersistentDataType.STRING);
+        String soundFileName = jukebox.getRecord().getItemMeta().getPersistentDataContainer().get(new NamespacedKey(CustomDiscs.getInstance(), "customdisc"), PersistentDataType.STRING);
 
         Path soundFilePath = Path.of(CustomDiscs.getInstance().getDataFolder().getPath(), "musicdata", soundFileName);
 
@@ -210,7 +210,6 @@ public class HopperManager implements Listener {
             if (blockState instanceof Jukebox) {
                 if (!PlayerManager.instance().isAudioPlayerPlaying(blockState.getLocation())) {
                     itemJukeboxToHopper(blockState.getBlock());
-                    getNextDiscFromHopperIntoJukebox(blockState.getBlock());
                 }
             }
         }
@@ -265,22 +264,108 @@ public class HopperManager implements Listener {
         Jukebox jukebox = (Jukebox) block.getState();
         if (!jukebox.getRecord().getType().equals(Material.AIR)) return;
 
-        lookForItemInHoppersThenPlayMusic(block, BlockFace.UP, jukebox);
+        if (block.getRelative(BlockFace.UP).getType().equals(Material.HOPPER)) {
+            org.bukkit.block.Hopper hopper = (org.bukkit.block.Hopper) block.getRelative(BlockFace.UP).getState();
+            if (!hopper.getInventory().isEmpty()) {
+                for (int i = 0; i < hopper.getInventory().getSize(); i++) {
+                    if (hopper.getInventory().getItem(i) != null) {
+                        if (isCustomMusicDisc(hopper.getInventory().getItem(i))) {
 
-        lookForItemInHoppersThenPlayMusic(block, BlockFace.SOUTH, jukebox);
+                            jukebox.setRecord(hopper.getInventory().getItem(i));
+                            jukebox.update();
 
-        lookForItemInHoppersThenPlayMusic(block, BlockFace.WEST, jukebox);
+                            String soundFileName = jukebox.getRecord().getItemMeta().getPersistentDataContainer().get(new NamespacedKey(CustomDiscs.getInstance(), "customdisc"), PersistentDataType.STRING);
 
-        lookForItemInHoppersThenPlayMusic(block, BlockFace.NORTH, jukebox);
+                            Path soundFilePath = Path.of(CustomDiscs.getInstance().getDataFolder().getPath(), "musicdata", soundFileName);
 
-        lookForItemInHoppersThenPlayMusic(block, BlockFace.EAST, jukebox);
+                            assert VoicePlugin.voicechatServerApi != null;
+                            PlayerManager.instance().playLocationalAudio(VoicePlugin.voicechatServerApi, soundFilePath, null, jukebox.getBlock());
 
-    }
+                            hopper.getInventory().setItem(i, new ItemStack(Material.AIR));
+                            return;
+                        }
+                    }
+                }
+            }
+        }
 
-    private void lookForItemInHoppersThenPlayMusic (Block block, BlockFace blockFace, Jukebox jukebox) {
+        if (block.getRelative(BlockFace.SOUTH).getType().equals(Material.HOPPER)) {
+            org.bukkit.block.Hopper hopper = (org.bukkit.block.Hopper) block.getRelative(BlockFace.SOUTH).getState();
+            if (!hopper.getInventory().isEmpty()) {
+                for (int i = 0; i < hopper.getInventory().getSize(); i++) {
+                    if (hopper.getInventory().getItem(i) != null) {
+                        if (isCustomMusicDisc(hopper.getInventory().getItem(i))) {
 
-        if (block.getRelative(blockFace).getType().equals(Material.HOPPER)) {
-            org.bukkit.block.Hopper hopper = (org.bukkit.block.Hopper) block.getRelative(blockFace).getState();
+                            jukebox.setRecord(hopper.getInventory().getItem(i));
+                            jukebox.update();
+
+                            String soundFileName = jukebox.getRecord().getItemMeta().getPersistentDataContainer().get(new NamespacedKey(CustomDiscs.getInstance(), "customdisc"), PersistentDataType.STRING);
+
+                            Path soundFilePath = Path.of(CustomDiscs.getInstance().getDataFolder().getPath(), "musicdata", soundFileName);
+
+                            assert VoicePlugin.voicechatServerApi != null;
+                            PlayerManager.instance().playLocationalAudio(VoicePlugin.voicechatServerApi, soundFilePath, null, jukebox.getBlock());
+
+                            hopper.getInventory().setItem(i, new ItemStack(Material.AIR));
+                            return;
+                        }
+                    }
+                }
+            }
+        }
+
+        if (block.getRelative(BlockFace.WEST).getType().equals(Material.HOPPER)) {
+            org.bukkit.block.Hopper hopper = (org.bukkit.block.Hopper) block.getRelative(BlockFace.WEST).getState();
+            if (!hopper.getInventory().isEmpty()) {
+                for (int i = 0; i < hopper.getInventory().getSize(); i++) {
+                    if (hopper.getInventory().getItem(i) != null) {
+                        if (isCustomMusicDisc(hopper.getInventory().getItem(i))) {
+
+                            jukebox.setRecord(hopper.getInventory().getItem(i));
+                            jukebox.update();
+
+                            String soundFileName = jukebox.getRecord().getItemMeta().getPersistentDataContainer().get(new NamespacedKey(CustomDiscs.getInstance(), "customdisc"), PersistentDataType.STRING);
+
+                            Path soundFilePath = Path.of(CustomDiscs.getInstance().getDataFolder().getPath(), "musicdata", soundFileName);
+
+                            assert VoicePlugin.voicechatServerApi != null;
+                            PlayerManager.instance().playLocationalAudio(VoicePlugin.voicechatServerApi, soundFilePath, null, jukebox.getBlock());
+
+                            hopper.getInventory().setItem(i, new ItemStack(Material.AIR));
+                            return;
+                        }
+                    }
+                }
+            }
+        }
+
+        if (block.getRelative(BlockFace.NORTH).getType().equals(Material.HOPPER)) {
+            org.bukkit.block.Hopper hopper = (org.bukkit.block.Hopper) block.getRelative(BlockFace.NORTH).getState();
+            if (!hopper.getInventory().isEmpty()) {
+                for (int i = 0; i < hopper.getInventory().getSize(); i++) {
+                    if (hopper.getInventory().getItem(i) != null) {
+                        if (isCustomMusicDisc(hopper.getInventory().getItem(i))) {
+
+                            jukebox.setRecord(hopper.getInventory().getItem(i));
+                            jukebox.update();
+
+                            String soundFileName = jukebox.getRecord().getItemMeta().getPersistentDataContainer().get(new NamespacedKey(CustomDiscs.getInstance(), "customdisc"), PersistentDataType.STRING);
+
+                            Path soundFilePath = Path.of(CustomDiscs.getInstance().getDataFolder().getPath(), "musicdata", soundFileName);
+
+                            assert VoicePlugin.voicechatServerApi != null;
+                            PlayerManager.instance().playLocationalAudio(VoicePlugin.voicechatServerApi, soundFilePath, null, jukebox.getBlock());
+
+                            hopper.getInventory().setItem(i, new ItemStack(Material.AIR));
+                            return;
+                        }
+                    }
+                }
+            }
+        }
+
+        if (block.getRelative(BlockFace.EAST).getType().equals(Material.HOPPER)) {
+            org.bukkit.block.Hopper hopper = (org.bukkit.block.Hopper) block.getRelative(BlockFace.EAST).getState();
             if (!hopper.getInventory().isEmpty()) {
                 for (int i = 0; i < hopper.getInventory().getSize(); i++) {
                     if (hopper.getInventory().getItem(i) != null) {
