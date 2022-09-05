@@ -1,7 +1,5 @@
 package me.Navoei.customdiscsplugin;
 
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -26,7 +24,7 @@ import java.util.Objects;
 
 public class HopperManager implements Listener {
 
-    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onHopperPickupFromOtherSource(InventoryMoveItemEvent event) {
 
         if (event.getDestination().getLocation() == null) return;
@@ -62,7 +60,7 @@ public class HopperManager implements Listener {
 
     }
 
-    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onHopperPickupItem(InventoryPickupItemEvent event) {
 
         if (!Objects.requireNonNull(event.getInventory().getLocation()).getChunk().isLoaded()) return;
@@ -97,7 +95,7 @@ public class HopperManager implements Listener {
 
     }
 
-    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onItemPlayerToHopper(InventoryClickEvent event) {
 
         if (event.getClickedInventory() == null) return;
@@ -182,7 +180,7 @@ public class HopperManager implements Listener {
 
     }
 
-    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onInventoryDrag(InventoryDragEvent event) {
 
         if (Objects.requireNonNull(event.getInventory()).getLocation() == null) return;
@@ -204,7 +202,7 @@ public class HopperManager implements Listener {
 
     }
 
-    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onChunkLoad(ChunkLoadEvent event) {
         for (BlockState blockState : event.getChunk().getTileEntities()) {
             if (blockState instanceof Jukebox) {
@@ -215,7 +213,7 @@ public class HopperManager implements Listener {
         }
     }
 
-    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onJukeboxPlace(BlockPlaceEvent event) {
         if (!event.getBlock().getType().equals(Material.JUKEBOX)) return;
 
@@ -223,7 +221,7 @@ public class HopperManager implements Listener {
 
     }
 
-    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onHopperPlace(BlockPlaceEvent event) {
         if (!event.getBlock().getType().equals(Material.HOPPER)) return;
 

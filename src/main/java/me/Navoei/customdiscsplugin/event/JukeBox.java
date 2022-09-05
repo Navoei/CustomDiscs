@@ -13,16 +13,19 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockState;
 import org.bukkit.block.Jukebox;
+import org.bukkit.block.data.BlockData;
+import org.bukkit.block.data.Directional;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockRedstoneEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.inventory.ItemFlag;
 import org.bukkit.persistence.PersistentDataType;
 
 import java.io.FileNotFoundException;
@@ -32,7 +35,7 @@ import java.util.Objects;
 
 public class JukeBox implements Listener{
 
-    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onInsert(PlayerInteractEvent event) throws IOException {
 
         Player player = event.getPlayer();
@@ -69,7 +72,7 @@ public class JukeBox implements Listener{
         }
     }
 
-    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onEject(PlayerInteractEvent event) {
 
         Player player = event.getPlayer();
@@ -85,7 +88,7 @@ public class JukeBox implements Listener{
 
     }
 
-    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onJukeboxBreak(BlockBreakEvent event) {
 
         Block block = event.getBlock();
@@ -96,8 +99,8 @@ public class JukeBox implements Listener{
         stopDisc(block, player);
     }
 
-    @EventHandler
-    public void onJukeBoxExplode(EntityExplodeEvent event) {
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    public void onJukeboxExplode(EntityExplodeEvent event) {
 
         for (Block explodedBlock : event.blockList()) {
             if (explodedBlock.getType() == Material.JUKEBOX) {

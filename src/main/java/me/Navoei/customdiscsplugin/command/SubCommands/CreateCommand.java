@@ -41,7 +41,7 @@ public class CreateCommand extends SubCommand {
     @Override
     public void perform(Player player, String[] args) {
         if (isMusicDisc(player)) {
-            if (args.length == 3) {
+            if (args.length >= 3) {
 
                 if (!player.hasPermission("customdiscs.create")) {
                     player.sendMessage(ChatColor.RED + "You do not have permission to execute this command!");
@@ -94,10 +94,8 @@ public class CreateCommand extends SubCommand {
                 player.sendMessage("Your filename is: " + ChatColor.GRAY + songname);
                 player.sendMessage("Your custom name is: " + ChatColor.GRAY + customName(readQuotes(args)));
 
-            } else if (args.length < 3) {
-                player.sendMessage(ChatColor.RED + "Insufficient arguments! ( /customdisc create <filename> \"Custom Lore\" )");
             } else {
-                player.sendMessage(ChatColor.RED + "Too many arguments! ( /customdisc create <filename> \"Custom Lore\" )");
+                player.sendMessage(ChatColor.RED + "Insufficient arguments! ( /customdisc create <filename> \"Custom Lore\" )");
             }
         } else {
             player.sendMessage(ChatColor.RED + "You are not holding a music disc in your main hand!");

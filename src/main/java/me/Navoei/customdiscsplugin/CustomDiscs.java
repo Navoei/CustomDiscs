@@ -14,7 +14,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.bukkit.NamespacedKey;
 import org.bukkit.block.Jukebox;
-import org.bukkit.inventory.ItemFlag;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.java.JavaPlugin;
 
