@@ -53,6 +53,10 @@ public class CreateCommand extends SubCommand {
                 //Find file, if file not there then say "file not there"
                 String songname = "";
                 String filename = args[1];
+                if (filename.contains("../")) {
+                    player.sendMessage(ChatColor.RED + "This is an invalid filename!");
+                    return;
+                }
 
                 if (customName(readQuotes(args)).equalsIgnoreCase("")) {
                     player.sendMessage(ChatColor.RED + "You must provide a name for your disc.");

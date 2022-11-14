@@ -36,7 +36,7 @@ dependencies {
     implementation "io.papermc.paper:paper-api:${bukkit_version}"
     implementation "de.maxhenkel.voicechat:voicechat-api:${voicechat_api_version}"
 
-    implementation "com.comphenix.protocol:ProtocolLib:5.0.0-SNAPSHOT"
+    compileOnly group: "com.comphenix.protocol", name: "ProtocolLib", version: "4.8.0";
 
 }
 
