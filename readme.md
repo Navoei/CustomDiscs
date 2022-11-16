@@ -8,8 +8,8 @@ A Paper fork of henkelmax's Audio Player.
 - Only custom discs are compatible with hoppers.
 
 Permission Node (Required to run the command. Playing discs does not require a permission.):
-- ```customdiscs.create`` to create a disc
-- ```customdiscs.convert`` to convert a disc
+- ```customdiscs.create``` to create a disc
+- ```customdiscs.convert``` to convert a disc
 
 Dependencies:
 - This plugin depends on the latest version of ProtocolLib for 1.19.x
