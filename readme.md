@@ -7,7 +7,7 @@ A Paper fork of henkelmax's Audio Player.
 - Music files must be in the ```.wav``` or ```.mp3``` format.
 - Only custom discs are compatible with hoppers.
 
-Permission Node (Required to run the command. Playing discs does not require a permission.):
+Permission Nodes (Required to run the commands. Playing discs does not require a permission.):
 - ```customdiscs.create``` to create a disc
 - ```customdiscs.convert``` to convert a disc
 
