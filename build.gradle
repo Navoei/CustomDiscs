@@ -28,6 +28,9 @@ dependencies {
 
     implementation 'com.google.code.findbugs:jsr305:3.0.2'
 
+    implementation 'org.jflac:jflac-codec:1.5.2'
+    shadow 'org.jflac:jflac-codec:1.5.2'
+
     // To use this dependency, you need to compile bukkit by yourself
     // See https://www.spigotmc.org/wiki/buildtools/
     // implementation "org.bukkit:craftbukkit:${bukkit_version}"
