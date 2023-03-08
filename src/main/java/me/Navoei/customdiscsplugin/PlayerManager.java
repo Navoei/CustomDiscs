@@ -11,6 +11,8 @@ import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
+import org.jflac.sound.spi.Flac2PcmAudioInputStream;
+import org.jflac.sound.spi.FlacAudioFileReader;
 
 import javax.annotation.Nullable;
 import javax.sound.sampled.*;
