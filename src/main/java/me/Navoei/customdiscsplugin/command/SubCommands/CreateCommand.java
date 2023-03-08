@@ -66,10 +66,10 @@ public class CreateCommand extends SubCommand {
                 File getDirectory = new File(CustomDiscs.getInstance().getDataFolder(), "musicdata");
                 File songFile = new File(getDirectory.getPath(), filename);
                 if (songFile.exists()) {
-                    if (getFileExtension(filename).equals("wav") || getFileExtension(filename).equals("mp3")) {
+                    if (getFileExtension(filename).equals("wav") || getFileExtension(filename).equals("mp3"), getFileExtension(filename).equals("flac")) {
                         songname = args[1];
                     } else {
-                        player.sendMessage(ChatColor.RED + "File is not in wav or mp3 format!");
+                        player.sendMessage(ChatColor.RED + "File is not in wav, flac, or mp3 format!");
                         return;
                     }
                 } else {
