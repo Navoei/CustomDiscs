@@ -121,6 +121,12 @@ public class PlayerManager {
             AudioInputStream convertedInputStream = new MpegFormatConversionProvider().getAudioInputStream(decodedFormat, inputStream);
             finalInputStream = AudioSystem.getAudioInputStream(audioFormat, convertedInputStream);
 
+        } else if (getFileExtension(file.toFile().toString()).equals("flac")) {
+            AudioInputStream inputStream = new FlacAudioFileReader().getAudioInputStream(file.toFile());
+            AudioFormat baseFormat = inputStream.getFormat();
+            AudioFormat decodedFormat = new AudioFormat(AudioFormat.Encoding.PCM_SIGNED, baseFormat.getSampleRate(), 16, baseFormat.getChannels(), baseFormat.getChannels() * 2, baseFormat.getFrameRate(), false);
+            AudioInputStream convertedInputStream = new Flac2PcmAudioInputStream(inputStream, decodedFormat, inputStream.getFrameLength());
+            finalInputStream = AudioSystem.getAudioInputStream(audioFormat, convertedInputStream);
         }
 
         assert finalInputStream != null;
