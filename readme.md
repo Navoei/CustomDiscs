@@ -1,4 +1,4 @@
-# Custom Discs 1.19.x
+# Custom Discs 1.19-1.19.3
 
 A Paper fork of henkelmax's Audio Player.
 - Play custom music discs using the Simple Voice Chat API. (The voice chat mod is required on the client and server.)
