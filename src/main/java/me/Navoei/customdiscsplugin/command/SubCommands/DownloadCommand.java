@@ -7,13 +7,11 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.codehaus.plexus.util.FileUtils;
 
-import java.io.BufferedInputStream;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URL;
+import java.net.URLConnection;
 import java.nio.file.Path;
-import java.util.Objects;
 
 public class DownloadCommand extends SubCommand {
 
@@ -43,7 +41,7 @@ public class DownloadCommand extends SubCommand {
             player.sendMessage(ChatColor.RED + "You do not have permission to execute this command!");
             return;
         }
-        
+
         if (args.length!=3) {
             player.sendMessage(ChatColor.RED + "Invalid arguments! ( /customdisc download <url> <filename.extension> )");
             return;
@@ -68,9 +66,20 @@ public class DownloadCommand extends SubCommand {
                 player.sendMessage(ChatColor.GRAY + "Downloading file...");
                 Path downloadPath = Path.of(customDiscs.getDataFolder().getPath(), "musicdata", filename);
                 File downloadFile = new File(downloadPath.toUri());
+
+                URLConnection connection = fileURL.openConnection();
+
+                if (connection != null) {
+                    long size = connection.getContentLengthLong() / 1048576;
+                    if (size > customDiscs.getConfig().getInt("max-download-size", 50)) {
+                        player.sendMessage(ChatColor.RED + "The file is larger than " + customDiscs.getConfig().getInt("max-download-size", 50) + "MB.");
+                        return;
+                    }
+                }
+
                 FileUtils.copyURLToFile(fileURL, downloadFile);
 
-                player.sendMessage(ChatColor.GREEN + "File successfully downloaded to " + ChatColor.GRAY + downloadPath.toUri() + ChatColor.GREEN + " .");
+                player.sendMessage(ChatColor.GREEN + "File successfully downloaded to " + ChatColor.GRAY + "plugins/CustomDiscs/musicdata/"+ filename + ChatColor.GREEN + " .");
                 player.sendMessage(ChatColor.GREEN + "Create a disc by doing " + ChatColor.GRAY + "/cd create "+filename+" \"Custom Lore\" " + ChatColor.GREEN + ".");
             } catch (IOException e) {
                 player.sendMessage(ChatColor.RED + "An error has occurred while downloading.");
