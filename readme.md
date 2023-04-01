@@ -22,3 +22,18 @@ Dependencies:
 
 https://user-images.githubusercontent.com/64107368/178426026-c454ac66-5133-4f3a-9af9-7f674e022423.mp4
 
+Default Config:
+```
+# [Music Disc Config]
+
+# The distance from which music discs can be heard in blocks.
+music-disc-distance: 16
+
+# The master volume of music discs from 0-1. (You can set values like 0.5 for 50% volume).
+music-disc-volume: 1
+
+#The maximum download size in megabytes.
+max-download-size: 50
+```
+
+
