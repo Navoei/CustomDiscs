@@ -39,6 +39,11 @@ public class DownloadCommand extends SubCommand {
         // /cd   download    url   filename
         //         [0]       [1]     [2]
 
+        if (!player.hasPermission("customdiscs.download")) {
+            player.sendMessage(ChatColor.RED + "You do not have permission to execute this command!");
+            return;
+        }
+        
         if (args.length!=3) {
             player.sendMessage(ChatColor.RED + "Invalid arguments! ( /customdisc download <url> <filename.extension> )");
             return;
