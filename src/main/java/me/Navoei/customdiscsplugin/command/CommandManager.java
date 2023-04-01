@@ -2,6 +2,7 @@ package me.Navoei.customdiscsplugin.command;
 
 import me.Navoei.customdiscsplugin.command.SubCommands.ConvertCommand;
 import me.Navoei.customdiscsplugin.command.SubCommands.CreateCommand;
+import me.Navoei.customdiscsplugin.command.SubCommands.DownloadCommand;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -21,6 +22,7 @@ public class CommandManager implements CommandExecutor, TabCompleter {
     public CommandManager() {
         subCommands.add(new CreateCommand());
         subCommands.add(new ConvertCommand());
+        subCommands.add(new DownloadCommand());
     }
 
     @Override

@@ -1,14 +1,12 @@
 package me.Navoei.customdiscsplugin.event;
 
 import me.Navoei.customdiscsplugin.CustomDiscs;
-import me.Navoei.customdiscsplugin.HopperManager;
 import me.Navoei.customdiscsplugin.PlayerManager;
 import me.Navoei.customdiscsplugin.VoicePlugin;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -34,7 +32,6 @@ public class JukeBox implements Listener{
 
     CustomDiscs customDiscs = CustomDiscs.getInstance();
     PlayerManager playerManager = PlayerManager.instance();
-    HopperManager hopperManager = HopperManager.instance();
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onInsert(PlayerInteractEvent event) throws IOException {
@@ -63,7 +60,6 @@ public class JukeBox implements Listener{
 
                 assert VoicePlugin.voicechatServerApi != null;
                 playerManager.playLocationalAudio(VoicePlugin.voicechatServerApi, soundFilePath, block, customActionBarSongPlaying.asComponent());
-
             } else {
                 player.sendMessage(ChatColor.RED + "Sound file not found.");
                 event.setCancelled(true);
@@ -82,9 +78,24 @@ public class JukeBox implements Listener{
         if (event.getClickedBlock().getType() != Material.JUKEBOX) return;
 
         if (jukeboxContainsDisc(block)) {
-            event.setUseInteractedBlock(event.useInteractedBlock());
-            stopDisc(block, player);
-            Bukkit.getScheduler().runTaskLater(customDiscs, () -> hopperManager.getNextDiscFromHopperIntoJukebox(block), 1L);
+
+            ItemStack itemInvolvedInEvent;
+            if (event.getMaterial().equals(Material.AIR)) {
+
+                if (!player.getInventory().getItemInMainHand().getType().equals(Material.AIR)) {
+                    itemInvolvedInEvent = player.getInventory().getItemInMainHand();
+                } else if (!player.getInventory().getItemInOffHand().getType().equals(Material.AIR)) {
+                    itemInvolvedInEvent = player.getInventory().getItemInOffHand();
+                } else {
+                    itemInvolvedInEvent = new ItemStack(Material.AIR);
+                }
+
+            } else {
+                itemInvolvedInEvent = new ItemStack(event.getMaterial());
+            }
+
+            if (player.isSneaking() && !itemInvolvedInEvent.getType().equals(Material.AIR)) return;
+            stopDisc(block);
         }
     }
 
@@ -96,7 +107,7 @@ public class JukeBox implements Listener{
 
         if (block.getType() != Material.JUKEBOX) return;
 
-        stopDisc(block, player);
+        stopDisc(block);
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
@@ -104,7 +115,7 @@ public class JukeBox implements Listener{
 
         for (Block explodedBlock : event.blockList()) {
             if (explodedBlock.getType() == Material.JUKEBOX) {
-                stopDisc(explodedBlock, null);
+                stopDisc(explodedBlock);
             }
         }
 
@@ -112,7 +123,7 @@ public class JukeBox implements Listener{
 
     public boolean jukeboxContainsDisc(Block b) {
         Jukebox jukebox = (Jukebox) b.getLocation().getBlock().getState();
-        return jukebox.getPlaying() != Material.AIR;
+        return jukebox.getRecord().getType() != Material.AIR;
     }
 
     public boolean isCustomMusicDisc(PlayerInteractEvent e) {
@@ -139,12 +150,8 @@ public class JukeBox implements Listener{
                 );
     }
 
-    private void stopDisc(Block block, Player player) {
+    private void stopDisc(Block block) {
         playerManager.stopLocationalAudio(block.getLocation());
-        if (player == null) return;
-        if (jukeboxContainsDisc(block)) {
-            player.swingMainHand();
-        }
     }
 
 }

@@ -12,6 +12,7 @@ import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -86,9 +87,6 @@ public class PlayerManager {
             }
 
             audioPlayer.setOnStopped(() -> {
-
-                Bukkit.getScheduler().runTask(CustomDiscs.getInstance(), () -> HopperManager.instance().discToHopper(block));
-
                 playerMap.remove(id);
             });
 
@@ -114,12 +112,7 @@ public class PlayerManager {
             Bukkit.getLogger().info("Error Occurred At: " + block.getLocation());
             for (ServerPlayer serverPlayer : playersInRange) {
                 Player bukkitPlayer = (Player) serverPlayer.getPlayer();
-
-                TextComponent actionBarComponent = Component.text()
-                        .content("An error has occurred while trying to play the music disc.")
-                        .color(NamedTextColor.RED)
-                        .build();
-                bukkitPlayer.sendActionBar(actionBarComponent.asComponent());
+                bukkitPlayer.sendMessage(ChatColor.RED + "An error has occurred while trying to play this disc.");
             }
             return null;
         }
