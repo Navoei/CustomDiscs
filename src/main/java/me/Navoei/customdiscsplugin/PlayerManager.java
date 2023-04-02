@@ -83,6 +83,9 @@ public class PlayerManager {
             }
 
             audioPlayer.setOnStopped(() -> {
+
+                Bukkit.getScheduler().runTask(CustomDiscs.getInstance(), () -> HopperManager.instance().discToHopper(block));
+
                 playerMap.remove(id);
             });
 

@@ -1,6 +1,7 @@
 package me.Navoei.customdiscsplugin.event;
 
 import me.Navoei.customdiscsplugin.CustomDiscs;
+import me.Navoei.customdiscsplugin.ParticleManager;
 import me.Navoei.customdiscsplugin.PlayerManager;
 import me.Navoei.customdiscsplugin.VoicePlugin;
 import net.kyori.adventure.text.Component;

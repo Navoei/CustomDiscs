@@ -12,14 +12,25 @@ import me.Navoei.customdiscsplugin.command.CommandManager;
 import me.Navoei.customdiscsplugin.event.JukeBox;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
+import org.bukkit.block.BlockFace;
+import org.bukkit.block.Hopper;
 import org.bukkit.block.Jukebox;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import javax.annotation.Nullable;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Path;
 import java.util.Objects;
+
+import static me.Navoei.customdiscsplugin.PlayerManager.getLengthSeconds;
 
 public final class CustomDiscs extends JavaPlugin {
 
@@ -75,9 +86,12 @@ public final class CustomDiscs extends JavaPlugin {
                     if (!jukebox.getRecord().hasItemMeta()) return;
 
                     if (jukebox.getRecord().getItemMeta().getPersistentDataContainer().has(new NamespacedKey(CustomDiscs.getInstance(), "customdisc"), PersistentDataType.STRING)) {
+                        jukebox.stopPlaying();
                         event.setCancelled(true);
                     }
 
+                    //Spawn particles if there isnt any music playing at this location.
+                    ParticleManager.start(jukebox);
                 }
             }
         });
@@ -95,4 +109,5 @@ public final class CustomDiscs extends JavaPlugin {
     public static CustomDiscs getInstance() {
         return instance;
     }
+
 }
