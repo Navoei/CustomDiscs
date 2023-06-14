@@ -1,11 +1,20 @@
 name: CustomDiscs
-version: ${version}
+version: '${version}'
 main: me.Navoei.customdiscsplugin.CustomDiscs
-api-version: ${bukkit_api_version}
+api-version: '${bukkit_api_version}'
 prefix: CustomDiscs
 authors: [ "Navoei" ]
 description: A plugin which uses the Simple Voice Chat API to add custom music discs.
-depend: [ voicechat, ProtocolLib ]
+dependencies:
+  server:
+    voicechat:
+      load: BEFORE
+      required: true
+      join-classpath: true
+    ProtocolLib:
+      load: BEFORE
+      required: true
+      join-classpath: true
 
 commands:
   customdisc:

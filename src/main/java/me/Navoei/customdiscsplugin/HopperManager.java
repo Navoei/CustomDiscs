@@ -82,7 +82,7 @@ public class HopperManager implements Listener {
 
         if (!event.isCancelled()) {
             if (!Arrays.toString(hopper.getInventory().getContents()).contains("null")) return;
-            
+
             jukebox.setRecord(new ItemStack(Material.AIR));
             block.setBlockData(jukebox.getBlockData());
         }
