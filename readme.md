@@ -17,8 +17,7 @@ Permission Nodes (Required to run the commands. Playing discs does not require a
 - ```customdiscs.download``` to download a file
 
 Dependencies:
-- This plugin depends on the latest version of ProtocolLib for 1.20.x
-Development builds for ProtocolLib can be found @ https://ci.dmulloy2.net/job/ProtocolLib/651/
+- This plugin depends on the latest version of ProtocolLib for 1.20.x.
 
 
 https://user-images.githubusercontent.com/64107368/178426026-c454ac66-5133-4f3a-9af9-7f674e022423.mp4
