@@ -20,7 +20,6 @@ import org.bukkit.event.world.ChunkLoadEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
-import org.jetbrains.annotations.NotNull;
 
 import java.nio.file.Path;
 import java.util.Arrays;
@@ -50,7 +49,7 @@ public class HopperManager implements Listener {
         String soundFileName = event.getItem().getItemMeta().getPersistentDataContainer().get(new NamespacedKey(customDiscs, "customdisc"), PersistentDataType.STRING);
 
 
-        @NotNull PersistentDataContainer persistentDataContainer = event.getItem().getItemMeta().getPersistentDataContainer();
+        PersistentDataContainer persistentDataContainer = event.getItem().getItemMeta().getPersistentDataContainer();
         float range = CustomDiscs.getInstance().musicDiscDistance;
         NamespacedKey customSoundRangeKey = new NamespacedKey(customDiscs, "CustomSoundRange");
 
