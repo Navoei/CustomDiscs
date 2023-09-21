@@ -15,6 +15,7 @@ Downloading Files:
 Permission Nodes (Required to run the commands. Playing discs does not require a permission.):
 - ```customdiscs.create``` to create a disc
 - ```customdiscs.download``` to download a file
+- ```customdiscs.range``` to set the range
 
 Dependencies:
 - This plugin depends on the latest version of ProtocolLib for 1.20.x.
@@ -28,6 +29,9 @@ Default Config:
 
 # The distance from which music discs can be heard in blocks.
 music-disc-distance: 16
+
+# The max distance from which music discs can be heard in blocks.
+music-disc-max-distance: 256
 
 # The master volume of music discs from 0-1. (You can set values like 0.5 for 50% volume).
 music-disc-volume: 1
