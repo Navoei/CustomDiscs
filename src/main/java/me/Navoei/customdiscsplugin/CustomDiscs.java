@@ -18,6 +18,7 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.Hopper;
 import org.bukkit.block.Jukebox;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -42,6 +43,7 @@ public final class CustomDiscs extends JavaPlugin {
     private VoicePlugin voicechatPlugin;
 
     public float musicDiscDistance;
+    public float musicDiscMaxDistance;
     public float musicDiscVolume;
 
     @Override
@@ -71,6 +73,7 @@ public final class CustomDiscs extends JavaPlugin {
         getCommand("customdisc").setExecutor(new CommandManager());
 
         musicDiscDistance = getConfig().getInt("music-disc-distance");
+        musicDiscMaxDistance = getConfig().getInt("music-disc-max-distance");
         musicDiscVolume = Float.parseFloat(Objects.requireNonNull(getConfig().getString("music-disc-volume")));
 
         ProtocolManager protocolManager = ProtocolLibrary.getProtocolManager();
@@ -108,6 +111,25 @@ public final class CustomDiscs extends JavaPlugin {
 
     public static CustomDiscs getInstance() {
         return instance;
+    }
+
+    public static boolean isMusicDisc(Player p) {
+
+        return p.getInventory().getItemInMainHand().getType().equals(Material.MUSIC_DISC_13) ||
+                p.getInventory().getItemInMainHand().getType().equals(Material.MUSIC_DISC_CAT) ||
+                p.getInventory().getItemInMainHand().getType().equals(Material.MUSIC_DISC_BLOCKS) ||
+                p.getInventory().getItemInMainHand().getType().equals(Material.MUSIC_DISC_CHIRP) ||
+                p.getInventory().getItemInMainHand().getType().equals(Material.MUSIC_DISC_FAR) ||
+                p.getInventory().getItemInMainHand().getType().equals(Material.MUSIC_DISC_MALL) ||
+                p.getInventory().getItemInMainHand().getType().equals(Material.MUSIC_DISC_MELLOHI) ||
+                p.getInventory().getItemInMainHand().getType().equals(Material.MUSIC_DISC_STAL) ||
+                p.getInventory().getItemInMainHand().getType().equals(Material.MUSIC_DISC_STRAD) ||
+                p.getInventory().getItemInMainHand().getType().equals(Material.MUSIC_DISC_WARD) ||
+                p.getInventory().getItemInMainHand().getType().equals(Material.MUSIC_DISC_11) ||
+                p.getInventory().getItemInMainHand().getType().equals(Material.MUSIC_DISC_WAIT) ||
+                p.getInventory().getItemInMainHand().getType().equals(Material.MUSIC_DISC_OTHERSIDE) ||
+                p.getInventory().getItemInMainHand().getType().equals(Material.MUSIC_DISC_5) ||
+                p.getInventory().getItemInMainHand().getType().equals(Material.MUSIC_DISC_PIGSTEP);
     }
 
 }

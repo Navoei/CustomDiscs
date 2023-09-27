@@ -40,7 +40,7 @@ public class CreateCommand extends SubCommand {
 
     @Override
     public void perform(Player player, String[] args) {
-        if (isMusicDisc(player)) {
+        if (CustomDiscs.isMusicDisc(player)) {
             if (args.length >= 3) {
 
                 if (!player.hasPermission("customdiscs.create")) {
@@ -156,25 +156,6 @@ public class CreateCommand extends SubCommand {
         } else {
             return sb.toString().substring(0, sb.length()-1);
         }
-    }
-
-    private boolean isMusicDisc(Player p) {
-
-        return p.getInventory().getItemInMainHand().getType().equals(Material.MUSIC_DISC_13) ||
-                p.getInventory().getItemInMainHand().getType().equals(Material.MUSIC_DISC_CAT) ||
-                p.getInventory().getItemInMainHand().getType().equals(Material.MUSIC_DISC_BLOCKS) ||
-                p.getInventory().getItemInMainHand().getType().equals(Material.MUSIC_DISC_CHIRP) ||
-                p.getInventory().getItemInMainHand().getType().equals(Material.MUSIC_DISC_FAR) ||
-                p.getInventory().getItemInMainHand().getType().equals(Material.MUSIC_DISC_MALL) ||
-                p.getInventory().getItemInMainHand().getType().equals(Material.MUSIC_DISC_MELLOHI) ||
-                p.getInventory().getItemInMainHand().getType().equals(Material.MUSIC_DISC_STAL) ||
-                p.getInventory().getItemInMainHand().getType().equals(Material.MUSIC_DISC_STRAD) ||
-                p.getInventory().getItemInMainHand().getType().equals(Material.MUSIC_DISC_WARD) ||
-                p.getInventory().getItemInMainHand().getType().equals(Material.MUSIC_DISC_11) ||
-                p.getInventory().getItemInMainHand().getType().equals(Material.MUSIC_DISC_WAIT) ||
-                p.getInventory().getItemInMainHand().getType().equals(Material.MUSIC_DISC_OTHERSIDE) ||
-                p.getInventory().getItemInMainHand().getType().equals(Material.MUSIC_DISC_5) ||
-                p.getInventory().getItemInMainHand().getType().equals(Material.MUSIC_DISC_PIGSTEP);
     }
 
 }
