@@ -2,10 +2,9 @@
 
 A Paper fork of henkelmax's Audio Player.
 - Play custom music discs using the Simple Voice Chat API. (The voice chat mod is required on the client and server.)
-- Use ```/customdisc``` or ```/cd``` to create a custom disc. 
+- Use ```/customdisc``` or ```/cd``` to view available commands.
 - Music files should go into ```plugins/CustomDiscs/musicdata/```
 - Music files must be in the ```.wav```, ```.flac```, or ```.mp3``` format.
-- Only custom discs are compatible with hoppers.
 
 Downloading Files:
 - To download a file use the command ```/cd download <url> <filename.extension>```. The link used to download a file must be a direct link (meaning the file must automatically begin downloading when accessing the link). Files must have the correct extension specified. An UnsupportedAudioFileException will be thrown in the server's console if the file extension is not correct (for example when giving a wav file the mp3 extension). Below is an example of how to use the command and a link to get direct downloads from Google Drive.
