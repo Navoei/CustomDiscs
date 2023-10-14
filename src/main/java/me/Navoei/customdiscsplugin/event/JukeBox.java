@@ -104,7 +104,6 @@ public class JukeBox implements Listener{
     public void onJukeboxBreak(BlockBreakEvent event) {
 
         Block block = event.getBlock();
-        Player player = event.getPlayer();
 
         if (block.getType() != Material.JUKEBOX) return;
 
@@ -128,27 +127,8 @@ public class JukeBox implements Listener{
     }
 
     public boolean isCustomMusicDisc(PlayerInteractEvent e) {
-
         if (e.getItem()==null) return false;
-
-        return e.getItem().getItemMeta().getPersistentDataContainer().has(new NamespacedKey(customDiscs, "customdisc")) &&
-                (
-                        e.getItem().getType().equals(Material.MUSIC_DISC_13) ||
-                                e.getItem().getType().equals(Material.MUSIC_DISC_CAT) ||
-                                e.getItem().getType().equals(Material.MUSIC_DISC_BLOCKS) ||
-                                e.getItem().getType().equals(Material.MUSIC_DISC_CHIRP) ||
-                                e.getItem().getType().equals(Material.MUSIC_DISC_FAR) ||
-                                e.getItem().getType().equals(Material.MUSIC_DISC_MALL) ||
-                                e.getItem().getType().equals(Material.MUSIC_DISC_MELLOHI) ||
-                                e.getItem().getType().equals(Material.MUSIC_DISC_STAL) ||
-                                e.getItem().getType().equals(Material.MUSIC_DISC_STRAD) ||
-                                e.getItem().getType().equals(Material.MUSIC_DISC_WARD) ||
-                                e.getItem().getType().equals(Material.MUSIC_DISC_11) ||
-                                e.getItem().getType().equals(Material.MUSIC_DISC_WAIT) ||
-                                e.getItem().getType().equals(Material.MUSIC_DISC_OTHERSIDE) ||
-                                e.getItem().getType().equals(Material.MUSIC_DISC_5) ||
-                                e.getItem().getType().equals(Material.MUSIC_DISC_PIGSTEP)
-                );
+        return e.getItem().getItemMeta().getPersistentDataContainer().has(new NamespacedKey(customDiscs, "customdisc"));
     }
 
     private void stopDisc(Block block) {
