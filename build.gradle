@@ -12,7 +12,7 @@ group = maven_group
 
 processResources {
     filesMatching("plugin.yml") {
-        expand "version": plugin_version,
+        expand "plugin_version": plugin_version,
                 "bukkit_api_version": bukkit_api_version
     }
 }

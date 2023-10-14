@@ -1,5 +1,5 @@
 name: CustomDiscs
-version: '${version}'
+version: '${plugin_version}'
 main: me.Navoei.customdiscsplugin.CustomDiscs
 api-version: '${bukkit_api_version}'
 prefix: CustomDiscs

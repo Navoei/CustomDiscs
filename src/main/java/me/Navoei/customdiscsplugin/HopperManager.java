@@ -11,6 +11,7 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.Jukebox;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -101,24 +102,7 @@ public class HopperManager implements Listener {
     }
 
     private boolean isCustomMusicDisc (ItemStack item) {
-
-        return item.getItemMeta().getPersistentDataContainer().has(new NamespacedKey(customDiscs, "customdisc"), PersistentDataType.STRING) && (
-                        item.getType().equals(Material.MUSIC_DISC_13) ||
-                        item.getType().equals(Material.MUSIC_DISC_CAT) ||
-                        item.getType().equals(Material.MUSIC_DISC_BLOCKS) ||
-                        item.getType().equals(Material.MUSIC_DISC_CHIRP) ||
-                        item.getType().equals(Material.MUSIC_DISC_FAR) ||
-                        item.getType().equals(Material.MUSIC_DISC_MALL) ||
-                        item.getType().equals(Material.MUSIC_DISC_MELLOHI) ||
-                        item.getType().equals(Material.MUSIC_DISC_STAL) ||
-                        item.getType().equals(Material.MUSIC_DISC_STRAD) ||
-                        item.getType().equals(Material.MUSIC_DISC_WARD) ||
-                        item.getType().equals(Material.MUSIC_DISC_11) ||
-                        item.getType().equals(Material.MUSIC_DISC_WAIT) ||
-                        item.getType().equals(Material.MUSIC_DISC_OTHERSIDE) ||
-                        item.getType().equals(Material.MUSIC_DISC_5) ||
-                        item.getType().equals(Material.MUSIC_DISC_PIGSTEP)
-                );
+        return item.getItemMeta().getPersistentDataContainer().has(new NamespacedKey(customDiscs, "customdisc"), PersistentDataType.STRING) && item.getType().toString().contains("MUSIC_DISC");
     }
 
     private static HopperManager instance;
