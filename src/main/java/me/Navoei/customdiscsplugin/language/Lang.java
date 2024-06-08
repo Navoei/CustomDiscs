@@ -4,7 +4,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 public enum Lang {
-    SOME_TEXT("text", "text");
+    PREFIX("text", "text");
 
     private final String path;
     private final String def;

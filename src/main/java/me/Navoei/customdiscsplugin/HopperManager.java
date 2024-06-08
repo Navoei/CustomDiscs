@@ -101,7 +101,7 @@ public class HopperManager implements Listener {
         }
     }
 
-    private boolean isCustomMusicDisc (ItemStack item) {
+    private boolean isCustomMusicDisc(ItemStack item) {
         return item.getItemMeta().getPersistentDataContainer().has(new NamespacedKey(customDiscs, "customdisc"), PersistentDataType.STRING);
     }
 

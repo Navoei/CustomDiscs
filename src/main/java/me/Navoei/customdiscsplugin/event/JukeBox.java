@@ -79,7 +79,6 @@ public class JukeBox implements Listener{
         if (event.getClickedBlock().getType() != Material.JUKEBOX) return;
 
         if (jukeboxContainsDisc(block)) {
-
             ItemStack itemInvolvedInEvent;
             if (event.getMaterial().equals(Material.AIR)) {
 
