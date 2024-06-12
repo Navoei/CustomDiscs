@@ -1,5 +1,6 @@
 package me.Navoei.customdiscsplugin;
 
+import me.Navoei.customdiscsplugin.language.Lang;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -40,9 +41,10 @@ public class HopperManager implements Listener {
 
         Component songNameComponent = Objects.requireNonNull(event.getItem().getItemMeta().lore()).get(0).asComponent();
         String songName = PlainTextComponentSerializer.plainText().serialize(songNameComponent);
-
+        String content = Lang.NOW_PLAYING.toString().replace("%song_name%", songName);
+        
         TextComponent customActionBarSongPlaying = Component.text()
-                .content("Now Playing: " + songName)
+                .content(content)
                 .color(NamedTextColor.GOLD)
                 .build();
 

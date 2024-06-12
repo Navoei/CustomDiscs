@@ -46,7 +46,7 @@ public class CreateCommand extends SubCommand {
             if (args.length >= 3) {
 
                 if (!player.hasPermission("customdiscs.create")) {
-                    Component textComponent = LegacyComponentSerializer.legacyAmpersand().deserialize(Lang.NO_PERMISSION.toString());
+                    Component textComponent = LegacyComponentSerializer.legacyAmpersand().deserialize(Lang.PREFIX + Lang.NO_PERMISSION.toString());
                     player.sendMessage(textComponent);
                     return;
                 }
@@ -57,13 +57,13 @@ public class CreateCommand extends SubCommand {
                 String song_name = "";
                 String filename = args[1];
                 if (filename.contains("../")) {
-                    Component textComponent = LegacyComponentSerializer.legacyAmpersand().deserialize(Lang.INVALID_FILENAME.toString());
+                    Component textComponent = LegacyComponentSerializer.legacyAmpersand().deserialize(Lang.PREFIX + Lang.INVALID_FILENAME.toString());
                     player.sendMessage(textComponent);
                     return;
                 }
 
                 if (customName(readQuotes(args)).equalsIgnoreCase("")) {
-                    Component textComponent = LegacyComponentSerializer.legacyAmpersand().deserialize(Lang.NO_DISC_NAME_PROVIDED.toString());
+                    Component textComponent = LegacyComponentSerializer.legacyAmpersand().deserialize(Lang.PREFIX + Lang.NO_DISC_NAME_PROVIDED.toString());
                     player.sendMessage(textComponent);
                     return;
                 }
@@ -74,12 +74,12 @@ public class CreateCommand extends SubCommand {
                     if (getFileExtension(filename).equals("wav") || getFileExtension(filename).equals("mp3") || getFileExtension(filename).equals("flac")) {
                         song_name = args[1];
                     } else {
-                        Component textComponent = LegacyComponentSerializer.legacyAmpersand().deserialize(Lang.INVALID_FORMAT.toString());
+                        Component textComponent = LegacyComponentSerializer.legacyAmpersand().deserialize(Lang.PREFIX + Lang.INVALID_FORMAT.toString());
                         player.sendMessage(textComponent);
                         return;
                     }
                 } else {
-                    Component textComponent = LegacyComponentSerializer.legacyAmpersand().deserialize(Lang.FILE_NOT_FOUND.toString());
+                    Component textComponent = LegacyComponentSerializer.legacyAmpersand().deserialize(Lang.PREFIX + Lang.FILE_NOT_FOUND.toString());
                     player.sendMessage(textComponent);
                     return;
                 }
@@ -102,16 +102,16 @@ public class CreateCommand extends SubCommand {
 
                 player.getInventory().getItemInMainHand().setItemMeta(meta);
 
-                Component textComponentFileName = LegacyComponentSerializer.legacyAmpersand().deserialize(Lang.CREATE_FILENAME.toString().replace("%filename%", song_name));
-                Component textComponentCustomName = LegacyComponentSerializer.legacyAmpersand().deserialize(Lang.CREATE_CUSTOM_NAME.toString().replace("%custom_name%", customName(readQuotes(args))));
+                Component textComponentFileName = LegacyComponentSerializer.legacyAmpersand().deserialize(Lang.PREFIX + Lang.CREATE_FILENAME.toString().replace("%filename%", song_name));
+                Component textComponentCustomName = LegacyComponentSerializer.legacyAmpersand().deserialize(Lang.PREFIX + Lang.CREATE_CUSTOM_NAME.toString().replace("%custom_name%", customName(readQuotes(args))));
                 player.sendMessage(textComponentFileName);
                 player.sendMessage(textComponentCustomName);
             } else {
-                Component textComponent = LegacyComponentSerializer.legacyAmpersand().deserialize(Lang.INVALID_ARGUMENTS.toString().replace("%command_syntax", getSyntax()));
+                Component textComponent = LegacyComponentSerializer.legacyAmpersand().deserialize(Lang.PREFIX + Lang.INVALID_ARGUMENTS.toString().replace("%command_syntax", getSyntax()));
                 player.sendMessage(textComponent);
             }
         } else {
-            Component textComponent = LegacyComponentSerializer.legacyAmpersand().deserialize(Lang.NOT_HOLDING_DISC.toString());
+            Component textComponent = LegacyComponentSerializer.legacyAmpersand().deserialize(Lang.PREFIX + Lang.NOT_HOLDING_DISC.toString());
             player.sendMessage(textComponent);
         }
     }
