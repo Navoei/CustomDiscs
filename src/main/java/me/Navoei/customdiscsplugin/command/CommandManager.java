@@ -1,12 +1,16 @@
 package me.Navoei.customdiscsplugin.command;
 
+import me.Navoei.customdiscsplugin.CustomDiscs;
 import me.Navoei.customdiscsplugin.command.SubCommands.CreateCommand;
 import me.Navoei.customdiscsplugin.command.SubCommands.DownloadCommand;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -40,11 +44,14 @@ public class CommandManager implements CommandExecutor, TabCompleter {
                 }
             }
         } else {
-            player.sendMessage(ChatColor.AQUA + "----[ Custom Discs ]----");
-            for (int i = 0; i < getSubCommands().size(); i++) {
-                player.sendMessage(getSubCommands().get(i).getSyntax() + ChatColor.DARK_GRAY + " - " + getSubCommands().get(i).getDescription());
+
+            FileConfiguration config = CustomDiscs.getInstance().getConfig();
+            List<String> messagesList = config.getStringList("help");
+            for (String s : messagesList) {
+                Component textComponent = LegacyComponentSerializer.legacyAmpersand().deserialize(s);
+                player.sendMessage(textComponent);
             }
-            player.sendMessage(ChatColor.AQUA + "---------------------");
+
             return true;
         }
 

@@ -2,10 +2,12 @@ package me.Navoei.customdiscsplugin.command.SubCommands;
 
 import me.Navoei.customdiscsplugin.CustomDiscs;
 import me.Navoei.customdiscsplugin.command.SubCommand;
+import me.Navoei.customdiscsplugin.language.Lang;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -35,7 +37,7 @@ public class CreateCommand extends SubCommand {
 
     @Override
     public String getSyntax() {
-        return ChatColor.GREEN + "/customdisc create <filename> \"Custom Lore\"";
+        return "/customdisc create <filename> \"Custom Lore\"";
     }
 
     @Override
@@ -44,22 +46,25 @@ public class CreateCommand extends SubCommand {
             if (args.length >= 3) {
 
                 if (!player.hasPermission("customdiscs.create")) {
-                    player.sendMessage(ChatColor.RED + "You do not have permission to execute this command!");
+                    Component textComponent = LegacyComponentSerializer.legacyAmpersand().deserialize(Lang.NO_PERMISSION.toString());
+                    player.sendMessage(textComponent);
                     return;
                 }
 
                 // /cd create test.mp3 "test"
                 //      [0]     [1]     [2]
                 //Find file, if file not there then say "file not there"
-                String songname = "";
+                String song_name = "";
                 String filename = args[1];
                 if (filename.contains("../")) {
-                    player.sendMessage(ChatColor.RED + "This is an invalid filename!");
+                    Component textComponent = LegacyComponentSerializer.legacyAmpersand().deserialize(Lang.INVALID_FILENAME.toString());
+                    player.sendMessage(textComponent);
                     return;
                 }
 
                 if (customName(readQuotes(args)).equalsIgnoreCase("")) {
-                    player.sendMessage(ChatColor.RED + "You must provide a name for your disc.");
+                    Component textComponent = LegacyComponentSerializer.legacyAmpersand().deserialize(Lang.NO_DISC_NAME_PROVIDED.toString());
+                    player.sendMessage(textComponent);
                     return;
                 }
 
@@ -67,13 +72,15 @@ public class CreateCommand extends SubCommand {
                 File songFile = new File(getDirectory.getPath(), filename);
                 if (songFile.exists()) {
                     if (getFileExtension(filename).equals("wav") || getFileExtension(filename).equals("mp3") || getFileExtension(filename).equals("flac")) {
-                        songname = args[1];
+                        song_name = args[1];
                     } else {
-                        player.sendMessage(ChatColor.RED + "File is not in wav, flac, or mp3 format!");
+                        Component textComponent = LegacyComponentSerializer.legacyAmpersand().deserialize(Lang.INVALID_FORMAT.toString());
+                        player.sendMessage(textComponent);
                         return;
                     }
                 } else {
-                    player.sendMessage(ChatColor.RED + "File not found!");
+                    Component textComponent = LegacyComponentSerializer.legacyAmpersand().deserialize(Lang.FILE_NOT_FOUND.toString());
+                    player.sendMessage(textComponent);
                     return;
                 }
 
@@ -95,14 +102,17 @@ public class CreateCommand extends SubCommand {
 
                 player.getInventory().getItemInMainHand().setItemMeta(meta);
 
-                player.sendMessage("Your filename is: " + ChatColor.GRAY + songname);
-                player.sendMessage("Your custom name is: " + ChatColor.GRAY + customName(readQuotes(args)));
-
+                Component textComponentFileName = LegacyComponentSerializer.legacyAmpersand().deserialize(Lang.CREATE_FILENAME.toString().replace("%filename%", song_name));
+                Component textComponentCustomName = LegacyComponentSerializer.legacyAmpersand().deserialize(Lang.CREATE_CUSTOM_NAME.toString().replace("%custom_name%", customName(readQuotes(args))));
+                player.sendMessage(textComponentFileName);
+                player.sendMessage(textComponentCustomName);
             } else {
-                player.sendMessage(ChatColor.RED + "Insufficient arguments! ( /customdisc create <filename> \"Custom Lore\" )");
+                Component textComponent = LegacyComponentSerializer.legacyAmpersand().deserialize(Lang.INVALID_ARGUMENTS.toString().replace("%command_syntax", getSyntax()));
+                player.sendMessage(textComponent);
             }
         } else {
-            player.sendMessage(ChatColor.RED + "You are not holding a music disc in your main hand!");
+            Component textComponent = LegacyComponentSerializer.legacyAmpersand().deserialize(Lang.NOT_HOLDING_DISC.toString());
+            player.sendMessage(textComponent);
         }
     }
 

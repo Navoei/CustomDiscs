@@ -94,7 +94,7 @@ public class HopperManager implements Listener {
     public void onChunkLoad(ChunkLoadEvent event) {
         for (BlockState blockState : event.getChunk().getTileEntities()) {
             if (blockState instanceof Jukebox jukebox) {
-                if (!PlayerManager.instance().isAudioPlayerPlaying(blockState.getLocation()) && !jukebox.isPlaying()) {
+                if (!PlayerManager.instance().isAudioPlayerPlaying(blockState.getLocation()) && isCustomMusicDisc(jukebox.getRecord())) {
                     discToHopper(blockState.getBlock());
                 }
             }

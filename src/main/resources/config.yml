@@ -8,3 +8,9 @@ music-disc-volume: 1
 
 #The maximum download size in megabytes.
 max-download-size: 50
+
+#Custom Discs Help Page
+help:
+  - "&8-[&6CustomDiscs Help Page&8]-"
+  - "&aAuthor&7: &6Navoei"
+  - "&fGit&0Hub&7: &9&ohttps://github.com/Navoei/CustomDiscs"

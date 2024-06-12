@@ -4,6 +4,7 @@ import me.Navoei.customdiscsplugin.CustomDiscs;
 import me.Navoei.customdiscsplugin.ParticleManager;
 import me.Navoei.customdiscsplugin.PlayerManager;
 import me.Navoei.customdiscsplugin.VoicePlugin;
+import me.Navoei.customdiscsplugin.language.Lang;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -53,9 +54,10 @@ public class JukeBox implements Listener{
 
                 Component songNameComponent = Objects.requireNonNull(event.getItem().getItemMeta().lore()).get(0).asComponent();
                 String songName = PlainTextComponentSerializer.plainText().serialize(songNameComponent);
+                String content = Lang.NOW_PLAYING.toString().replace("%song_name%", songName);
 
                 TextComponent customActionBarSongPlaying = Component.text()
-                        .content("Now Playing: " + songName)
+                        .content(content)
                         .color(NamedTextColor.GOLD)
                         .build();
 
