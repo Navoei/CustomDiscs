@@ -8,6 +8,7 @@ import me.Navoei.customdiscsplugin.language.Lang;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -54,15 +55,10 @@ public class JukeBox implements Listener{
 
                 Component songNameComponent = Objects.requireNonNull(event.getItem().getItemMeta().lore()).get(0).asComponent();
                 String songName = PlainTextComponentSerializer.plainText().serialize(songNameComponent);
-                String content = Lang.NOW_PLAYING.toString().replace("%song_name%", songName);
-
-                TextComponent customActionBarSongPlaying = Component.text()
-                        .content(content)
-                        .color(NamedTextColor.GOLD)
-                        .build();
+                Component customActionBarSongPlaying = LegacyComponentSerializer.legacyAmpersand().deserialize(Lang.NOW_PLAYING.toString().replace("%song_name%", songName));
 
                 assert VoicePlugin.voicechatServerApi != null;
-                playerManager.playLocationalAudio(VoicePlugin.voicechatServerApi, soundFilePath, block, customActionBarSongPlaying.asComponent());
+                playerManager.playLocationalAudio(VoicePlugin.voicechatServerApi, soundFilePath, block, customActionBarSongPlaying);
             } else {
                 player.sendMessage(ChatColor.RED + "Sound file not found.");
                 event.setCancelled(true);

@@ -47,7 +47,7 @@ public class DownloadCommand extends SubCommand {
         }
 
         if (args.length!=3) {
-            Component textComponent = LegacyComponentSerializer.legacyAmpersand().deserialize(Lang.PREFIX + Lang.INVALID_ARGUMENTS.toString().replace("%command_syntax", getSyntax()));
+            Component textComponent = LegacyComponentSerializer.legacyAmpersand().deserialize(Lang.PREFIX + Lang.INVALID_ARGUMENTS.toString().replace("%command_syntax%", getSyntax()));
             player.sendMessage(textComponent);
             return;
         }
