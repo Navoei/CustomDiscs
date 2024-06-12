@@ -28,7 +28,7 @@ public class VoicePlugin implements VoicechatPlugin {
      */
     @Override
     public String getPluginId() {
-        return CustomDiscs.PLUGIN_ID;
+        return null;
     }
 
     /**

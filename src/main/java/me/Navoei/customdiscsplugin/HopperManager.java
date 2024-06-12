@@ -42,7 +42,7 @@ public class HopperManager implements Listener {
         Component songNameComponent = Objects.requireNonNull(event.getItem().getItemMeta().lore()).get(0).asComponent();
         String songName = PlainTextComponentSerializer.plainText().serialize(songNameComponent);
         String content = Lang.NOW_PLAYING.toString().replace("%song_name%", songName);
-        
+
         TextComponent customActionBarSongPlaying = Component.text()
                 .content(content)
                 .color(NamedTextColor.GOLD)
@@ -96,6 +96,7 @@ public class HopperManager implements Listener {
     public void onChunkLoad(ChunkLoadEvent event) {
         for (BlockState blockState : event.getChunk().getTileEntities()) {
             if (blockState instanceof Jukebox jukebox) {
+                if (!jukebox.hasRecord()) return;
                 if (!PlayerManager.instance().isAudioPlayerPlaying(blockState.getLocation()) && isCustomMusicDisc(jukebox.getRecord())) {
                     discToHopper(blockState.getBlock());
                 }
