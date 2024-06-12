@@ -21,7 +21,7 @@ Dependencies:
 
 https://user-images.githubusercontent.com/64107368/178426026-c454ac66-5133-4f3a-9af9-7f674e022423.mp4
 
-Default Config:
+Default Config.yml:
 ```
 # [Music Disc Config]
 
@@ -33,6 +33,32 @@ music-disc-volume: 1
 
 #The maximum download size in megabytes.
 max-download-size: 50
+
+#Custom Discs Help Page
+help:
+  - "&8-[&6CustomDiscs Help Page&8]-"
+  - "&aAuthor&7: &6Navoei"
+  - "&fGit&0Hub&7: &9&ohttps://github.com/Navoei/CustomDiscs"
+```
+
+Default Lang.yml:
+```
+prefix: "&8[&6CustomDiscs&8]&r"
+no-permission: "&cYou do not have permission to execute this command."
+invalid-filename: "&cThis is an invalid filename!"
+no-disc-name-provided: "&cYou must provide a name for your disc."
+invalid-format: "&cFile must be in wav, flac, or mp3 format!"
+file-not-found: "&cFile not found!"
+invalid-arguments: "&cInvalid arguments. &7(&a%command_syntax%&7)"
+not-holding-disc: "&cYou must hold a disc in your main hand."
+create-filename: "&7Your filename is: &a\"%filename%\"."
+create-custom-name: "&7Your custom name is: &a\"%custom_name%\"."
+downloading-file: "&7Downloading file..."
+file-too-large: "&cThe file is larger than %max_download_size%MB."
+successful-download: "&aFile successfully downloaded to &7%file_path%&a."
+create-disc: "&aCreate a disc by doing &7/cd create %filename% \"Custom Lore\"&a."
+download-error: "&cAn error has occurred while downloading."
+now-playing: "&6Now playing: %song_name%"
 ```
 
 
