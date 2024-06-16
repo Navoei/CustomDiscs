@@ -83,7 +83,9 @@ public class PlayerManager {
             }
 
             audioPlayer.setOnStopped(() -> {
+                //Stuff that runs once the audio player ends.
 
+                //Stop the vanilla disc if it is playing. This ensures the hopper will pickup the disc.
                 Bukkit.getScheduler().runTask(CustomDiscs.getInstance(), () -> HopperManager.instance().discToHopper(block));
 
                 playerMap.remove(id);
