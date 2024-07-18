@@ -20,7 +20,7 @@ public class ReloadCommand extends SubCommand {
 
     @Override
     public String getDescription() {
-        return ChatColor.GRAY + "Reloads plugin's configuration.";
+        return ChatColor.GRAY + "Reloads plugin configuration.";
     }
 
     @Override
@@ -29,7 +29,7 @@ public class ReloadCommand extends SubCommand {
     }
 
     @Override
-    public void perform(Player player) {
+    public void perform(Player player, String[] args) {
 
         if (!player.hasPermission("customdiscs.reload")) {
             Component textComponent = LegacyComponentSerializer.legacyAmpersand().deserialize(Lang.PREFIX + Lang.NO_PERMISSION.toString());
@@ -37,7 +37,7 @@ public class ReloadCommand extends SubCommand {
             return;
         }
 
-        customDiscs.reload()
+        customDiscs.reload();
         Component textComponent = LegacyComponentSerializer.legacyAmpersand().deserialize(Lang.PREFIX + Lang.RELOAD.toString());
         player.sendMessage(textComponent);
 
