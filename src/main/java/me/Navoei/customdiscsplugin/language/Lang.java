@@ -19,7 +19,8 @@ public enum Lang {
     SUCCESSFUL_DOWNLOAD("successful-download", "&aFile successfully downloaded to &7%file_path%&a."),
     CREATE_DISC("create-disc", "&aCreate a disc by doing &7/cd create filename.extension \"Custom Lore\"&a."),
     DOWNLOAD_ERROR("download-error", "&rAn error has occurred while downloading."),
-    NOW_PLAYING("now-playing","&6Now playing: %song_name%");
+    NOW_PLAYING("now-playing","&6Now playing: %song_name%"),
+    RELOAD("reload", "&aReloading complete!");
 
     private final String path;
     private final String def;

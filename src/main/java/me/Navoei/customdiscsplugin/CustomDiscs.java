@@ -99,6 +99,14 @@ public final class CustomDiscs extends JavaPlugin {
         }
     }
 
+    /**
+     * Perform a reload of the plugin
+     */
+    public void reload() {
+        onDisable();
+        onEnable();
+    }
+
     public static CustomDiscs getInstance() {
         return instance;
     }
