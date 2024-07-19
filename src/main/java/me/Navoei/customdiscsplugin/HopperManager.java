@@ -8,6 +8,7 @@ import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
+import org.bukkit.block.Container;
 import org.bukkit.block.Jukebox;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -71,7 +72,6 @@ public class HopperManager implements Listener {
         //Set the block type to force an update.
         block.setType(Material.JUKEBOX);
         jukebox.update(true, true);
-
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
