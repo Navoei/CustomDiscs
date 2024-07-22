@@ -17,6 +17,8 @@ import org.bukkit.event.inventory.InventoryMoveItemEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.world.ChunkLoadEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.components.JukeboxPlayableComponent;
 import org.bukkit.persistence.PersistentDataType;
 
 import java.nio.file.Path;
@@ -39,7 +41,14 @@ public class HopperManager implements Listener {
         String songName = PlainTextComponentSerializer.plainText().serialize(songNameComponent);
         Component customActionBarSongPlaying = LegacyComponentSerializer.legacyAmpersand().deserialize(Lang.NOW_PLAYING.toString().replace("%song_name%", songName));
 
-        String soundFileName = event.getItem().getItemMeta().getPersistentDataContainer().get(new NamespacedKey(customDiscs, "customdisc"), PersistentDataType.STRING);
+        ItemMeta discMeta = event.getItem().getItemMeta();
+        String soundFileName = discMeta.getPersistentDataContainer().get(new NamespacedKey(customDiscs, "customdisc"), PersistentDataType.STRING);
+        if (discMeta.getJukeboxPlayable().isShowInTooltip()) {
+            JukeboxPlayableComponent jpc = discMeta.getJukeboxPlayable();
+            jpc.setShowInTooltip(false);
+            discMeta.setJukeboxPlayable(jpc);
+            event.getItem().setItemMeta(discMeta);
+        }
 
         Path soundFilePath = Path.of(customDiscs.getDataFolder().getPath(), "musicdata", soundFileName);
         assert VoicePlugin.voicechatServerApi != null;

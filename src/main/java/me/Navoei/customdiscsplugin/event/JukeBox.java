@@ -24,6 +24,8 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.components.JukeboxPlayableComponent;
 import org.bukkit.persistence.PersistentDataType;
 
 import java.io.FileNotFoundException;
@@ -47,7 +49,16 @@ public class JukeBox implements Listener{
 
         if (isCustomMusicDisc(event) && !jukeboxContainsDisc(block)) {
 
-            String soundFileName = event.getItem().getItemMeta().getPersistentDataContainer().get(new NamespacedKey(customDiscs, "customdisc"), PersistentDataType.STRING);
+            ItemMeta discMeta = event.getItem().getItemMeta();
+            String soundFileName = discMeta.getPersistentDataContainer().get(new NamespacedKey(customDiscs, "customdisc"), PersistentDataType.STRING);
+            if (discMeta.getJukeboxPlayable().isShowInTooltip()) {
+                JukeboxPlayableComponent jpc = discMeta.getJukeboxPlayable();
+                jpc.setShowInTooltip(false);
+                discMeta.setJukeboxPlayable(jpc);
+                event.getItem().setItemMeta(discMeta);
+                Component textComponent = LegacyComponentSerializer.legacyAmpersand().deserialize(Lang.PREFIX + Lang.DISC_CONVERTED.toString());
+                player.sendMessage(textComponent);
+            }
 
             Path soundFilePath = Path.of(customDiscs.getDataFolder().getPath(), "musicdata", soundFileName);
 

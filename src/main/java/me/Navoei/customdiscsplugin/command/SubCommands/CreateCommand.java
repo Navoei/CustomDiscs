@@ -15,6 +15,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.components.JukeboxPlayableComponent;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.Nullable;
@@ -94,8 +95,10 @@ public class CreateCommand extends SubCommand {
                         .color(NamedTextColor.GRAY)
                         .build();
                 itemLore.add(customLoreSong);
-                meta.addItemFlags(ItemFlag.values());
                 meta.lore(itemLore);
+                JukeboxPlayableComponent jpc = meta.getJukeboxPlayable();
+                jpc.setShowInTooltip(false);
+                meta.setJukeboxPlayable(jpc);
 
                 PersistentDataContainer data = meta.getPersistentDataContainer();
                 data.set(new NamespacedKey(CustomDiscs.getInstance(), "customdisc"), PersistentDataType.STRING, filename);
