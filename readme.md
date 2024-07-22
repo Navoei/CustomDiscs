@@ -16,7 +16,7 @@ Permission Nodes (Required to run the commands. Playing discs does not require a
 - ```customdiscs.download``` to download a file
 
 Dependencies:
-- This plugin depends on the latest version of ProtocolLib for 1.20.x and SimpleVoiceChatBukkit version 2.4.25. 
+- This plugin depends on the latest version of ProtocolLib for 1.21 and SimpleVoiceChatBukkit version 2.5.16. 
 
 
 https://user-images.githubusercontent.com/64107368/178426026-c454ac66-5133-4f3a-9af9-7f674e022423.mp4
@@ -59,6 +59,7 @@ successful-download: "&aFile successfully downloaded to &7%file_path%&a."
 create-disc: "&aCreate a disc by doing &7/cd create %filename% \"Custom Lore\"&a."
 download-error: "&cAn error has occurred while downloading."
 now-playing: "&6Now playing: %song_name%"
+disc-converted: "&aConverted disc to new format! &fThis is due to changes in newer Minecraft versions which introduced &7JukeboxPlayableComponent&f."
 ```
 
 
