@@ -17,6 +17,7 @@ import org.bukkit.event.inventory.InventoryMoveItemEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.world.ChunkLoadEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.components.JukeboxPlayableComponent;
 import org.bukkit.persistence.PersistentDataType;
@@ -43,6 +44,15 @@ public class HopperManager implements Listener {
 
         ItemMeta discMeta = event.getItem().getItemMeta();
         String soundFileName = discMeta.getPersistentDataContainer().get(new NamespacedKey(customDiscs, "customdisc"), PersistentDataType.STRING);
+
+        PersistentDataContainer persistentDataContainer = event.getItem().getItemMeta().getPersistentDataContainer();
+        float range = CustomDiscs.getInstance().musicDiscDistance;
+        NamespacedKey customSoundRangeKey = new NamespacedKey(customDiscs, "CustomSoundRange");
+
+        if(persistentDataContainer.has(customSoundRangeKey, PersistentDataType.FLOAT)) {
+            range = Math.min(persistentDataContainer.get(customSoundRangeKey, PersistentDataType.FLOAT), CustomDiscs.getInstance().musicDiscMaxDistance);
+        }
+        
         if (discMeta.getJukeboxPlayable().isShowInTooltip()) {
             JukeboxPlayableComponent jpc = discMeta.getJukeboxPlayable();
             jpc.setShowInTooltip(false);
@@ -52,7 +62,7 @@ public class HopperManager implements Listener {
 
         Path soundFilePath = Path.of(customDiscs.getDataFolder().getPath(), "musicdata", soundFileName);
         assert VoicePlugin.voicechatServerApi != null;
-        playerManager.playLocationalAudio(VoicePlugin.voicechatServerApi, soundFilePath, event.getDestination().getLocation().getBlock(), customActionBarSongPlaying);
+        playerManager.playLocationalAudio(VoicePlugin.voicechatServerApi, soundFilePath, event.getDestination().getLocation().getBlock(), customActionBarSongPlaying, range);
 
     }
 

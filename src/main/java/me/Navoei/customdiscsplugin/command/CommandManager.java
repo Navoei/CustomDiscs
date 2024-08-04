@@ -3,6 +3,7 @@ package me.Navoei.customdiscsplugin.command;
 import me.Navoei.customdiscsplugin.CustomDiscs;
 import me.Navoei.customdiscsplugin.command.SubCommands.CreateCommand;
 import me.Navoei.customdiscsplugin.command.SubCommands.DownloadCommand;
+import me.Navoei.customdiscsplugin.command.SubCommands.SetRangeCommand;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.ChatColor;
@@ -25,6 +26,7 @@ public class CommandManager implements CommandExecutor, TabCompleter {
     public CommandManager() {
         subCommands.add(new CreateCommand());
         subCommands.add(new DownloadCommand());
+        subCommands.add(new SetRangeCommand());
     }
 
     @Override

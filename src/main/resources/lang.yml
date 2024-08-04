@@ -15,3 +15,5 @@ create-disc: "&aCreate a disc by doing &7/cd create %filename% \"Custom Lore\"&a
 download-error: "&cAn error has occurred while downloading."
 now-playing: "&6Now playing: %song_name%"
 disc-converted: "&aConverted disc to new format! &fThis is due to changes in newer Minecraft versions which introduced &7JukeboxPlayableComponent&f."
+invalid-range: "&cYou need to chose a range between 1 and %range_value%"
+create-custom-range: "&7Your range is set to: &a\"%custom_range%\"."
