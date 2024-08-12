@@ -7,7 +7,6 @@ public enum Lang {
     PREFIX("prefix", "&8[&6CustomDiscs&8]&r"),
     NO_PERMISSION("no-permission", "&rYou do not have permission to execute this command."),
     INVALID_FILENAME("invalid-filename", "&rThis is an invalid filename!"),
-    NO_DISC_NAME_PROVIDED("no-disc-name-provided", "&rYou must provide a name for your disc."),
     INVALID_FORMAT("invalid-format", "&rFile must be in wav, flac, or mp3 format!"),
     FILE_NOT_FOUND("file-not-found", "&rFile not found!"),
     INVALID_ARGUMENTS("invalid-arguments", "&rInsufficient arguments. &7(&a%command_syntax%&7)"),
