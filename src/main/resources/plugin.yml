@@ -16,8 +16,3 @@ dependencies:
       load: BEFORE
       required: true
       join-classpath: true
-
-commands:
-  customdisc:
-    description: The custom discs command.
-    aliases: cd
