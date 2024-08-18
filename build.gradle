@@ -1,6 +1,6 @@
 plugins {
     id 'java'
-    id "com.github.johnrengelman.shadow" version "7.1.0"
+    id 'io.github.goooler.shadow' version '8.1.7'
 }
 
 sourceCompatibility = JavaLanguageVersion.of(java_version as int)
@@ -38,6 +38,7 @@ dependencies {
     // Use this dependency if you don't want to compile bukkit
     implementation "io.papermc.paper:paper-api:${bukkit_version}"
     implementation "de.maxhenkel.voicechat:voicechat-api:${voicechat_api_version}"
+    shadow "dev.jorel:commandapi-bukkit-shade:${command_api_version}"
 
     compileOnly group: "com.comphenix.protocol", name: "ProtocolLib", version: "5.1.0";
 
@@ -55,12 +56,17 @@ repositories {
         url = uri("https://papermc.io/repo/repository/maven-public/")
     }
     maven { url "https://repo.dmulloy2.net/repository/public/" }
+    maven { url = "https://repo.codemc.org/repository/maven-public/" }
     mavenLocal()
 }
 
 shadowJar {
     configurations = [project.configurations.shadow]
-    classifier 'shadow-dev'
+    archiveClassifier.set("shadow-dev")
+
     //relocate 'javazoom', "me.navoei.${mod_id}.javazoom"
     //relocate 'org.tritonus', "me.navoei.${mod_id}.tritonus"
+
+    // By documentation, it was recommented to relocate to not cause issues with other plugins that shade CommandAPI
+    relocate("dev.jorel.commandapi", "me.navoei.${mod_id}.commandapi")
 }
