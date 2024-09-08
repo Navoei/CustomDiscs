@@ -15,6 +15,7 @@ import me.Navoei.customdiscsplugin.event.JukeBox;
 import me.Navoei.customdiscsplugin.language.Lang;
 import org.bukkit.NamespacedKey;
 import org.bukkit.block.Jukebox;
+import org.bukkit.entity.Player;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -34,6 +35,7 @@ public final class CustomDiscs extends JavaPlugin {
 	public static YamlConfiguration LANG;
 	public static File LANG_FILE;
 	public float musicDiscDistance;
+        public float musicDiscMaxDistance;
 	public float musicDiscVolume;
 	
 	@Override
@@ -71,6 +73,7 @@ public final class CustomDiscs extends JavaPlugin {
 		getServer().getPluginManager().registerEvents(new HopperManager(), this);
 		
 		musicDiscDistance = getConfig().getInt("music-disc-distance");
+                musicDiscMaxDistance = getConfig().getInt("music-disc-max-distance");
 		musicDiscVolume = Float.parseFloat(Objects.requireNonNull(getConfig().getString("music-disc-volume")));
 		
 		ProtocolManager protocolManager = ProtocolLibrary.getProtocolManager();
@@ -110,7 +113,11 @@ public final class CustomDiscs extends JavaPlugin {
 	public static CustomDiscs getInstance() {
 		return instance;
 	}
-	
+        
+        public static boolean isMusicDisc(Player p) {
+                return p.getInventory().getItemInMainHand().getType().toString().contains("MUSIC_DISC");
+        }
+        
 	/**
 	 * Load the lang.yml file.
 	 *

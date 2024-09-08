@@ -7,8 +7,8 @@ import dev.jorel.commandapi.executors.CommandArguments;
 import me.Navoei.customdiscsplugin.CustomDiscs;
 import me.Navoei.customdiscsplugin.language.Lang;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
+import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 import org.codehaus.plexus.util.FileUtils;
@@ -27,7 +27,7 @@ public class DownloadSubCommand extends CommandAPICommand {
 		super("download");
 		this.plugin = plugin;
 		
-		this.withFullDescription(ChatColor.GRAY + "Downloads a file from a given URL.");
+		this.withFullDescription(NamedTextColor.GRAY + "Downloads a file from a given URL.");
 		this.withUsage("/customdisc download <url> <filename.extension>");
 		
 		this.withArguments(new TextArgument("url"));
@@ -86,7 +86,7 @@ public class DownloadSubCommand extends CommandAPICommand {
 	}
 	
 	private int onCommandConsole(ConsoleCommandSender executor, CommandArguments arguments) {
-		executor.sendMessage(ChatColor.RED + "Only players can use this command!");
+		executor.sendMessage(NamedTextColor.RED + "Only players can use this command!");
 		return 1;
 	}
 	

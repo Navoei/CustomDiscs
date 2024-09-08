@@ -1,6 +1,5 @@
 package me.Navoei.customdiscsplugin.language;
 
-import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 public enum Lang {
@@ -19,7 +18,9 @@ public enum Lang {
     CREATE_DISC("create-disc", "&aCreate a disc by doing &7/cd create filename.extension \"Custom Lore\"&a."),
     DOWNLOAD_ERROR("download-error", "&rAn error has occurred while downloading."),
     NOW_PLAYING("now-playing","&6Now playing: %song_name%"),
-    DISC_CONVERTED("disc-converted", "&aConverted disc to new format! &fThis is due to changes in newer Minecraft versions which introduced &7JukeboxPlayableComponent&f.");
+    DISC_CONVERTED("disc-converted", "&aConverted disc to new format! &fThis is due to changes in newer Minecraft versions which introduced &7JukeboxPlayableComponent&f."),
+    INVALID_RANGE("invalid-range","&rYou need to chose a range between 1 and %range_value%"),
+    CREATE_CUSTOM_RANGE("create-custom-range", "&7Your range is set to: &a\"%custom_range%\".");
 
     private final String path;
     private final String def;

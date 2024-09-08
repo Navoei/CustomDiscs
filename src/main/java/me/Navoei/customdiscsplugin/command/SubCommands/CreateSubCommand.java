@@ -12,7 +12,6 @@ import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
-import org.bukkit.ChatColor;
 import org.bukkit.NamespacedKey;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
@@ -36,7 +35,7 @@ public class CreateSubCommand extends CommandAPICommand {
 		super("create");
 		this.plugin = plugin;
 		
-		this.withFullDescription(ChatColor.GRAY + "Creates a custom music disc.");
+		this.withFullDescription(NamedTextColor.GRAY + "Creates a custom music disc.");
 		this.withUsage("/customdisc create <filename> \"Custom Lore\"");
 		
 		this.withArguments(new StringArgument("filename").replaceSuggestions(ArgumentSuggestions.stringCollection((sender) -> {
@@ -60,7 +59,7 @@ public class CreateSubCommand extends CommandAPICommand {
 	}
 	
 	private int onCommandPlayer(Player player, CommandArguments arguments) {
-		if (!isMusicDisc(player)) {
+		if (!CustomDiscs.isMusicDisc(player)) {
 			player.sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize(Lang.PREFIX + Lang.NOT_HOLDING_DISC.toString()));
 			return 1;
 		}
@@ -113,7 +112,7 @@ public class CreateSubCommand extends CommandAPICommand {
 	}
 	
 	private int onCommandConsole(ConsoleCommandSender executor, CommandArguments arguments) {
-		executor.sendMessage(ChatColor.RED + "Only players can use this command!");
+		executor.sendMessage(NamedTextColor.RED + "Only players can use this command!");
 		return 1;
 	}
 	
@@ -124,9 +123,5 @@ public class CreateSubCommand extends CommandAPICommand {
 		} else {
 			return "";
 		}
-	}
-	
-	private boolean isMusicDisc(Player p) {
-		return p.getInventory().getItemInMainHand().getType().toString().contains("MUSIC_DISC");
 	}
 }
