@@ -19,6 +19,7 @@ import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 
 import java.util.Objects;
+import org.bukkit.Bukkit;
 
 public class SetRangeSubCommand extends CommandAPICommand {
 	private final CustomDiscs plugin;
@@ -37,7 +38,7 @@ public class SetRangeSubCommand extends CommandAPICommand {
 	}
 	
 	private int onCommandPlayer(Player player, CommandArguments arguments) {
-                if (!CustomDiscs.isMusicDisc(player)) {
+                if (!CustomDiscs.isMusicDisc(player) && !CustomDiscs.isGoatHorn(player)) {
 			player.sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize(Lang.PREFIX + Lang.NOT_HOLDING_DISC.toString()));
 			return 1;
 		}
@@ -59,9 +60,28 @@ public class SetRangeSubCommand extends CommandAPICommand {
                 ItemMeta theItemMeta = disc.getItemMeta();
 
                 PersistentDataContainer data = theItemMeta.getPersistentDataContainer();
-                data.set(new NamespacedKey(this.plugin, "customsoundrange"), PersistentDataType.FLOAT, range);
 
-                player.getInventory().getItemInMainHand().setItemMeta(theItemMeta);
+                if (CustomDiscs.isMusicDisc(player)) {
+                        data.set(new NamespacedKey(this.plugin, "customsoundrange"), PersistentDataType.FLOAT, range);
+                        player.getInventory().getItemInMainHand().setItemMeta(theItemMeta);
+                } else if (CustomDiscs.isGoatHorn(player)) {
+                        var namespaceHorn = new NamespacedKey(this.plugin, "customhorn");
+                        String retrieveCustomHornFile = data.get(namespaceHorn, PersistentDataType.STRING);
+                        if (retrieveCustomHornFile == null || retrieveCustomHornFile.compareTo("null") == 0) {
+                                player.sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize(Lang.PREFIX + Lang.NOT_HOLDING_MODIFIED_GOATHORN.toString()));
+                                return 1;
+                        }
+                        
+                        Float setCustomHornRange = range;
+
+                        var namespaceCustomsoundrange = new NamespacedKey(this.plugin, "customsoundrange");
+                        var namespaceCustomhorncooldown = new NamespacedKey(this.plugin, "customhorncoolodwn");
+                        int retrieveCustomhorncooldown = data.get(namespaceCustomhorncooldown, PersistentDataType.INTEGER);
+
+                        String command = "minecraft:item modify entity "+player.getName()+" weapon.mainhand {\"function\":\"minecraft:set_components\",\"components\":{\"minecraft:custom_data\":\"{PublicBukkitValues:{\\\""+namespaceHorn+"\\\":\\\""+retrieveCustomHornFile+"\\\",\\\""+namespaceCustomsoundrange+"\\\":"+setCustomHornRange+"f,\\\""+namespaceCustomhorncooldown+"\\\":"+retrieveCustomhorncooldown+"}}\"}}";
+                        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command);
+
+                }
 
                 player.sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize(Lang.PREFIX + Lang.CREATE_CUSTOM_RANGE.toString().replace("%custom_range%", Float.toString(range))));
                 
@@ -69,7 +89,7 @@ public class SetRangeSubCommand extends CommandAPICommand {
 	}
 	
 	private int onCommandConsole(ConsoleCommandSender executor, CommandArguments arguments) {
-		executor.sendMessage(NamedTextColor.RED + "Only players can use this command!");
+		executor.sendMessage(NamedTextColor.RED + "Only players can use this command : '"+arguments+"'!");
 		return 1;
 	}
 

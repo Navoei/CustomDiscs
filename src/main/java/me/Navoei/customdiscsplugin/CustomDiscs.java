@@ -12,6 +12,7 @@ import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandAPIBukkitConfig;
 import me.Navoei.customdiscsplugin.command.CustomDiscCommand;
 import me.Navoei.customdiscsplugin.event.JukeBox;
+import me.Navoei.customdiscsplugin.event.HornPlay;
 import me.Navoei.customdiscsplugin.language.Lang;
 import org.bukkit.NamespacedKey;
 import org.bukkit.block.Jukebox;
@@ -37,6 +38,9 @@ public final class CustomDiscs extends JavaPlugin {
 	public float musicDiscDistance;
         public float musicDiscMaxDistance;
 	public float musicDiscVolume;
+	public float hornCooldown;
+	public int hornMaxCooldown;
+	public int hornMaxCooldownTicks;
 	
 	@Override
 	public void onLoad() {
@@ -70,11 +74,15 @@ public final class CustomDiscs extends JavaPlugin {
 		}
 		
 		getServer().getPluginManager().registerEvents(new JukeBox(), this);
+                getServer().getPluginManager().registerEvents(new HornPlay(), this);
 		getServer().getPluginManager().registerEvents(new HopperManager(), this);
 		
-		musicDiscDistance = getConfig().getInt("music-disc-distance");
-                musicDiscMaxDistance = getConfig().getInt("music-disc-max-distance");
+		musicDiscDistance = Objects.requireNonNull(getConfig().getInt("music-disc-distance"));
+                musicDiscMaxDistance = Objects.requireNonNull(getConfig().getInt("music-disc-max-distance"));
 		musicDiscVolume = Float.parseFloat(Objects.requireNonNull(getConfig().getString("music-disc-volume")));
+		hornCooldown = Float.parseFloat(Objects.requireNonNull(getConfig().getString("horn-cooldown")));
+                hornMaxCooldown = Objects.requireNonNull(getConfig().getInt("horn-max-cooldown"));
+                hornMaxCooldownTicks = (Objects.requireNonNull(getConfig().getInt("horn-max-cooldown")) * 20);
 		
 		ProtocolManager protocolManager = ProtocolLibrary.getProtocolManager();
 		
@@ -88,7 +96,7 @@ public final class CustomDiscs extends JavaPlugin {
 					
 					if (!jukebox.getRecord().hasItemMeta()) return;
 					
-					if (jukebox.getRecord().getItemMeta().getPersistentDataContainer().has(new NamespacedKey(CustomDiscs.getInstance(), "customdisc"), PersistentDataType.STRING)) {
+					if (jukebox.getRecord().getItemMeta().getPersistentDataContainer().has(new NamespacedKey(this.plugin, "customdisc"), PersistentDataType.STRING)) {
 						jukebox.stopPlaying();
 						event.setCancelled(true);
 					}
@@ -116,6 +124,10 @@ public final class CustomDiscs extends JavaPlugin {
         
         public static boolean isMusicDisc(Player p) {
                 return p.getInventory().getItemInMainHand().getType().toString().contains("MUSIC_DISC");
+        }
+    
+        public static boolean isGoatHorn(Player p) {
+                return p.getInventory().getItemInMainHand().getType().toString().contains("GOAT_HORN");
         }
         
 	/**

@@ -9,8 +9,14 @@ music-disc-max-distance: 256
 # The master volume of music discs from 0-1. (You can set values like 0.5 for 50% volume).
 music-disc-volume: 1
 
-#The maximum download size in megabytes.
+# The maximum download size in megabytes.
 max-download-size: 50
+
+# The default cooldown time for horns in seconds from 1 to the max value of horn-max-cooldown.
+horn-cooldown: 7
+
+# The default max cooldown time for horns in seconds (5 minutes by default).
+horn-max-cooldown: 300
 
 #Custom Discs Help Page
 help:

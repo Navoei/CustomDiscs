@@ -86,7 +86,7 @@ public class DownloadSubCommand extends CommandAPICommand {
 	}
 	
 	private int onCommandConsole(ConsoleCommandSender executor, CommandArguments arguments) {
-		executor.sendMessage(NamedTextColor.RED + "Only players can use this command!");
+		executor.sendMessage(NamedTextColor.RED + "Only players can use this command : '"+arguments+"'!");
 		return 1;
 	}
 	
