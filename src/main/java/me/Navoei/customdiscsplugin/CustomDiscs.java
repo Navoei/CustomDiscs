@@ -150,7 +150,7 @@ public final class CustomDiscs extends JavaPlugin {
 				}
 			} catch (IOException e) {
 				e.printStackTrace(); // So they notice
-				log.severe("Failed to create lang.yml for MyHomes.");
+				log.severe("Failed to create lang.yml for CustomDiscs.");
 				log.severe("Now disabling...");
 				this.setEnabled(false); // Without it loaded, we can't send them messages
 			}
@@ -167,7 +167,7 @@ public final class CustomDiscs extends JavaPlugin {
 		try {
 			conf.save(getLangFile());
 		} catch (IOException e) {
-			log.log(Level.WARNING, "Failed to save lang.yml for MyHomes");
+			log.log(Level.WARNING, "Failed to save lang.yml for CustomDiscs");
 			log.log(Level.WARNING, "Now disabling...");
 			e.printStackTrace();
 		}
