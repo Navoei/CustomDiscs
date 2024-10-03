@@ -5,8 +5,10 @@ import dev.jorel.commandapi.executors.CommandArguments;
 import me.Navoei.customdiscsplugin.CustomDiscs;
 import me.Navoei.customdiscsplugin.command.SubCommands.CreateSubCommand;
 import me.Navoei.customdiscsplugin.command.SubCommands.DownloadSubCommand;
+import me.Navoei.customdiscsplugin.command.SubCommands.SetRangeSubCommand;
+import me.Navoei.customdiscsplugin.command.SubCommands.SetHornCooldownSubCommand;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
-import org.bukkit.ChatColor;
+import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
@@ -23,6 +25,8 @@ public class CustomDiscCommand extends CommandAPICommand {
 		
 		this.withSubcommand(new CreateSubCommand(plugin));
 		this.withSubcommand(new DownloadSubCommand(plugin));
+		this.withSubcommand(new SetRangeSubCommand(plugin));
+		this.withSubcommand(new SetHornCooldownSubCommand(plugin));
 		
 		this.executesPlayer(this::onCommandPlayer);
 		this.executesConsole(this::onCommandConsole);
@@ -38,7 +42,7 @@ public class CustomDiscCommand extends CommandAPICommand {
 	}
 	
 	private int onCommandConsole(ConsoleCommandSender executor, CommandArguments arguments) {
-		executor.sendMessage(ChatColor.RED + "Only players can use this command!");
+		executor.sendMessage(NamedTextColor.RED + "Only players can use this command : '"+arguments+"'!");
 		return 1;
 	}
 }

@@ -8,7 +8,7 @@ import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
-import org.bukkit.block.Container;
+//import org.bukkit.block.Container;
 import org.bukkit.block.Jukebox;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -17,22 +17,31 @@ import org.bukkit.event.inventory.InventoryMoveItemEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.world.ChunkLoadEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.components.JukeboxPlayableComponent;
 import org.bukkit.persistence.PersistentDataType;
 
 import java.nio.file.Path;
 import java.util.Objects;
+import org.bukkit.entity.minecart.HopperMinecart;
+import org.bukkit.inventory.InventoryHolder;
+
+// Used only if logger is needed
+//import java.util.logging.Logger;
+//import org.bukkit.Bukkit;
 
 public class HopperManager implements Listener {
 
     CustomDiscs customDiscs = CustomDiscs.getInstance();
 
     PlayerManager playerManager = PlayerManager.instance();
+    
+    //private static final Logger logger = Bukkit.getLogger(); // or Logger.getLogger("Minecraft");
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onJukeboxInsertFromHopper(InventoryMoveItemEvent event) {
-
+        //logger.warning("Enter : onJukeboxInsertFromHopper");
         if (event.getDestination().getLocation() == null) return;
         if (!event.getDestination().getType().equals(InventoryType.JUKEBOX)) return;
         if (!isCustomMusicDisc(event.getItem())) return;
@@ -43,6 +52,15 @@ public class HopperManager implements Listener {
 
         ItemMeta discMeta = event.getItem().getItemMeta();
         String soundFileName = discMeta.getPersistentDataContainer().get(new NamespacedKey(customDiscs, "customdisc"), PersistentDataType.STRING);
+        
+        PersistentDataContainer persistentDataContainer = event.getItem().getItemMeta().getPersistentDataContainer();
+        float range = CustomDiscs.getInstance().musicDiscDistance;
+        NamespacedKey customSoundRangeKey = new NamespacedKey(customDiscs, "customsoundrange");
+
+        if(persistentDataContainer.has(customSoundRangeKey, PersistentDataType.FLOAT)) {
+            range = Math.min(persistentDataContainer.get(customSoundRangeKey, PersistentDataType.FLOAT), CustomDiscs.getInstance().musicDiscMaxDistance);
+        }
+        
         if (discMeta.getJukeboxPlayable().isShowInTooltip()) {
             JukeboxPlayableComponent jpc = discMeta.getJukeboxPlayable();
             jpc.setShowInTooltip(false);
@@ -52,24 +70,34 @@ public class HopperManager implements Listener {
 
         Path soundFilePath = Path.of(customDiscs.getDataFolder().getPath(), "musicdata", soundFileName);
         assert VoicePlugin.voicechatServerApi != null;
-        playerManager.playLocationalAudio(VoicePlugin.voicechatServerApi, soundFilePath, event.getDestination().getLocation().getBlock(), customActionBarSongPlaying);
+        playerManager.playLocationalAudio(VoicePlugin.voicechatServerApi, soundFilePath, event.getDestination().getLocation().getBlock(), customActionBarSongPlaying, range);
 
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onJukeboxEjectToHopper(InventoryMoveItemEvent event) {
+        //logger.warning("Enter : onJukeboxEjectToHopper");
 
+        InventoryHolder holderSource = event.getSource().getHolder();
+        InventoryHolder holderDestination = event.getDestination().getHolder();
+        
         if (event.getSource().getLocation() == null) return;
         if (!event.getSource().getType().equals(InventoryType.JUKEBOX)) return;
         if (event.getItem().getItemMeta() == null) return;
         if (!isCustomMusicDisc(event.getItem())) return;
 
-        event.setCancelled(playerManager.isAudioPlayerPlaying(event.getSource().getLocation()));
+        if (holderDestination instanceof HopperMinecart) {
+            discToHopper(((BlockState) holderSource).getBlock());
+            stopDiscOnEject(((BlockState) holderSource).getBlock());
+        } else {
+            event.setCancelled(playerManager.isAudioPlayerPlaying(event.getSource().getLocation()));
+        }
+        
 
     }
 
     public void discToHopper(Block block) {
-
+        //logger.warning("Enter : discToHopper");
         if (block == null) return;
         if (!block.getLocation().getChunk().isLoaded()) return;
         if (!block.getType().equals(Material.JUKEBOX)) return;
@@ -85,6 +113,7 @@ public class HopperManager implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onChunkLoad(ChunkLoadEvent event) {
+        //logger.warning("Enter : onChunkLoad");
         for (BlockState blockState : event.getChunk().getTileEntities()) {
             if (blockState instanceof Jukebox jukebox) {
                 if (!jukebox.hasRecord()) return;
@@ -98,12 +127,18 @@ public class HopperManager implements Listener {
     }
 
     private boolean isCustomMusicDisc(ItemStack item) {
+        //logger.warning("Enter : isCustomMusicDisc");
         return item.getItemMeta().getPersistentDataContainer().has(new NamespacedKey(customDiscs, "customdisc"), PersistentDataType.STRING);
+    }
+    
+    private void stopDiscOnEject(Block block) {
+        playerManager.stopLocationalAudio(block.getLocation());
     }
 
     private static HopperManager instance;
 
     public static HopperManager instance() {
+        //logger.warning("Enter : HopperManager Instance");
         if (instance == null) {
             instance = new HopperManager();
         }
