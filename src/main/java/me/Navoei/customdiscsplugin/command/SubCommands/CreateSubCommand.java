@@ -149,8 +149,16 @@ public class CreateSubCommand extends CommandAPICommand {
                                                 + "}";*/
                                 //Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command);
                                 
+                                /*1.21.1
                                 String itemCommand = "minecraft:give " + player.getName() + " minecraft:goat_horn["
                                             + "minecraft:instrument={sound_event:{sound_id:\"intentionally_empty\"},use_duration:140,range:256F},"
+                                            + "minecraft:custom_data={PublicBukkitValues:{\"" + namespaceHorn + "\":\"" + filename + "\",\""+namespaceCustomsoundrange+"\":"+retrieveCustomRangeIfSet+"f,\"" + namespaceCustomhorncooldown + "\":" + setHornCooldown + "}},"
+                                            + "minecraft:lore=['{\"bold\":false,\"color\":\"gray\",\"italic\":false,\"text\":\"" + song_name + "\",\"underlined\":false}']"
+                                            + "]";
+                                */
+                                
+                                String itemCommand = "minecraft:give " + player.getName() + " minecraft:goat_horn["
+                                            + "minecraft:instrument={sound_event:\"intentionally_empty\",use_duration:140,range:256F,description:{\"bold\":false,\"color\":\"gray\",\"italic\":false,\"text\":\"" + song_name + "\",\"underlined\":false}},"
                                             + "minecraft:custom_data={PublicBukkitValues:{\"" + namespaceHorn + "\":\"" + filename + "\",\""+namespaceCustomsoundrange+"\":"+retrieveCustomRangeIfSet+"f,\"" + namespaceCustomhorncooldown + "\":" + setHornCooldown + "}},"
                                             + "minecraft:lore=['{\"bold\":false,\"color\":\"gray\",\"italic\":false,\"text\":\"" + song_name + "\",\"underlined\":false}']"
                                             + "]";
