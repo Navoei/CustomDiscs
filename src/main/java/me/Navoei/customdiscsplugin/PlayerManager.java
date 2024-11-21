@@ -8,8 +8,8 @@ import de.maxhenkel.voicechat.api.audiochannel.LocationalAudioChannel;
 import javazoom.spi.mpeg.sampled.convert.MpegFormatConversionProvider;
 import javazoom.spi.mpeg.sampled.file.MpegAudioFileReader;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -44,7 +44,7 @@ public class PlayerManager {
         });
     }
 
-    public void playLocationalAudio(VoicechatServerApi api, Path soundFilePath, Block block, Component actionbarComponent) {
+    public void playLocationalAudio(VoicechatServerApi api, Path soundFilePath, Block block, Component actionbarComponent, float range) {
         UUID id = UUID.nameUUIDFromBytes(block.getLocation().toString().getBytes());
 
         LocationalAudioChannel audioChannel = api.createLocationalAudioChannel(id, api.fromServerLevel(block.getWorld()), api.createPosition(block.getLocation().getX() + 0.5d, block.getLocation().getY() + 0.5d, block.getLocation().getZ() + 0.5d));
@@ -52,7 +52,7 @@ public class PlayerManager {
         if (audioChannel == null) return;
 
         audioChannel.setCategory(VoicePlugin.MUSIC_DISC_CATEGORY);
-        audioChannel.setDistance(CustomDiscs.getInstance().musicDiscDistance);
+        audioChannel.setDistance(range);
 
         AtomicBoolean stopped = new AtomicBoolean();
         AtomicReference<de.maxhenkel.voicechat.api.audiochannel.AudioPlayer> player = new AtomicReference<>();
@@ -68,7 +68,7 @@ public class PlayerManager {
         });
 
         executorService.execute(() -> {
-            Collection<ServerPlayer> playersInRange = api.getPlayersInRange(api.fromServerLevel(block.getWorld()), api.createPosition(block.getLocation().getX() + 0.5d, block.getLocation().getY() + 0.5d, block.getLocation().getZ() + 0.5d), CustomDiscs.getInstance().musicDiscDistance);
+            Collection<ServerPlayer> playersInRange = api.getPlayersInRange(api.fromServerLevel(block.getWorld()), api.createPosition(block.getLocation().getX() + 0.5d, block.getLocation().getY() + 0.5d, block.getLocation().getZ() + 0.5d), range);
 
             de.maxhenkel.voicechat.api.audiochannel.AudioPlayer audioPlayer = playChannel(api, audioChannel, block, soundFilePath, playersInRange);
 
@@ -100,6 +100,61 @@ public class PlayerManager {
             }
         });
     }
+    
+    public void playLocationalAudioHorn(VoicechatServerApi api, Path soundFilePath, Player block, Component actionbarComponent, float range) {
+        UUID id = UUID.nameUUIDFromBytes(block.getLocation().toString().getBytes());
+
+        LocationalAudioChannel audioChannel = api.createLocationalAudioChannel(id, api.fromServerLevel(block.getWorld()), api.createPosition(block.getLocation().getX() + 0.5d, block.getLocation().getY() + 0.5d, block.getLocation().getZ() + 0.5d));
+
+        if (audioChannel == null) return;
+
+        audioChannel.setCategory(VoicePlugin.GOAT_HORN_CATEGORY);
+        audioChannel.setDistance(range);
+
+        AtomicBoolean stopped = new AtomicBoolean();
+        AtomicReference<de.maxhenkel.voicechat.api.audiochannel.AudioPlayer> player = new AtomicReference<>();
+
+        playerMap.put(id, () -> {
+            synchronized (stopped) {
+                stopped.set(true);
+                de.maxhenkel.voicechat.api.audiochannel.AudioPlayer audioPlayer = player.get();
+                if (audioPlayer != null) {
+                    audioPlayer.stopPlaying();
+                }
+            }
+        });
+
+        executorService.execute(() -> {
+            Collection<ServerPlayer> playersInRange = api.getPlayersInRange(api.fromServerLevel(block.getWorld()), api.createPosition(block.getLocation().getX() + 0.5d, block.getLocation().getY() + 0.5d, block.getLocation().getZ() + 0.5d), range);
+
+            de.maxhenkel.voicechat.api.audiochannel.AudioPlayer audioPlayer = playChannelHorn(api, audioChannel, block, soundFilePath, playersInRange);
+
+            for (ServerPlayer serverPlayer : playersInRange) {
+                Player bukkitPlayer = (Player) serverPlayer.getPlayer();
+                bukkitPlayer.sendActionBar(actionbarComponent);
+            }
+
+            if (audioPlayer == null) {
+                playerMap.remove(id);
+                return;
+            }
+
+            audioPlayer.setOnStopped(() -> {
+
+                //Bukkit.getScheduler().runTask(CustomDiscs.getInstance(), () -> HopperManager.instance().discToHopper(block));
+
+                playerMap.remove(id);
+            });
+
+            synchronized (stopped) {
+                if (!stopped.get()) {
+                    player.set(audioPlayer);
+                } else {
+                    audioPlayer.stopPlaying();
+                }
+            }
+        });
+    }
 
     @Nullable
     private de.maxhenkel.voicechat.api.audiochannel.AudioPlayer playChannel(VoicechatServerApi api, AudioChannel audioChannel, Block block, Path soundFilePath, Collection<ServerPlayer> playersInRange) {
@@ -113,7 +168,25 @@ public class PlayerManager {
             Bukkit.getLogger().info("Error Occurred At: " + block.getLocation());
             for (ServerPlayer serverPlayer : playersInRange) {
                 Player bukkitPlayer = (Player) serverPlayer.getPlayer();
-                bukkitPlayer.sendMessage(ChatColor.RED + "An error has occurred while trying to play this disc.");
+                bukkitPlayer.sendMessage(NamedTextColor.RED + "An error has occurred while trying to play this disc.");
+            }
+            return null;
+        }
+    }
+    
+    @Nullable
+    private de.maxhenkel.voicechat.api.audiochannel.AudioPlayer playChannelHorn(VoicechatServerApi api, AudioChannel audioChannel, Player block, Path soundFilePath, Collection<ServerPlayer> playersInRange) {
+        try {
+            short[] audio = readSoundFile(soundFilePath);
+            AudioPlayer audioPlayer = api.createAudioPlayer(audioChannel, api.createEncoder(), audio);
+            audioPlayer.startPlaying();
+            return audioPlayer;
+        } catch (Exception e) {
+            e.printStackTrace();
+            Bukkit.getLogger().info("Error Occurred At: " + block.getLocation());
+            for (ServerPlayer serverPlayer : playersInRange) {
+                Player bukkitPlayer = (Player) serverPlayer.getPlayer();
+                bukkitPlayer.sendMessage(NamedTextColor.RED + "An error has occurred while trying to play this horn.");
             }
             return null;
         }

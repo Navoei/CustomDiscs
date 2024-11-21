@@ -10,7 +10,6 @@ import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.block.Block;
@@ -26,6 +25,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.components.JukeboxPlayableComponent;
+import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 
 import java.io.FileNotFoundException;
@@ -51,6 +51,15 @@ public class JukeBox implements Listener{
 
             ItemMeta discMeta = event.getItem().getItemMeta();
             String soundFileName = discMeta.getPersistentDataContainer().get(new NamespacedKey(customDiscs, "customdisc"), PersistentDataType.STRING);
+            
+            PersistentDataContainer persistentDataContainer = event.getItem().getItemMeta().getPersistentDataContainer();
+            float range = CustomDiscs.getInstance().musicDiscDistance;
+            NamespacedKey customSoundRangeKey = new NamespacedKey(customDiscs, "customsoundrange");
+
+            if(persistentDataContainer.has(customSoundRangeKey, PersistentDataType.FLOAT)) {
+                range = Math.min(persistentDataContainer.get(customSoundRangeKey, PersistentDataType.FLOAT), CustomDiscs.getInstance().musicDiscMaxDistance);
+            }
+            
             if (discMeta.getJukeboxPlayable().isShowInTooltip()) {
                 JukeboxPlayableComponent jpc = discMeta.getJukeboxPlayable();
                 jpc.setShowInTooltip(false);
@@ -69,9 +78,9 @@ public class JukeBox implements Listener{
                 Component customActionBarSongPlaying = LegacyComponentSerializer.legacyAmpersand().deserialize(Lang.NOW_PLAYING.toString().replace("%song_name%", songName));
 
                 assert VoicePlugin.voicechatServerApi != null;
-                playerManager.playLocationalAudio(VoicePlugin.voicechatServerApi, soundFilePath, block, customActionBarSongPlaying);
+                playerManager.playLocationalAudio(VoicePlugin.voicechatServerApi, soundFilePath, block, customActionBarSongPlaying, range);
             } else {
-                player.sendMessage(ChatColor.RED + "Sound file not found.");
+                player.sendMessage(NamedTextColor.RED + "Sound file not found.");
                 event.setCancelled(true);
                 throw new FileNotFoundException("Sound file is missing!");
             }
