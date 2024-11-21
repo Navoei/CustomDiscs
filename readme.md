@@ -12,7 +12,7 @@ Downloading Files:
 - Direct Google Drive links: https://lonedev6.github.io/gddl/
 
 Set the range of a disc:
-- To set the active range of a playable disc, just use the command ```/cd range <range>``` where <range> is between 1 and the max value set in the config file (default : 256)
+- To set the active range of a playable disc, just use the command ```/cd range <range>```. The range can be between 1 and the max value set in the config file (default : 256)
 - Example: ```/cd range 100```
 
 Set the cooldown for a modified goat horn:
