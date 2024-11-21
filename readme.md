@@ -1,6 +1,6 @@
-# Custom Discs v3.3.0a for Paper 1.21.3 ("a" for Athar's fork release from the original plugin here : https://github.com/Navoei/CustomDiscs )
+# Custom Discs v3.3.0a for Paper 1.21.3
 
-A Paper fork of henkelmax's Audio Player.
+A Paper fork of henkelmax's Audio Player. Special thanks to Athar for maintaining this plugin. 
 - Play custom music discs using the Simple Voice Chat API. (The voice chat mod is required on the client and server.)
 - Use ```/customdisc``` or ```/cd``` to view available commands.
 - Music files should go into ```plugins/CustomDiscs/musicdata/```
