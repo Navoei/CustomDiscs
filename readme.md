@@ -1,4 +1,4 @@
-# Custom Discs v3.3.0 for Paper 1.21.3
+# Custom Discs v4.0 for Paper 1.21.3
 
 A Paper fork of henkelmax's Audio Player. Special thanks to Athar42 for maintaining this plugin. 
 - Play custom music discs using the Simple Voice Chat API. (The voice chat mod is required on the client and server.)
@@ -15,7 +15,7 @@ Set the range of a disc:
 - To set the active range of a playable disc, just use the command ```/cd range <range>```. The range can be between 1 and the max value set in the config file (default : 256)
 - Example: ```/cd range 100```
 
-Set the cooldown for a modified goat horn:
+Set the cooldown for a modified goat horn: (GOAT HORNS ARE EXPERIMENTAL!!! Please report any issues.)
 - To set a different cooldown timer than the one set by the config, just use the command ```/cd goatcooldown <cooldown>``` where <cooldown> is between 0 and the max value set in the config file (default : 6000)
 - Example: ```/cd goatcooldown 7```
 
