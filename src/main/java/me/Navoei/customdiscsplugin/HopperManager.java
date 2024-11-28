@@ -75,40 +75,21 @@ public class HopperManager implements Listener {
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-    public void onJukeboxEjectToHopper(InventoryMoveItemEvent event) {
+    public void onJukeboxEjectToHopperMinecart(InventoryMoveItemEvent event) {
         //logger.warning("Enter : onJukeboxEjectToHopper");
 
         InventoryHolder holderSource = event.getSource().getHolder();
         InventoryHolder holderDestination = event.getDestination().getHolder();
-        
+
         if (event.getSource().getLocation() == null) return;
         if (!event.getSource().getType().equals(InventoryType.JUKEBOX)) return;
         if (event.getItem().getItemMeta() == null) return;
         if (!isCustomMusicDisc(event.getItem())) return;
 
         if (holderDestination instanceof HopperMinecart) {
-            discToHopper(((BlockState) holderSource).getBlock());
-            stopDiscOnEject(((BlockState) holderSource).getBlock());
-        } else {
-            event.setCancelled(playerManager.isAudioPlayerPlaying(event.getSource().getLocation()));
+            stopDisc(((BlockState) holderSource).getBlock());
         }
-        
 
-    }
-
-    public void discToHopper(Block block) {
-        //logger.warning("Enter : discToHopper");
-        if (block == null) return;
-        if (!block.getLocation().getChunk().isLoaded()) return;
-        if (!block.getType().equals(Material.JUKEBOX)) return;
-
-        Jukebox jukebox = (Jukebox) block.getState();
-        if (jukebox.isPlaying()) {
-            jukebox.stopPlaying();
-        }
-        //Set the block type to force an update.
-        block.setType(Material.JUKEBOX);
-        jukebox.update(true, true);
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
@@ -119,19 +100,27 @@ public class HopperManager implements Listener {
                 if (!jukebox.hasRecord()) return;
                 if (!PlayerManager.instance().isAudioPlayerPlaying(blockState.getLocation()) && isCustomMusicDisc(jukebox.getRecord())) {
                     //Set the block type to force an update.
-                    blockState.getBlock().setType(Material.JUKEBOX);
-                    jukebox.update(true, true);
+                    jukebox.stopPlaying();
                 }
             }
         }
+    }
+
+    public void discToHopper(Block block) {
+        if (block == null) return;
+        if (!block.getLocation().getChunk().isLoaded()) return;
+        if (!block.getType().equals(Material.JUKEBOX)) return;
+
+        Jukebox jukebox = (Jukebox) block.getState();
+        jukebox.stopPlaying();
     }
 
     private boolean isCustomMusicDisc(ItemStack item) {
         //logger.warning("Enter : isCustomMusicDisc");
         return item.getItemMeta().getPersistentDataContainer().has(new NamespacedKey(customDiscs, "customdisc"), PersistentDataType.STRING);
     }
-    
-    private void stopDiscOnEject(Block block) {
+
+    private void stopDisc(Block block) {
         playerManager.stopLocationalAudio(block.getLocation());
     }
 

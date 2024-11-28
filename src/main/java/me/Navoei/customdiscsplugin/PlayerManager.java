@@ -85,7 +85,7 @@ public class PlayerManager {
             audioPlayer.setOnStopped(() -> {
                 //Stuff that runs once the audio player ends.
 
-                //Stop the vanilla disc if it is playing. This ensures the hopper will pickup the disc.
+                //Stop the disc and let it flow into the hopper.
                 Bukkit.getScheduler().runTask(CustomDiscs.getInstance(), () -> HopperManager.instance().discToHopper(block));
 
                 playerMap.remove(id);
@@ -101,6 +101,7 @@ public class PlayerManager {
         });
     }
     
+    /*
     public void playLocationalAudioHorn(VoicechatServerApi api, Path soundFilePath, Player block, Component actionbarComponent, float range) {
         UUID id = UUID.nameUUIDFromBytes(block.getLocation().toString().getBytes());
 
@@ -155,6 +156,7 @@ public class PlayerManager {
             }
         });
     }
+    */
 
     @Nullable
     private de.maxhenkel.voicechat.api.audiochannel.AudioPlayer playChannel(VoicechatServerApi api, AudioChannel audioChannel, Block block, Path soundFilePath, Collection<ServerPlayer> playersInRange) {
@@ -174,6 +176,7 @@ public class PlayerManager {
         }
     }
     
+    /*
     @Nullable
     private de.maxhenkel.voicechat.api.audiochannel.AudioPlayer playChannelHorn(VoicechatServerApi api, AudioChannel audioChannel, Player block, Path soundFilePath, Collection<ServerPlayer> playersInRange) {
         try {
@@ -191,6 +194,7 @@ public class PlayerManager {
             return null;
         }
     }
+    */
 
     private static short[] readSoundFile(Path file) throws UnsupportedAudioFileException, IOException, LineUnavailableException {
         return VoicePlugin.voicechatApi.getAudioConverter().bytesToShorts(convertFormat(file, FORMAT));

@@ -12,12 +12,11 @@ import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandAPIBukkitConfig;
 import me.Navoei.customdiscsplugin.command.CustomDiscCommand;
 import me.Navoei.customdiscsplugin.event.JukeBox;
-import me.Navoei.customdiscsplugin.event.HornPlay;
 import me.Navoei.customdiscsplugin.language.Lang;
 import org.bukkit.NamespacedKey;
 import org.bukkit.block.Jukebox;
-import org.bukkit.entity.Player;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Player;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -74,15 +73,14 @@ public final class CustomDiscs extends JavaPlugin {
 		}
 		
 		getServer().getPluginManager().registerEvents(new JukeBox(), this);
-                getServer().getPluginManager().registerEvents(new HornPlay(), this);
 		getServer().getPluginManager().registerEvents(new HopperManager(), this);
 		
 		musicDiscDistance = Objects.requireNonNull(getConfig().getInt("music-disc-distance"));
-                musicDiscMaxDistance = Objects.requireNonNull(getConfig().getInt("music-disc-max-distance"));
+		musicDiscMaxDistance = Objects.requireNonNull(getConfig().getInt("music-disc-max-distance"));
 		musicDiscVolume = Float.parseFloat(Objects.requireNonNull(getConfig().getString("music-disc-volume")));
 		hornCooldown = Float.parseFloat(Objects.requireNonNull(getConfig().getString("horn-cooldown")));
-                hornMaxCooldown = Objects.requireNonNull(getConfig().getInt("horn-max-cooldown"));
-                hornMaxCooldownTicks = (Objects.requireNonNull(getConfig().getInt("horn-max-cooldown")) * 20);
+		hornMaxCooldown = Objects.requireNonNull(getConfig().getInt("horn-max-cooldown"));
+		hornMaxCooldownTicks = (Objects.requireNonNull(getConfig().getInt("horn-max-cooldown")) * 20);
 		
 		ProtocolManager protocolManager = ProtocolLibrary.getProtocolManager();
 		
@@ -97,12 +95,13 @@ public final class CustomDiscs extends JavaPlugin {
 					if (!jukebox.getRecord().hasItemMeta()) return;
 					
 					if (jukebox.getRecord().getItemMeta().getPersistentDataContainer().has(new NamespacedKey(this.plugin, "customdisc"), PersistentDataType.STRING)) {
-						jukebox.stopPlaying();
 						event.setCancelled(true);
 					}
 					
-					//Spawn particles if there isnt any music playing at this location.
-					ParticleManager.start(jukebox);
+					//Start the jukebox state manager.
+					//This keeps the jukebox powered while custom song is playing,
+					//which perfectly emulated the vanilla behavior of discs.
+					JukeboxStateManager.start(jukebox);
 				}
 			}
 		});
@@ -121,14 +120,6 @@ public final class CustomDiscs extends JavaPlugin {
 	public static CustomDiscs getInstance() {
 		return instance;
 	}
-        
-        public static boolean isMusicDisc(Player p) {
-                return p.getInventory().getItemInMainHand().getType().toString().contains("MUSIC_DISC");
-        }
-    
-        public static boolean isGoatHorn(Player p) {
-                return p.getInventory().getItemInMainHand().getType().toString().contains("GOAT_HORN");
-        }
         
 	/**
 	 * Load the lang.yml file.
@@ -199,5 +190,13 @@ public final class CustomDiscs extends JavaPlugin {
 			ioException.printStackTrace();
 		}
 		
+	}
+
+	public static boolean isMusicDisc(Player p) {
+		return p.getInventory().getItemInMainHand().getType().toString().contains("MUSIC_DISC");
+	}
+
+	public static boolean isGoatHorn(Player p) {
+		return p.getInventory().getItemInMainHand().getType().toString().contains("GOAT_HORN");
 	}
 }
