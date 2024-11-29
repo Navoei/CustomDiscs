@@ -1,4 +1,4 @@
-# Custom Discs v4.0 for Paper 1.21.3
+# Custom Discs v4.1 for Paper 1.21.3
 
 A Paper fork of henkelmax's Audio Player. Special thanks to Athar42 for maintaining this plugin. 
 - Play custom music discs using the Simple Voice Chat API. (The voice chat mod is required on the client and server.)
@@ -42,12 +42,6 @@ music-disc-volume: 1
 # The maximum download size in megabytes.
 max-download-size: 50
 
-# The default cooldown time for horns in seconds from 1 to the max value of horn-max-cooldown.
-horn-cooldown: 7
-
-# The default max cooldown time for horns in seconds (5 minutes by default).
-horn-max-cooldown: 15
-
 #Custom Discs Help Page
 help:
   - "&8-[&6CustomDiscs Help Page&8]-"
@@ -77,10 +71,6 @@ now-playing: "&6Now playing: %song_name%"
 disc-converted: "&aConverted disc to new format! &fThis is due to changes in newer Minecraft versions which introduced &7JukeboxPlayableComponent&f."
 invalid-range: "&cYou need to chose a range between 1 and %range_value%"
 create-custom-range: "&7Your range is set to: &a\"%custom_range%\"."
-not-holding-goathorn: "&rYou must hold a goat horn in your main hand."
-not-holding-modified-goathorn: "&rYou must hold a modified goat horn in your main hand."
-invalid-cooldown: "&rYou need to chose a cooldown between 0 and %cooldown_value%"
-create-custom-goat-cooldown: "&7Your goat horn cooldown is set to: &a\"%custom_goat_cooldown%\"."
 ```
 
 
