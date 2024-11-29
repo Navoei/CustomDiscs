@@ -78,6 +78,7 @@ public class VoicePlugin implements VoicechatPlugin {
                 .build();
         voicechatServerApi.registerVolumeCategory(goatHorns);
         
+        /*
         playerHeads = voicechatServerApi.volumeCategoryBuilder()
                 .setId(PLAYER_HEAD_CATEGORY)
                 .setName("Player Heads")
@@ -85,6 +86,7 @@ public class VoicePlugin implements VoicechatPlugin {
                 .setIcon(getPlayerHeadsIcon())
                 .build();
         voicechatServerApi.registerVolumeCategory(playerHeads);
+        */
 
     }
 
@@ -141,7 +143,8 @@ public class VoicePlugin implements VoicechatPlugin {
         }
         return null;
     }
-    
+
+    /*
     private int[][] getPlayerHeadsIcon() {
         try {
             Enumeration<URL> resources = CustomDiscs.getInstance().getClass().getClassLoader().getResources("player_head_category.png");
@@ -168,5 +171,7 @@ public class VoicePlugin implements VoicechatPlugin {
         }
         return null;
     }
+    */
+
 
 }

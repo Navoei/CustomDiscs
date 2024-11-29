@@ -11,6 +11,7 @@ import de.maxhenkel.voicechat.api.BukkitVoicechatService;
 import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandAPIBukkitConfig;
 import me.Navoei.customdiscsplugin.command.CustomDiscCommand;
+import me.Navoei.customdiscsplugin.event.GoatHorn;
 import me.Navoei.customdiscsplugin.event.JukeBox;
 import me.Navoei.customdiscsplugin.language.Lang;
 import org.bukkit.NamespacedKey;
@@ -73,6 +74,7 @@ public final class CustomDiscs extends JavaPlugin {
 		}
 		
 		getServer().getPluginManager().registerEvents(new JukeBox(), this);
+		getServer().getPluginManager().registerEvents(new GoatHorn(), this);
 		getServer().getPluginManager().registerEvents(new HopperManager(), this);
 		
 		musicDiscDistance = Objects.requireNonNull(getConfig().getInt("music-disc-distance"));
@@ -100,7 +102,7 @@ public final class CustomDiscs extends JavaPlugin {
 					
 					//Start the jukebox state manager.
 					//This keeps the jukebox powered while custom song is playing,
-					//which perfectly emulated the vanilla behavior of discs.
+					//which perfectly emulates the vanilla behavior of discs.
 					JukeboxStateManager.start(jukebox);
 				}
 			}

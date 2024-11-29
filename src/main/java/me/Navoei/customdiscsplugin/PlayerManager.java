@@ -100,8 +100,7 @@ public class PlayerManager {
             }
         });
     }
-    
-    /*
+
     public void playLocationalAudioHorn(VoicechatServerApi api, Path soundFilePath, Player block, Component actionbarComponent, float range) {
         UUID id = UUID.nameUUIDFromBytes(block.getLocation().toString().getBytes());
 
@@ -156,7 +155,6 @@ public class PlayerManager {
             }
         });
     }
-    */
 
     @Nullable
     private de.maxhenkel.voicechat.api.audiochannel.AudioPlayer playChannel(VoicechatServerApi api, AudioChannel audioChannel, Block block, Path soundFilePath, Collection<ServerPlayer> playersInRange) {
@@ -175,8 +173,7 @@ public class PlayerManager {
             return null;
         }
     }
-    
-    /*
+
     @Nullable
     private de.maxhenkel.voicechat.api.audiochannel.AudioPlayer playChannelHorn(VoicechatServerApi api, AudioChannel audioChannel, Player block, Path soundFilePath, Collection<ServerPlayer> playersInRange) {
         try {
@@ -194,7 +191,6 @@ public class PlayerManager {
             return null;
         }
     }
-    */
 
     private static short[] readSoundFile(Path file) throws UnsupportedAudioFileException, IOException, LineUnavailableException {
         return VoicePlugin.voicechatApi.getAudioConverter().bytesToShorts(convertFormat(file, FORMAT));
