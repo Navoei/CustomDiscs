@@ -52,7 +52,7 @@ public class JukeBox implements Listener{
             
             PersistentDataContainer persistentDataContainer = event.getItem().getItemMeta().getPersistentDataContainer();
             float range = CustomDiscs.getInstance().musicDiscDistance;
-            NamespacedKey customSoundRangeKey = new NamespacedKey(customDiscs, "customsoundrange");
+            NamespacedKey customSoundRangeKey = new NamespacedKey(customDiscs, "range");
 
             if(persistentDataContainer.has(customSoundRangeKey, PersistentDataType.FLOAT)) {
                 range = Math.min(persistentDataContainer.get(customSoundRangeKey, PersistentDataType.FLOAT), CustomDiscs.getInstance().musicDiscMaxDistance);

@@ -58,7 +58,7 @@ public class GoatHorn implements Listener {
             @NotNull PersistentDataContainer persistentDataContainer = event.getItem().getItemMeta().getPersistentDataContainer();
 
             float range;
-            NamespacedKey customSoundRangeKey = new NamespacedKey(customDiscs, "customsoundrange");
+            NamespacedKey customSoundRangeKey = new NamespacedKey(customDiscs, "range");
             if(persistentDataContainer.has(customSoundRangeKey, PersistentDataType.FLOAT)) {
                 range = Math.min(persistentDataContainer.get(customSoundRangeKey, PersistentDataType.FLOAT), CustomDiscs.getInstance().musicDiscMaxDistance);
             } else {
@@ -66,11 +66,11 @@ public class GoatHorn implements Listener {
             }
 
             int hornCooldown;
-            NamespacedKey hornCooldownKey = new NamespacedKey(customDiscs, "customhorncoolodwn");
+            NamespacedKey hornCooldownKey = new NamespacedKey(customDiscs, "horncooldown");
             if(persistentDataContainer.has(hornCooldownKey, PersistentDataType.INTEGER)) {
-                hornCooldown = Math.min(persistentDataContainer.get(hornCooldownKey, PersistentDataType.INTEGER), CustomDiscs.getInstance().hornMaxCooldownTicks);
+                hornCooldown = Math.min(persistentDataContainer.get(hornCooldownKey, PersistentDataType.INTEGER), CustomDiscs.getInstance().hornMaxCooldown) * 20;
             } else {
-                hornCooldown = Math.min(Math.round(CustomDiscs.getInstance().hornCooldown * 20), CustomDiscs.getInstance().hornMaxCooldownTicks);
+                hornCooldown = Math.min(Math.round(CustomDiscs.getInstance().hornCooldown) * 20, CustomDiscs.getInstance().hornMaxCooldown) * 20;
             }
 
             Path soundFilePath = Path.of(customDiscs.getDataFolder().getPath(), "musicdata", soundFileName);

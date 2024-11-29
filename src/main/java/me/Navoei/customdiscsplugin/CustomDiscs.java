@@ -18,6 +18,7 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.block.Jukebox;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -82,7 +83,6 @@ public final class CustomDiscs extends JavaPlugin {
 		musicDiscVolume = Float.parseFloat(Objects.requireNonNull(getConfig().getString("music-disc-volume")));
 		hornCooldown = Float.parseFloat(Objects.requireNonNull(getConfig().getString("horn-cooldown")));
 		hornMaxCooldown = Objects.requireNonNull(getConfig().getInt("horn-max-cooldown"));
-		hornMaxCooldownTicks = (Objects.requireNonNull(getConfig().getInt("horn-max-cooldown")) * 20);
 		
 		ProtocolManager protocolManager = ProtocolLibrary.getProtocolManager();
 		
@@ -192,13 +192,5 @@ public final class CustomDiscs extends JavaPlugin {
 			ioException.printStackTrace();
 		}
 		
-	}
-
-	public static boolean isMusicDisc(Player p) {
-		return p.getInventory().getItemInMainHand().getType().toString().contains("MUSIC_DISC");
-	}
-
-	public static boolean isGoatHorn(Player p) {
-		return p.getInventory().getItemInMainHand().getType().toString().contains("GOAT_HORN");
 	}
 }

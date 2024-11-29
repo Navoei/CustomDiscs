@@ -3,15 +3,21 @@ package me.Navoei.customdiscsplugin.command.SubCommands;
 import dev.jorel.commandapi.CommandAPICommand;
 import dev.jorel.commandapi.arguments.FloatArgument;
 import dev.jorel.commandapi.executors.CommandArguments;
+import io.papermc.paper.datacomponent.DataComponentTypes;
+import io.papermc.paper.datacomponent.item.JukeboxPlayable;
+import io.papermc.paper.datacomponent.item.UseCooldown;
 import me.Navoei.customdiscsplugin.CustomDiscs;
 import me.Navoei.customdiscsplugin.language.Lang;
+import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.NamespacedKey;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.components.UseCooldownComponent;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 
@@ -35,52 +41,31 @@ public class SetHornCooldownSubCommand extends CommandAPICommand {
 	}
 	
 	private int onCommandPlayer(Player player, CommandArguments arguments) {
-                if (!CustomDiscs.isGoatHorn(player)) {
+
+        ItemStack item = player.getInventory().getItemInMainHand();
+
+        if (!isCustomGoatHorn(item)) {
 			player.sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize(Lang.PREFIX + Lang.NOT_HOLDING_GOATHORN.toString()));
 			return 1;
 		}
 
-                if (!player.hasPermission("customdiscs.horncooldown")) {
+        if (!player.hasPermission("customdiscs.horncooldown")) {
 			player.sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize(Lang.PREFIX + Lang.NO_PERMISSION.toString()));
 			return 1;
 		}
 		
-                Float goatcooldown = Objects.requireNonNull(arguments.getByClass("goatcooldown", Float.class));
+        Float goatcooldown = Objects.requireNonNull(arguments.getByClass("goatcooldown", Float.class));
 
-                if ( goatcooldown < 0 || goatcooldown > this.plugin.hornMaxCooldown) {
-                        player.sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize(Lang.PREFIX + Lang.INVALID_COOLDOWN.toString().replace("%cooldown_value%", Float.toString(this.plugin.hornMaxCooldown))));
-                        return 1;
-                }
+        if ( goatcooldown < 0 || goatcooldown > this.plugin.hornMaxCooldown) {
+            player.sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize(Lang.PREFIX + Lang.INVALID_COOLDOWN.toString().replace("%cooldown_value%", Float.toString(this.plugin.hornMaxCooldown))));
+            return 1;
+        }
 
-                //Sets the lore of the item to the quotes from the command.
-                ItemStack disc = new ItemStack(player.getInventory().getItemInMainHand());
-                ItemMeta theItemMeta = disc.getItemMeta();
+		ItemMeta meta = item.getItemMeta();
+		meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "horncooldown"), PersistentDataType.INTEGER, goatcooldown.intValue());
+		item.setItemMeta(meta);
 
-                PersistentDataContainer data = theItemMeta.getPersistentDataContainer();
-
-                var namespaceHorn = new NamespacedKey(this.plugin, "customhorn");
-                String retrieveCustomHornFile = data.get(namespaceHorn, PersistentDataType.STRING);
-                if (retrieveCustomHornFile == null || retrieveCustomHornFile.compareTo("null") == 0) {
-                        player.sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize(Lang.PREFIX + Lang.NOT_HOLDING_MODIFIED_GOATHORN.toString()));
-                        return 1;
-                }
-
-                var namespaceCustomsoundrange = new NamespacedKey(this.plugin, "customsoundrange");
-                Float retrieveCustomsoundrange = data.get(namespaceCustomsoundrange, PersistentDataType.FLOAT);
-                
-                var namespaceCustomhorncooldown = new NamespacedKey(this.plugin, "customhorncoolodwn");
-                int setCustomGoatcooldown;
-                if (goatcooldown == 0) {
-                    setCustomGoatcooldown = 1;
-                } else {
-                    setCustomGoatcooldown = Math.min(Math.round(goatcooldown * 20), CustomDiscs.getInstance().hornMaxCooldownTicks);
-                }
-
-                String command = "minecraft:item modify entity "+player.getName()+" weapon.mainhand {\"function\":\"minecraft:set_components\",\"components\":{\"minecraft:custom_data\":\"{PublicBukkitValues:{\\\""+namespaceHorn+"\\\":\\\""+retrieveCustomHornFile+"\\\",\\\""+namespaceCustomsoundrange+"\\\":"+retrieveCustomsoundrange+"f,\\\""+namespaceCustomhorncooldown+"\\\":"+setCustomGoatcooldown+"}}\"}}";
-                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command);
-
-
-                player.sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize(Lang.PREFIX + Lang.CREATE_CUSTOM_GOAT_COOLDOWN.toString().replace("%custom_goat_cooldown%", Float.toString(goatcooldown))));
+        player.sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize(Lang.PREFIX + Lang.CREATE_CUSTOM_GOAT_COOLDOWN.toString().replace("%custom_goat_cooldown%", Float.toString(goatcooldown))));
                 
 		return 1;
 	}
@@ -89,5 +74,10 @@ public class SetHornCooldownSubCommand extends CommandAPICommand {
 		executor.sendMessage(NamedTextColor.RED + "Only players can use this command : '"+arguments+"'!");
 		return 1;
 	}
+
+    public boolean isCustomGoatHorn(ItemStack item) {
+        if (item==null) return false;
+        return item.getType().toString().contains("GOAT_HORN") && item.getItemMeta().getPersistentDataContainer().has(new NamespacedKey(plugin, "customhorn"));
+    }
 
 }
