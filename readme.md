@@ -15,15 +15,10 @@ Set the range of a disc:
 - To set the active range of a playable disc, just use the command ```/cd range <range>```. The range can be between 1 and the max value set in the config file (default : 256)
 - Example: ```/cd range 100```
 
-Set the cooldown for a modified goat horn: (GOAT HORNS ARE EXPERIMENTAL!!! Please report any issues.)
-- To set a different cooldown timer than the one set by the config, just use the command ```/cd goatcooldown <cooldown>``` where <cooldown> is between 0 and the max value set in the config file (default : 6000)
-- Example: ```/cd goatcooldown 7```
-
 Permission Nodes (Required to run the commands. Playing discs does not require a permission.):
 - ```customdiscs.create``` to create a disc
 - ```customdiscs.download``` to download a file
 - ```customdiscs.range``` to set the range of the disc
-- ```customdiscs.horncooldown``` to set the cooldown for your modified goat horn
 
 Dependencies:
 - This plugin depends on the latest version of ProtocolLib for 1.21 and SimpleVoiceChatBukkit version 2.5.16. 

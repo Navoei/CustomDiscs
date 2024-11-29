@@ -12,12 +12,6 @@ music-disc-volume: 1
 # The maximum download size in megabytes.
 max-download-size: 50
 
-# The default cooldown time for horns in seconds from 1 to the max value of horn-max-cooldown.
-horn-cooldown: 7
-
-# The default max cooldown time for horns in seconds (5 minutes by default).
-horn-max-cooldown: 300
-
 #Custom Discs Help Page
 help:
   - "&8-[&6CustomDiscs Help Page&8]-"

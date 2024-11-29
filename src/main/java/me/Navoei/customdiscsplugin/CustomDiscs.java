@@ -11,14 +11,11 @@ import de.maxhenkel.voicechat.api.BukkitVoicechatService;
 import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandAPIBukkitConfig;
 import me.Navoei.customdiscsplugin.command.CustomDiscCommand;
-import me.Navoei.customdiscsplugin.event.GoatHorn;
 import me.Navoei.customdiscsplugin.event.JukeBox;
 import me.Navoei.customdiscsplugin.language.Lang;
 import org.bukkit.NamespacedKey;
 import org.bukkit.block.Jukebox;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.entity.Player;
-import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -39,9 +36,6 @@ public final class CustomDiscs extends JavaPlugin {
 	public float musicDiscDistance;
         public float musicDiscMaxDistance;
 	public float musicDiscVolume;
-	public float hornCooldown;
-	public int hornMaxCooldown;
-	public int hornMaxCooldownTicks;
 	
 	@Override
 	public void onLoad() {
@@ -75,14 +69,11 @@ public final class CustomDiscs extends JavaPlugin {
 		}
 		
 		getServer().getPluginManager().registerEvents(new JukeBox(), this);
-		getServer().getPluginManager().registerEvents(new GoatHorn(), this);
 		getServer().getPluginManager().registerEvents(new HopperManager(), this);
 		
 		musicDiscDistance = Objects.requireNonNull(getConfig().getInt("music-disc-distance"));
 		musicDiscMaxDistance = Objects.requireNonNull(getConfig().getInt("music-disc-max-distance"));
 		musicDiscVolume = Float.parseFloat(Objects.requireNonNull(getConfig().getString("music-disc-volume")));
-		hornCooldown = Float.parseFloat(Objects.requireNonNull(getConfig().getString("horn-cooldown")));
-		hornMaxCooldown = Objects.requireNonNull(getConfig().getInt("horn-max-cooldown"));
 		
 		ProtocolManager protocolManager = ProtocolLibrary.getProtocolManager();
 		

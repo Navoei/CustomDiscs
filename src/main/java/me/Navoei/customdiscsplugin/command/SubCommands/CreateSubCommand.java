@@ -67,7 +67,7 @@ public class CreateSubCommand extends CommandAPICommand {
 
 		ItemStack item = player.getInventory().getItemInMainHand();
 
-		if (!isMusicDisc(item) && !isGoatHorn(item)) {
+		if (!isMusicDisc(item)) {
 			player.sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize(Lang.PREFIX + Lang.NOT_HOLDING_DISC.toString()));
 			return 1;
 		}
@@ -98,41 +98,20 @@ public class CreateSubCommand extends CommandAPICommand {
 		
 		String song_name = Objects.requireNonNull(arguments.getByClass("song_name", String.class));
 
-                if (isMusicDisc(item)) {
-					// IF DISC
-					ItemStack disc = new ItemStack(player.getInventory().getItemInMainHand());
-					ItemMeta meta = disc.getItemMeta();
-					@Nullable List<Component> itemLore = new ArrayList<>();
-					final TextComponent customLoreSong = Component.text().decoration(TextDecoration.ITALIC, false).content(song_name).color(NamedTextColor.GRAY).build();
-					itemLore.add(customLoreSong);
-					meta.lore(itemLore);
+		ItemStack disc = new ItemStack(player.getInventory().getItemInMainHand());
+		ItemMeta meta = disc.getItemMeta();
+		@Nullable List<Component> itemLore = new ArrayList<>();
+		final TextComponent customLoreSong = Component.text().decoration(TextDecoration.ITALIC, false).content(song_name).color(NamedTextColor.GRAY).build();
+		itemLore.add(customLoreSong);
+		meta.lore(itemLore);
 
-					JukeboxPlayableComponent jpc = meta.getJukeboxPlayable();
-					jpc.setShowInTooltip(false);
-					meta.setJukeboxPlayable(jpc);
+		JukeboxPlayableComponent jpc = meta.getJukeboxPlayable();
+		jpc.setShowInTooltip(false);
+		meta.setJukeboxPlayable(jpc);
 
-					PersistentDataContainer data = meta.getPersistentDataContainer();
-					data.set(new NamespacedKey(this.plugin, "customdisc"), PersistentDataType.STRING, filename);
-					player.getInventory().getItemInMainHand().setItemMeta(meta);
-
-                } else if (isGoatHorn(item)) {
-					// IF HORN
-					ItemStack goat_horn = new ItemStack(player.getInventory().getItemInMainHand());
-					ItemMeta meta = goat_horn.getItemMeta();
-					@Nullable List<Component> itemLore = new ArrayList<>();
-					final TextComponent customLoreSong = Component.text().decoration(TextDecoration.ITALIC, false).content(song_name).color(NamedTextColor.GRAY).build();
-					itemLore.add(customLoreSong);
-					meta.lore(itemLore);
-
-					meta.addItemFlags(ItemFlag.HIDE_ADDITIONAL_TOOLTIP);
-
-					PersistentDataContainer data = meta.getPersistentDataContainer();
-					data.set(new NamespacedKey(this.plugin, "customhorn"), PersistentDataType.STRING, filename);
-					player.getInventory().getItemInMainHand().setItemMeta(meta);
-                } else {
-					return 1;
-                }
-		
+		PersistentDataContainer data = meta.getPersistentDataContainer();
+		data.set(new NamespacedKey(this.plugin, "customdisc"), PersistentDataType.STRING, filename);
+		player.getInventory().getItemInMainHand().setItemMeta(meta);
 		player.sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize(Lang.PREFIX + Lang.CREATE_FILENAME.toString().replace("%filename%", filename)));
 		player.sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize(Lang.PREFIX + Lang.CREATE_CUSTOM_NAME.toString().replace("%custom_name%", song_name)));
 		return 1;
@@ -156,7 +135,4 @@ public class CreateSubCommand extends CommandAPICommand {
 		return item.getType().toString().contains("MUSIC_DISC");
 	}
 
-	public static boolean isGoatHorn(ItemStack item) {
-		return item.getType().toString().contains("GOAT_HORN");
-	}
 }

@@ -69,24 +69,6 @@ public class VoicePlugin implements VoicechatPlugin {
                 .setIcon(getMusicDiscIcon())
                 .build();
         voicechatServerApi.registerVolumeCategory(musicDiscs);
-        
-        goatHorns = voicechatServerApi.volumeCategoryBuilder()
-                .setId(GOAT_HORN_CATEGORY)
-                .setName("Goat Horns")
-                .setDescription("The volume of goat horns")
-                .setIcon(getGoatHornsIcon())
-                .build();
-        voicechatServerApi.registerVolumeCategory(goatHorns);
-        
-        /*
-        playerHeads = voicechatServerApi.volumeCategoryBuilder()
-                .setId(PLAYER_HEAD_CATEGORY)
-                .setName("Player Heads")
-                .setDescription("The volume of player heads (not enabled)")
-                .setIcon(getPlayerHeadsIcon())
-                .build();
-        voicechatServerApi.registerVolumeCategory(playerHeads);
-        */
 
     }
 
@@ -116,62 +98,5 @@ public class VoicePlugin implements VoicechatPlugin {
         }
         return null;
     }
-    
-    private int[][] getGoatHornsIcon() {
-        try {
-            Enumeration<URL> resources = CustomDiscs.getInstance().getClass().getClassLoader().getResources("goat_horn_category.png");
-
-            while (resources.hasMoreElements()) {
-                BufferedImage bufferedImage = ImageIO.read(resources.nextElement().openStream());
-                if (bufferedImage.getWidth() != 16) {
-                    continue;
-                }
-                if (bufferedImage.getHeight() != 16) {
-                    continue;
-                }
-                int[][] image = new int[16][16];
-                for (int x = 0; x < bufferedImage.getWidth(); x++) {
-                    for (int y = 0; y < bufferedImage.getHeight(); y++) {
-                        image[x][y] = bufferedImage.getRGB(x, y);
-                    }
-                }
-                return image;
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    /*
-    private int[][] getPlayerHeadsIcon() {
-        try {
-            Enumeration<URL> resources = CustomDiscs.getInstance().getClass().getClassLoader().getResources("player_head_category.png");
-
-            while (resources.hasMoreElements()) {
-                BufferedImage bufferedImage = ImageIO.read(resources.nextElement().openStream());
-                if (bufferedImage.getWidth() != 16) {
-                    continue;
-                }
-                if (bufferedImage.getHeight() != 16) {
-                    continue;
-                }
-                int[][] image = new int[16][16];
-                for (int x = 0; x < bufferedImage.getWidth(); x++) {
-                    for (int y = 0; y < bufferedImage.getHeight(); y++) {
-                        image[x][y] = bufferedImage.getRGB(x, y);
-                    }
-                }
-                return image;
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-    */
-
 
 }

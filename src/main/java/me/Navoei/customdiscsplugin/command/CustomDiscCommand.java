@@ -6,7 +6,6 @@ import me.Navoei.customdiscsplugin.CustomDiscs;
 import me.Navoei.customdiscsplugin.command.SubCommands.CreateSubCommand;
 import me.Navoei.customdiscsplugin.command.SubCommands.DownloadSubCommand;
 import me.Navoei.customdiscsplugin.command.SubCommands.SetRangeSubCommand;
-import me.Navoei.customdiscsplugin.command.SubCommands.SetHornCooldownSubCommand;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.command.ConsoleCommandSender;
@@ -26,7 +25,6 @@ public class CustomDiscCommand extends CommandAPICommand {
 		this.withSubcommand(new CreateSubCommand(plugin));
 		this.withSubcommand(new DownloadSubCommand(plugin));
 		this.withSubcommand(new SetRangeSubCommand(plugin));
-		this.withSubcommand(new SetHornCooldownSubCommand(plugin));
 		
 		this.executesPlayer(this::onCommandPlayer);
 		this.executesConsole(this::onCommandConsole);

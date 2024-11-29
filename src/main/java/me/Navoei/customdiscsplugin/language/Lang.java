@@ -20,11 +20,7 @@ public enum Lang {
     NOW_PLAYING("now-playing","&6Now playing: %song_name%"),
     DISC_CONVERTED("disc-converted", "&aConverted disc to new format! &fThis is due to changes in newer Minecraft versions which introduced &7JukeboxPlayableComponent&f."),
     INVALID_RANGE("invalid-range","&rYou need to chose a range between 1 and %range_value%"),
-    CREATE_CUSTOM_RANGE("create-custom-range", "&7Your range is set to: &a\"%custom_range%\"."),
-    NOT_HOLDING_GOATHORN("not-holding-goathorn", "&cYou must hold a goat horn in your main hand."),
-    NOT_HOLDING_MODIFIED_GOATHORN("not-holding-modified-goathorn", "&cYou must hold a modified goat horn in your main hand."),
-    INVALID_COOLDOWN("invalid-cooldown","&cYou need to chose a cooldown between 0 and %cooldown_value%"),
-    CREATE_CUSTOM_GOAT_COOLDOWN("create-custom-goat-cooldown", "&7Your goat horn cooldown is set to: &a\"%custom_goat_cooldown%\".");
+    CREATE_CUSTOM_RANGE("create-custom-range", "&7Your range is set to: &a\"%custom_range%\".");
 
     private final String path;
     private final String def;

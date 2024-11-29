@@ -42,7 +42,7 @@ public class SetRangeSubCommand extends CommandAPICommand {
 
         ItemStack item = player.getInventory().getItemInMainHand();
 
-        if (!isCustomDisc(item) && !isCustomGoatHorn(item)) {
+        if (!isCustomDisc(item)) {
 			player.sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize(Lang.PREFIX + Lang.NOT_HOLDING_DISC.toString()));
 			return 1;
 		}
@@ -59,22 +59,12 @@ public class SetRangeSubCommand extends CommandAPICommand {
             return 1;
         }
 
-        if (isCustomDisc(item)) {
-            ItemMeta meta = item.getItemMeta();
-
-            PersistentDataContainer data = meta.getPersistentDataContainer();
-            data.set(new NamespacedKey(this.plugin, "range"), PersistentDataType.FLOAT, range);
-            player.getInventory().getItemInMainHand().setItemMeta(meta);
-        } else if (isCustomGoatHorn(item)) {
-            ItemMeta meta = item.getItemMeta();
-
-            PersistentDataContainer data = meta.getPersistentDataContainer();
-            data.set(new NamespacedKey(this.plugin, "range"), PersistentDataType.FLOAT, range);
-            player.getInventory().getItemInMainHand().setItemMeta(meta);
-        }
-
+        ItemMeta meta = item.getItemMeta();
+        PersistentDataContainer data = meta.getPersistentDataContainer();
+        data.set(new NamespacedKey(this.plugin, "range"), PersistentDataType.FLOAT, range);
+        player.getInventory().getItemInMainHand().setItemMeta(meta);
         player.sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize(Lang.PREFIX + Lang.CREATE_CUSTOM_RANGE.toString().replace("%custom_range%", Float.toString(range))));
-                
+
 		return 1;
 	}
 	
@@ -86,11 +76,6 @@ public class SetRangeSubCommand extends CommandAPICommand {
     public boolean isCustomDisc(ItemStack item) {
         if (item==null) return false;
         return item.getType().toString().contains("MUSIC_DISC") && item.getItemMeta().getPersistentDataContainer().has(new NamespacedKey(plugin, "customdisc"));
-    }
-
-    public boolean isCustomGoatHorn(ItemStack item) {
-        if (item==null) return false;
-        return item.getType().toString().contains("GOAT_HORN") && item.getItemMeta().getPersistentDataContainer().has(new NamespacedKey(plugin, "customhorn"));
     }
 
 }
