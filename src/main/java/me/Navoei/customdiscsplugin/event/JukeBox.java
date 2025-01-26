@@ -75,7 +75,7 @@ public class JukeBox implements Listener{
                 Component customActionBarSongPlaying = LegacyComponentSerializer.legacyAmpersand().deserialize(Lang.NOW_PLAYING.toString().replace("%song_name%", songName));
 
                 assert VoicePlugin.voicechatServerApi != null;
-                playerManager.playLocationalAudio(VoicePlugin.voicechatServerApi, soundFilePath, block, customActionBarSongPlaying, range);
+                playerManager.playAudio(VoicePlugin.voicechatServerApi, soundFilePath, block, customActionBarSongPlaying, range);
             } else {
                 player.sendMessage(NamedTextColor.RED + "Sound file not found.");
                 event.setCancelled(true);

@@ -2,39 +2,30 @@ package me.Navoei.customdiscsplugin;
 
 import org.bukkit.Location;
 import org.bukkit.block.Jukebox;
-import org.bukkit.scheduler.BukkitRunnable;
 
-import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.List;
 
-public class JukeboxStateManager extends BukkitRunnable {
+public class JukeboxStateManager {
 
+    static CustomDiscs plugin = CustomDiscs.getInstance();
     static PlayerManager playerManager = PlayerManager.instance();
-    static HashMap<Location, JukeboxStateManager> locationParticleManager = new HashMap<>();
+    static List<Location> jukeboxLocations = new ArrayList<>();
 
         public static void start(Jukebox jukebox) {
-            JukeboxStateManager jukeboxStateManager = new JukeboxStateManager();
-            jukeboxStateManager.jukebox = jukebox;
-            if (locationParticleManager.containsKey(jukebox.getLocation())) return;
-            locationParticleManager.put(jukebox.getLocation(), jukeboxStateManager);
-            locationParticleManager.get(jukebox.getLocation()).runTaskTimer(CustomDiscs.getInstance(), 0, 1);
-        }
-
-        //private float seconds;
-        private Jukebox jukebox;
-
-
-        @Override
-        public void run() {
-
-                if (!playerManager.isAudioPlayerPlaying(jukebox.getLocation())) {
-                    jukebox.stopPlaying();
-                    locationParticleManager.remove(jukebox.getLocation());
-                    cancel();
-                } else {
+            if (jukeboxLocations.contains(jukebox.getLocation()) || !playerManager.isAudioPlayerPlaying(jukebox.getLocation())) return;
+            jukeboxLocations.add(jukebox.getLocation());
+            plugin.getServer().getRegionScheduler().runAtFixedRate(plugin, jukebox.getLocation(), scheduledTask -> {
+                if (playerManager.isAudioPlayerPlaying(jukebox.getLocation())) {
                     if (!jukebox.isPlaying()) {
                         jukebox.startPlaying();
                     }
+                } else {
+                    jukebox.stopPlaying();
+                    jukeboxLocations.remove(jukebox.getLocation());
+                    scheduledTask.cancel();
                 }
+            }, 0, 1);
         }
 
 }
