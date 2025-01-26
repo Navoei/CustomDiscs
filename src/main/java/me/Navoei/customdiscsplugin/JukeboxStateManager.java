@@ -25,7 +25,7 @@ public class JukeboxStateManager {
                     jukeboxLocations.remove(jukebox.getLocation());
                     scheduledTask.cancel();
                 }
-            }, 0, 1);
+            }, 1, 1);
         }
 
 }

@@ -55,18 +55,12 @@ public class PlayerManager {
         audioChannel.setCategory(VoicePlugin.MUSIC_DISC_CATEGORY);
         audioChannel.setDistance(range);
 
-        Collection<ServerPlayer> playersInRange = api.getPlayersInRange(api.fromServerLevel(block.getWorld()), audioChannel.getLocation(), range+1f, serverPlayer -> {
-           VoicechatConnection connection = api.getConnectionOf(serverPlayer);
-           if (connection != null) {
-               return connection.isDisabled();
-           }
-           return true;
-        });
+        Collection<ServerPlayer> playersInRange = api.getPlayersInRange(api.fromServerLevel(block.getWorld()), audioChannel.getLocation(), range);
 
-        playersInRange.stream().map(de.maxhenkel.voicechat.api.Player::getPlayer).map(ServerPlayer.class::cast).forEach(player -> {
-            Player bukkitPlayer = (Player) player.getPlayer();
+        for (ServerPlayer serverPlayer : playersInRange) {
+            Player bukkitPlayer = (Player) serverPlayer.getPlayer();
             bukkitPlayer.sendActionBar(actionbarComponent);
-        });
+        }
 
         AtomicBoolean stopped = new AtomicBoolean();
         AtomicReference<de.maxhenkel.voicechat.api.audiochannel.AudioPlayer> player = new AtomicReference<>();
