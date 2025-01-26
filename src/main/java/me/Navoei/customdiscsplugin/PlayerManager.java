@@ -9,6 +9,7 @@ import de.maxhenkel.voicechat.api.audiochannel.LocationalAudioChannel;
 import javazoom.spi.mpeg.sampled.convert.MpegFormatConversionProvider;
 import javazoom.spi.mpeg.sampled.file.MpegAudioFileReader;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
@@ -108,7 +109,8 @@ public class PlayerManager {
             plugin.getLogger().info("Error Occurred At: " + block.getLocation());
             for (ServerPlayer serverPlayer : playersInRange) {
                 Player bukkitPlayer = (Player) serverPlayer.getPlayer();
-                bukkitPlayer.sendMessage(NamedTextColor.RED + "An error has occurred while trying to play this disc.");
+                TextComponent textComponent = Component.text("An error has occurred while trying to play this disc.").color(NamedTextColor.RED);
+                bukkitPlayer.sendMessage(textComponent);
             }
             return null;
         }
