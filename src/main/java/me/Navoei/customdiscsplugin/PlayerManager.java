@@ -128,6 +128,7 @@ public class PlayerManager {
                     TextComponent textComponent = Component.text("An error has occurred while trying to play this disc.").color(NamedTextColor.RED);
                     bukkitPlayer.sendMessage(textComponent);
                 }
+                e.printStackTrace();
                 return null;
             }
         });
@@ -172,6 +173,7 @@ public class PlayerManager {
         byte[] buffer = new byte[FRAME_SIZE_BYTES];  // Buffer to hold 960 bytes of audio data
         int bytesRead = inputStream.read(buffer);
         // If fewer than 960 bytes are read, pad with zeros
+        if (bytesRead == -1) return null;
         if (bytesRead < FRAME_SIZE_BYTES) {
             for (int i = bytesRead; i < FRAME_SIZE_BYTES; i++) {
                 buffer[i] = 0;  // Pad with zero
