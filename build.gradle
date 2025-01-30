@@ -52,7 +52,8 @@ repositories {
     }
     // You need this maven repository if you want to use the paper dependency
     maven {
-        url = uri("https://papermc.io/repo/repository/maven-public/")
+        name = "papermc"
+        url = uri("https://repo.papermc.io/repository/maven-public/")
     }
     maven { url "https://repo.dmulloy2.net/repository/public/" }
     maven { url = "https://repo.codemc.org/repository/maven-public/" }

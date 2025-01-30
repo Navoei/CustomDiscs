@@ -21,6 +21,7 @@ import javax.annotation.Nullable;
 import javax.sound.sampled.*;
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Map;
 import java.util.UUID;
@@ -65,8 +66,7 @@ public class PlayerManager {
 
         AtomicBoolean stopped = new AtomicBoolean();
         AtomicReference<de.maxhenkel.voicechat.api.audiochannel.AudioPlayer> player = new AtomicReference<>();
-
-        playerMap.put(id, new PlayerReference(() -> {
+        PlayerReference playerReference = new PlayerReference(() -> {
             synchronized (stopped) {
                 stopped.set(true);
                 de.maxhenkel.voicechat.api.audiochannel.AudioPlayer audioPlayer = player.get();
@@ -74,7 +74,9 @@ public class PlayerManager {
                     audioPlayer.stopPlaying();
                 }
             }
-        }, player, soundFilePath));
+        }, player, soundFilePath);
+
+        playerMap.put(id, playerReference);
 
         executorService.execute(() -> {
             de.maxhenkel.voicechat.api.audiochannel.AudioPlayer audioPlayer = playChannel(api, audioChannel, block, soundFilePath, playersInRange);
@@ -83,8 +85,10 @@ public class PlayerManager {
                 return;
             }
             audioPlayer.setOnStopped(() -> {
-                plugin.getServer().getRegionScheduler().run(plugin, block.getLocation(), scheduledTask -> HopperManager.instance().discToHopper(block));
-                playerMap.remove(id);
+                //plugin.getServer().getRegionScheduler().run(plugin, block.getLocation(), scheduledTask -> HopperManager.instance().discToHopper(block));
+                if (playerMap.containsValue(playerReference)) {
+                    playerMap.remove(id);
+                }
             });
             synchronized (stopped) {
                 if (!stopped.get()) {
@@ -99,21 +103,22 @@ public class PlayerManager {
 
     @Nullable
     private de.maxhenkel.voicechat.api.audiochannel.AudioPlayer playChannel(VoicechatServerApi api, AudioChannel audioChannel, Block block, Path soundFilePath, Collection<ServerPlayer> playersInRange) {
-        try {
-            short[] audio = readSoundFile(soundFilePath);
-            AudioPlayer audioPlayer = api.createAudioPlayer(audioChannel, api.createEncoder(), audio);
-            audioPlayer.startPlaying();
-            return audioPlayer;
-        } catch (Exception e) {
-            e.printStackTrace();
-            plugin.getLogger().info("Error Occurred At: " + block.getLocation());
-            for (ServerPlayer serverPlayer : playersInRange) {
-                Player bukkitPlayer = (Player) serverPlayer.getPlayer();
-                TextComponent textComponent = Component.text("An error has occurred while trying to play this disc.").color(NamedTextColor.RED);
-                bukkitPlayer.sendMessage(textComponent);
+        //short[] audio = readSoundFile(soundFilePath);
+        AudioPlayer audioPlayer = api.createAudioPlayer(audioChannel, api.createEncoder(), () -> {
+            try {
+                return readSoundFile(soundFilePath);
+            } catch (Exception e) {
+                plugin.getLogger().info("Error Occurred At: " + block.getLocation());
+                for (ServerPlayer serverPlayer : playersInRange) {
+                    Player bukkitPlayer = (Player) serverPlayer.getPlayer();
+                    TextComponent textComponent = Component.text("An error has occurred while trying to play this disc.").color(NamedTextColor.RED);
+                    bukkitPlayer.sendMessage(textComponent);
+                }
+                return null;
             }
-            return null;
-        }
+        });
+        audioPlayer.startPlaying();
+        return audioPlayer;
     }
 
     private static short[] readSoundFile(Path file) throws UnsupportedAudioFileException, IOException {
@@ -144,7 +149,23 @@ public class PlayerManager {
 
         assert finalInputStream != null;
 
-        return adjustVolume(finalInputStream.readAllBytes(), CustomDiscs.getInstance().musicDiscVolume);
+        //byte[] audioPacket = inputStreamToPackets(finalInputStream);
+
+        return adjustVolume(finalInputStream.readNBytes(1920), CustomDiscs.getInstance().musicDiscVolume);
+    }
+
+    private static byte[] inputStreamToPackets(AudioInputStream inputStream) throws IOException {
+        int FRAME_SIZE_BYTES = 1920;
+        byte[] buffer = new byte[FRAME_SIZE_BYTES];  // Buffer to hold 960 bytes of audio data
+        int bytesRead = inputStream.read(buffer);
+        // If fewer than 960 bytes are read, pad with zeros
+        if (bytesRead < FRAME_SIZE_BYTES) {
+            for (int i = bytesRead; i < FRAME_SIZE_BYTES; i++) {
+                buffer[i] = 0;  // Pad with zero
+            }
+        }
+        System.out.println(Arrays.toString(buffer));
+        return buffer;
     }
 
     private static byte[] adjustVolume(byte[] audioSamples, double volume) {
@@ -181,7 +202,6 @@ public class PlayerManager {
         if (player != null) {
             player.onStop.stop();
         }
-        playerMap.remove(id);
     }
 
     public static float getLengthSeconds(Path file) throws UnsupportedAudioFileException, IOException {
