@@ -81,8 +81,10 @@ public class PlayerManager {
 
         executorService.execute(() -> {
             AudioPlayer audioPlayer = null;
+            AudioInputStream inputStream = null;
             try {
-                audioPlayer = playChannel(api, audioChannel, block, soundFilePath, playersInRange);
+                inputStream = getAudioInputStream(soundFilePath, FORMAT);
+                audioPlayer = playChannel(api, audioChannel, block, inputStream, playersInRange);
             } catch (UnsupportedAudioFileException | IOException e) {
                 throw new RuntimeException(e);
             }
@@ -90,7 +92,13 @@ public class PlayerManager {
                 playerMap.remove(id);
                 return;
             }
+            AudioInputStream finalInputStream = inputStream;
             audioPlayer.setOnStopped(() -> {
+                try {
+                    finalInputStream.close();
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
                 //plugin.getServer().getRegionScheduler().run(plugin, block.getLocation(), scheduledTask -> HopperManager.instance().discToHopper(block));
                 if (playerMap.containsValue(playerReference)) {
                     playerMap.remove(id);
@@ -108,9 +116,8 @@ public class PlayerManager {
     }
 
     @Nullable
-    private de.maxhenkel.voicechat.api.audiochannel.AudioPlayer playChannel(VoicechatServerApi api, AudioChannel audioChannel, Block block, Path soundFilePath, Collection<ServerPlayer> playersInRange) throws UnsupportedAudioFileException, IOException {
+    private de.maxhenkel.voicechat.api.audiochannel.AudioPlayer playChannel(VoicechatServerApi api, AudioChannel audioChannel, Block block, AudioInputStream inputStream, Collection<ServerPlayer> playersInRange) throws UnsupportedAudioFileException, IOException {
         //short[] audio = readSoundFile(soundFilePath);
-        AudioInputStream inputStream = getAudioInputStream(soundFilePath, FORMAT);
         AudioPlayer audioPlayer = api.createAudioPlayer(audioChannel, api.createEncoder(), () -> {
             try {
                 return readSoundFile(inputStream);
@@ -151,36 +158,12 @@ public class PlayerManager {
         return finalInputStream;
     }
 
-    private static short[] readSoundFile(AudioInputStream inputStream) throws UnsupportedAudioFileException, IOException {
+    private static short[] readSoundFile(AudioInputStream inputStream) throws IOException {
         return VoicePlugin.voicechatApi.getAudioConverter().bytesToShorts(getAudioPacket(inputStream));
     }
 
-    private static byte[] getAudioPacket(AudioInputStream inputStream) throws UnsupportedAudioFileException, IOException {
-
-
-        /*if (getFileExtension(file.toFile().toString()).equals("wav")) {
-            AudioInputStream inputStream = AudioSystem.getAudioInputStream(file.toFile());
-            finalInputStream = AudioSystem.getAudioInputStream(audioFormat, inputStream);
-        } else if (getFileExtension(file.toFile().toString()).equals("mp3")) {
-
-            AudioInputStream inputStream = new MpegAudioFileReader().getAudioInputStream(file.toFile());
-            AudioFormat baseFormat = inputStream.getFormat();
-            AudioFormat decodedFormat = new AudioFormat(AudioFormat.Encoding.PCM_SIGNED, baseFormat.getSampleRate(), 16, baseFormat.getChannels(), baseFormat.getChannels() * 2, baseFormat.getFrameRate(), false);
-            AudioInputStream convertedInputStream = new MpegFormatConversionProvider().getAudioInputStream(decodedFormat, inputStream);
-            finalInputStream = AudioSystem.getAudioInputStream(audioFormat, convertedInputStream);
-
-        } else if (getFileExtension(file.toFile().toString()).equals("flac")) {
-            AudioInputStream inputStream = new FlacAudioFileReader().getAudioInputStream(file.toFile());
-            AudioFormat baseFormat = inputStream.getFormat();
-            AudioFormat decodedFormat = new AudioFormat(AudioFormat.Encoding.PCM_SIGNED, baseFormat.getSampleRate(), 16, baseFormat.getChannels(), baseFormat.getChannels() * 2, baseFormat.getFrameRate(), false);
-            AudioInputStream convertedInputStream = new Flac2PcmAudioInputStream(inputStream, decodedFormat, inputStream.getFrameLength());
-            finalInputStream = AudioSystem.getAudioInputStream(audioFormat, convertedInputStream);
-        }*/
-
-        //assert finalInputStream != null;
-
+    private static byte[] getAudioPacket(AudioInputStream inputStream) throws IOException {
         byte[] audioPacket = inputStreamToPackets(inputStream);
-
         return adjustVolume(audioPacket, CustomDiscs.getInstance().musicDiscVolume);
     }
 
@@ -194,7 +177,6 @@ public class PlayerManager {
                 buffer[i] = 0;  // Pad with zero
             }
         }
-        System.out.println(Arrays.toString(buffer));
         return buffer;
     }
 
