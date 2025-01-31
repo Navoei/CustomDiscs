@@ -103,7 +103,6 @@ public class PlayerManager {
                 if (playerMap.containsValue(playerReference)) {
                     playerMap.remove(id);
                 }
-                System.out.println(playerMap);
             });
             synchronized (stopped) {
                 if (!stopped.get()) {

@@ -145,7 +145,8 @@ public class JukeBox implements Listener{
     }
 
     public boolean isCustomMusicDisc(ItemStack itemStack) {
-        if (itemStack==null) return false;
+        if (itemStack == null) return false;
+        if (itemStack.getItemMeta() == null) return false;
         return itemStack.getItemMeta().getPersistentDataContainer().has(new NamespacedKey(customDiscs, "customdisc"));
     }
 
