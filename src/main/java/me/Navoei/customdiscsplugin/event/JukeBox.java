@@ -45,7 +45,7 @@ public class JukeBox implements Listener{
         if (event.getAction() != Action.RIGHT_CLICK_BLOCK || event.getClickedBlock() == null || event.getItem() == null || event.getItem().getItemMeta() == null || block == null) return;
         if (event.getClickedBlock().getType() != Material.JUKEBOX) return;
 
-        if (isCustomMusicDisc(event) && !jukeboxContainsDisc(block)) {
+        if (isCustomMusicDisc(event.getItem()) && !jukeboxContainsDisc(block)) {
 
             ItemMeta discMeta = event.getItem().getItemMeta();
             String soundFileName = discMeta.getPersistentDataContainer().get(new NamespacedKey(customDiscs, "customdisc"), PersistentDataType.STRING);
@@ -120,6 +120,8 @@ public class JukeBox implements Listener{
         Block block = event.getBlock();
 
         if (block.getType() != Material.JUKEBOX) return;
+        Jukebox jukebox = (Jukebox) block.getState();
+        if (!isCustomMusicDisc(jukebox.getRecord())) return;
 
         stopDisc(block);
     }
@@ -129,6 +131,8 @@ public class JukeBox implements Listener{
 
         for (Block explodedBlock : event.blockList()) {
             if (explodedBlock.getType() == Material.JUKEBOX) {
+                Jukebox jukebox = (Jukebox) explodedBlock.getState();
+                if (!isCustomMusicDisc(jukebox.getRecord())) return;
                 stopDisc(explodedBlock);
             }
         }
@@ -140,9 +144,9 @@ public class JukeBox implements Listener{
         return jukebox.getRecord().getType() != Material.AIR;
     }
 
-    public boolean isCustomMusicDisc(PlayerInteractEvent e) {
-        if (e.getItem()==null) return false;
-        return e.getItem().getItemMeta().getPersistentDataContainer().has(new NamespacedKey(customDiscs, "customdisc"));
+    public boolean isCustomMusicDisc(ItemStack itemStack) {
+        if (itemStack==null) return false;
+        return itemStack.getItemMeta().getPersistentDataContainer().has(new NamespacedKey(customDiscs, "customdisc"));
     }
 
     private void stopDisc(Block block) {

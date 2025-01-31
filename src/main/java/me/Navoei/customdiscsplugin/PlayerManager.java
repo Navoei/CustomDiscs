@@ -103,6 +103,7 @@ public class PlayerManager {
                 if (playerMap.containsValue(playerReference)) {
                     playerMap.remove(id);
                 }
+                System.out.println(playerMap);
             });
             synchronized (stopped) {
                 if (!stopped.get()) {
@@ -160,7 +161,9 @@ public class PlayerManager {
     }
 
     private static short[] readSoundFile(AudioInputStream inputStream) throws IOException {
-        return VoicePlugin.voicechatApi.getAudioConverter().bytesToShorts(getAudioPacket(inputStream));
+        byte[] audioPacket = getAudioPacket(inputStream);
+        if (audioPacket == null) return null;
+        return VoicePlugin.voicechatApi.getAudioConverter().bytesToShorts(audioPacket);
     }
 
     private static byte[] getAudioPacket(AudioInputStream inputStream) throws IOException {
@@ -183,6 +186,8 @@ public class PlayerManager {
     }
 
     private static byte[] adjustVolume(byte[] audioSamples, double volume) {
+
+        if (audioSamples == null) return null;
 
         if (volume > 1d || volume < 0d) {
             CustomDiscs.getInstance().getLogger().info("Error: The volume must be between 0 and 1 in the config!");
