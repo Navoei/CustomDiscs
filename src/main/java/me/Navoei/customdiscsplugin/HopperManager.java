@@ -19,7 +19,7 @@ import org.bukkit.event.world.ChunkLoadEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.inventory.meta.components.JukeboxPlayableComponent;
+//import org.bukkit.inventory.meta.components.JukeboxPlayableComponent;
 import org.bukkit.persistence.PersistentDataType;
 
 import java.nio.file.Path;
@@ -61,12 +61,12 @@ public class HopperManager implements Listener {
             range = Math.min(persistentDataContainer.get(customSoundRangeKey, PersistentDataType.FLOAT), CustomDiscs.getInstance().musicDiscMaxDistance);
         }
         
-        if (discMeta.getJukeboxPlayable().isShowInTooltip()) {
+        /*if (discMeta.getJukeboxPlayable().isShowInTooltip()) { //DEPRECATED
             JukeboxPlayableComponent jpc = discMeta.getJukeboxPlayable();
-            jpc.setShowInTooltip(false);
+            jpc.setShowInTooltip(false); //DEPRECATED
             discMeta.setJukeboxPlayable(jpc);
             event.getItem().setItemMeta(discMeta);
-        }
+        }*/
 
         Path soundFilePath = Path.of(customDiscs.getDataFolder().getPath(), "musicdata", soundFileName);
         assert VoicePlugin.voicechatServerApi != null;
