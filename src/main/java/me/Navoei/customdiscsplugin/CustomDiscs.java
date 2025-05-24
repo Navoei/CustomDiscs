@@ -34,7 +34,7 @@ public final class CustomDiscs extends JavaPlugin {
 	public static YamlConfiguration LANG;
 	public static File LANG_FILE;
 	public float musicDiscDistance;
-        public float musicDiscMaxDistance;
+	public float musicDiscMaxDistance;
 	public float musicDiscVolume;
 	
 	@Override

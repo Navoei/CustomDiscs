@@ -44,6 +44,7 @@ public class JukeBox implements Listener{
 
         if (event.getAction() != Action.RIGHT_CLICK_BLOCK || event.getClickedBlock() == null || event.getItem() == null || event.getItem().getItemMeta() == null || block == null) return;
         if (event.getClickedBlock().getType() != Material.JUKEBOX) return;
+        if (player.isSneaking()) return;
 
         if (isCustomMusicDisc(event.getItem()) && !jukeboxContainsDisc(block)) {
 
