@@ -1,5 +1,7 @@
 package me.Navoei.customdiscsplugin.event;
 
+import io.papermc.paper.datacomponent.DataComponentTypes;
+import io.papermc.paper.datacomponent.item.TooltipDisplay;
 import me.Navoei.customdiscsplugin.CustomDiscs;
 import me.Navoei.customdiscsplugin.PlayerManager;
 import me.Navoei.customdiscsplugin.VoicePlugin;
@@ -30,6 +32,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Objects;
+import java.util.Optional;
 
 public class JukeBox implements Listener{
 
@@ -51,19 +54,17 @@ public class JukeBox implements Listener{
             ItemMeta discMeta = event.getItem().getItemMeta();
             String soundFileName = discMeta.getPersistentDataContainer().get(new NamespacedKey(customDiscs, "customdisc"), PersistentDataType.STRING);
             
-            PersistentDataContainer persistentDataContainer = event.getItem().getItemMeta().getPersistentDataContainer();
+            PersistentDataContainer persistentDataContainer = discMeta.getPersistentDataContainer();
             float range = CustomDiscs.getInstance().musicDiscDistance;
             NamespacedKey customSoundRangeKey = new NamespacedKey(customDiscs, "range");
 
             if(persistentDataContainer.has(customSoundRangeKey, PersistentDataType.FLOAT)) {
-                range = Math.min(persistentDataContainer.get(customSoundRangeKey, PersistentDataType.FLOAT), CustomDiscs.getInstance().musicDiscMaxDistance);
+                float soundRange = Optional.ofNullable(persistentDataContainer.get(customSoundRangeKey, PersistentDataType.FLOAT)).orElse(0f);
+                range = Math.min(soundRange, CustomDiscs.getInstance().musicDiscMaxDistance);
             }
-            
-            if (discMeta.getJukeboxPlayable().isShowInTooltip()) {
-                JukeboxPlayableComponent jpc = discMeta.getJukeboxPlayable();
-                jpc.setShowInTooltip(false);
-                discMeta.setJukeboxPlayable(jpc);
-                event.getItem().setItemMeta(discMeta);
+
+            if (!event.getItem().hasData(DataComponentTypes.TOOLTIP_DISPLAY) || !event.getItem().getData(DataComponentTypes.TOOLTIP_DISPLAY).hiddenComponents().contains(DataComponentTypes.JUKEBOX_PLAYABLE)) {
+                event.getItem().setData(DataComponentTypes.TOOLTIP_DISPLAY, TooltipDisplay.tooltipDisplay().addHiddenComponents(DataComponentTypes.JUKEBOX_PLAYABLE).build());
                 Component textComponent = LegacyComponentSerializer.legacyAmpersand().deserialize(Lang.PREFIX + Lang.DISC_CONVERTED.toString());
                 player.sendMessage(textComponent);
             }
@@ -71,7 +72,7 @@ public class JukeBox implements Listener{
             Path soundFilePath = Path.of(customDiscs.getDataFolder().getPath(), "musicdata", soundFileName);
 
             if (soundFilePath.toFile().exists()) {
-                Component songNameComponent = Objects.requireNonNull(event.getItem().getItemMeta().lore()).get(0).asComponent();
+                Component songNameComponent = Objects.requireNonNull(discMeta.lore()).get(0).asComponent();
                 String songName = PlainTextComponentSerializer.plainText().serialize(songNameComponent);
                 Component customActionBarSongPlaying = LegacyComponentSerializer.legacyAmpersand().deserialize(Lang.NOW_PLAYING.toString().replace("%song_name%", songName));
 

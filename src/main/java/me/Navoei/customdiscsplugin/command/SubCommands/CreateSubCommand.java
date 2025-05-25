@@ -5,6 +5,8 @@ import dev.jorel.commandapi.arguments.ArgumentSuggestions;
 import dev.jorel.commandapi.arguments.StringArgument;
 import dev.jorel.commandapi.arguments.TextArgument;
 import dev.jorel.commandapi.executors.CommandArguments;
+import io.papermc.paper.datacomponent.DataComponentTypes;
+import io.papermc.paper.datacomponent.item.TooltipDisplay;
 import me.Navoei.customdiscsplugin.CustomDiscs;
 import me.Navoei.customdiscsplugin.language.Lang;
 import net.kyori.adventure.text.Component;
@@ -17,7 +19,6 @@ import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.inventory.meta.components.JukeboxPlayableComponent;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 
@@ -94,15 +95,12 @@ public class CreateSubCommand extends CommandAPICommand {
 		String song_name = Objects.requireNonNull(arguments.getByClass("song_name", String.class));
 
 		ItemStack disc = new ItemStack(player.getInventory().getItemInMainHand());
+		disc.setData(DataComponentTypes.TOOLTIP_DISPLAY, TooltipDisplay.tooltipDisplay().addHiddenComponents(DataComponentTypes.JUKEBOX_PLAYABLE).build());
 		ItemMeta meta = disc.getItemMeta();
 		@Nullable List<Component> itemLore = new ArrayList<>();
 		final TextComponent customLoreSong = Component.text().decoration(TextDecoration.ITALIC, false).content(song_name).color(NamedTextColor.GRAY).build();
 		itemLore.add(customLoreSong);
 		meta.lore(itemLore);
-
-		JukeboxPlayableComponent jpc = meta.getJukeboxPlayable();
-		jpc.setShowInTooltip(false);
-		meta.setJukeboxPlayable(jpc);
 
 		PersistentDataContainer data = meta.getPersistentDataContainer();
 		data.set(new NamespacedKey(this.plugin, "customdisc"), PersistentDataType.STRING, filename);
