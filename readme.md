@@ -1,4 +1,4 @@
-# Custom Discs v4.2 for Paper 1.21.4
+# Custom Discs v4.2 for Paper 1.21.5
 
 A Paper fork of henkelmax's Audio Player. Special thanks to Athar42 for maintaining this plugin. 
 - Play custom music discs using the Simple Voice Chat API. (The voice chat mod is required on the client and server.)
@@ -21,7 +21,7 @@ Permission Nodes (Required to run the commands. Playing discs does not require a
 - ```customdiscs.range``` to set the range of the disc
 
 Dependencies:
-- This plugin depends on the latest version of ProtocolLib for 1.21 and SimpleVoiceChatBukkit version 2.5.16. 
+- This plugin depends on the latest version of ProtocolLib for 1.21.5 and SimpleVoiceChatBukkit version 2.5.30. 
 
 
 https://user-images.githubusercontent.com/64107368/178426026-c454ac66-5133-4f3a-9af9-7f674e022423.mp4
