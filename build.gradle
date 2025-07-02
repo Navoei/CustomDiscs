@@ -44,6 +44,9 @@ dependencies {
     implementation "io.papermc.paper:paper-api:${bukkit_version}"
     implementation "de.maxhenkel.voicechat:voicechat-api:${voicechat_api_version}"
     shadow "dev.jorel:commandapi-bukkit-shade:${command_api_version}"
+    // Next two are for testing of an upcoming CommandAPI change - Not yet available.
+    //shadow "dev.jorel:commandapi-paper-shade:${command_api_version}"
+    //shadow "dev.jorel:commandapi-paper-shade-mojang-mapped:${command_api_version}"
 
     compileOnly group: "com.comphenix.protocol", name: "ProtocolLib", version: "5.3.0"
 }
