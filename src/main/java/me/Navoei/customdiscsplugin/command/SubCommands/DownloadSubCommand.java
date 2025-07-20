@@ -1,16 +1,20 @@
 package me.Navoei.customdiscsplugin.command.SubCommands;
 
+import me.Navoei.customdiscsplugin.CustomDiscs;
+import me.Navoei.customdiscsplugin.language.Lang;
+
 import dev.jorel.commandapi.CommandAPICommand;
 import dev.jorel.commandapi.arguments.StringArgument;
 import dev.jorel.commandapi.arguments.TextArgument;
 import dev.jorel.commandapi.executors.CommandArguments;
-import me.Navoei.customdiscsplugin.CustomDiscs;
-import me.Navoei.customdiscsplugin.language.Lang;
+
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import net.kyori.adventure.text.format.NamedTextColor;
+
 import org.bukkit.Bukkit;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
+
 import org.codehaus.plexus.util.FileUtils;
 
 import java.io.File;
@@ -22,9 +26,12 @@ import java.net.URLConnection;
 import java.net.MalformedURLException;
 import java.nio.file.Path;
 import java.util.Objects;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class DownloadSubCommand extends CommandAPICommand {
 	private final CustomDiscs plugin;
+	private final boolean debugModeResult = CustomDiscs.isDebugMode();
 	
 	public DownloadSubCommand(CustomDiscs plugin) {
 		super("download");
@@ -32,33 +39,34 @@ public class DownloadSubCommand extends CommandAPICommand {
 		
 		this.withFullDescription(NamedTextColor.GRAY + "Downloads a file from a given URL.");
 		this.withUsage("/customdisc download <url> <filename.extension>");
-		
+		this.withPermission("customdiscs.download");
+
 		this.withArguments(new TextArgument("url"));
 		this.withArguments(new StringArgument("filename"));
 		
 		this.executesPlayer(this::onCommandPlayer);
 		this.executesConsole(this::onCommandConsole);
 	}
-	
+
 	private int onCommandPlayer(Player player, CommandArguments arguments) {
-		if (!player.hasPermission("customdiscs.download")) {
-			player.sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize(Lang.PREFIX + Lang.NO_PERMISSION.toString()));
-			return 1;
-		}
-		
+		final Logger pluginLogger = plugin.getLogger();
+
 		Bukkit.getScheduler().runTaskAsynchronously(this.plugin, () -> {
 			try {
 				try {
 					URI uri = new URI(Objects.requireNonNull(arguments.getByClass("url", String.class)));
 					URL fileURL = uri.toURL();
 					String filename = Objects.requireNonNull(arguments.getByClass("filename", String.class));
+
+					if(debugModeResult) {
+						pluginLogger.info("DEBUG - Download File URL: " + fileURL);
+						pluginLogger.info("DEBUG - File name: " + filename);
+					}
+
 					if (filename.contains("../")) {
 						player.sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize(Lang.PREFIX + Lang.INVALID_FILENAME.toString()));
 						return;
 					}
-
-					//DEBUG
-					//System.out.println(filename);
 
 					String fileExtension = getFileExtension(filename);
 					if (!fileExtension.equals("wav") && !fileExtension.equals("mp3") && !fileExtension.equals("flac")) {
@@ -85,11 +93,17 @@ public class DownloadSubCommand extends CommandAPICommand {
 					player.sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize(Lang.PREFIX + Lang.CREATE_DISC.toString().replace("%filename%", filename)));
 				} catch (URISyntaxException | MalformedURLException e) {
 					player.sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize(Lang.PREFIX + Lang.DOWNLOAD_ERROR.toString()));
-					e.printStackTrace();
+					pluginLogger.warning("A download error occurred.");
+					if(debugModeResult) {
+						pluginLogger.log(Level.SEVERE, "Exception output: ", e);
+					}
 				}
 			} catch (IOException e) {
 				player.sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize(Lang.PREFIX + Lang.DOWNLOAD_ERROR.toString()));
-				e.printStackTrace();
+				pluginLogger.warning("A download error occurred.");
+				if(debugModeResult) {
+					pluginLogger.log(Level.SEVERE, "Exception output: ", e);
+				}
 			}
 		});
 
@@ -109,4 +123,5 @@ public class DownloadSubCommand extends CommandAPICommand {
 			return "";
 		}
 	}
+
 }

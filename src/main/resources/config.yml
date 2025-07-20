@@ -1,4 +1,21 @@
-# [Music Disc Config]
+# [General CustomDiscs Config]
+
+# The maximum download size in megabytes.
+max-download-size: 50
+
+# The master volume of music discs from 0-1. (You can set values like 0.5 for 50% volume).
+music-disc-volume: 1
+
+# Debug Mode - To display some more logging information and Stack Trace informations
+debugMode: false
+
+# [Music Discs Config]
+
+# Enable custom music discs.
+music-disc-enable: true
+
+# Enable "Now playing" message for custom music discs.
+music-disc-playing-enable: true
 
 # The distance from which music discs can be heard in blocks.
 music-disc-distance: 16
@@ -6,15 +23,46 @@ music-disc-distance: 16
 # The max distance from which music discs can be heard in blocks.
 music-disc-max-distance: 256
 
-# The master volume of music discs from 0-1. (You can set values like 0.5 for 50% volume).
-music-disc-volume: 1
+# [Goat Horns Config]
 
-# The maximum download size in megabytes.
-max-download-size: 50
+# Enable custom goat horns.
+custom-horn-enable: true
 
-#Custom Discs Help Page
+# Enable "Now playing" message for custom horns.
+custom-horn-playing-enable: true
+
+# The distance from which custom horns can be heard in blocks.
+custom-horn-distance: 16
+
+# The max distance from which custom horns can be heard in blocks.
+custom-horn-max-distance: 256
+
+# The default cooldown time for horns in ticks from 1 to the max value of horn-max-cooldown (1 second is 20 ticks).
+horn-cooldown: 140
+
+# The default max cooldown time for horns in ticks (1 second is 20 ticks).
+horn-max-cooldown: 6000
+
+# [Player Heads Config]
+
+# Enable custom player heads.
+custom-head-enable: true
+
+# Enable "Now playing" message for player heads.
+custom-head-playing-enable: true
+
+# The distance from which music discs can be heard in blocks.
+custom-head-distance: 16
+
+# The max distance from which music discs can be heard in blocks.
+custom-head-max-distance: 256
+
+
+# [DO NOT EDIT BELOW THIS LINE - Help configuration]
+# Custom Discs Help Page
 help:
-  - "&8-[&6CustomDiscs Help Page&8]-"
+  - "&8-[&6CustomDiscs v5.0 - Help Page&8]-"
   - "&aAuthor&7: &6Navoei"
-  - "&aContributors&7: &6alfw / &6Athar42"
+  - "&aContributors&7: &6Athar42 / &6alfw"
   - "&fGit&0Hub&7: &9&ohttps://github.com/Navoei/CustomDiscs"
+  - "&aDiscord&7: &9&ohttps://discord.gg/YJpqruvZ97"
