@@ -59,7 +59,9 @@ public final class CustomDiscs extends JavaPlugin {
 	@Override
 	public void onLoad() {
 		CustomDiscs.instance = this;
-		CommandAPI.onLoad(new CommandAPIBukkitConfig(this).verboseOutput(true).beLenientForMinorVersions(true));
+		CommandAPI.onLoad(new CommandAPIBukkitConfig(this).verboseOutput(true));
+		//To get CommandAPI working on newer MC Release - for development
+		//CommandAPI.onLoad(new CommandAPIBukkitConfig(this).verboseOutput(true).beLenientForMinorVersions(true));
 		new CustomDiscCommand(this).register("customdiscs");
 	}
 	
