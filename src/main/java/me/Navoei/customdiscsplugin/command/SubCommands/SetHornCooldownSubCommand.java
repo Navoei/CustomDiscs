@@ -19,7 +19,6 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 
-import java.util.Objects;
 import java.util.Optional;
 
 public class SetHornCooldownSubCommand extends CommandAPICommand {
@@ -41,7 +40,7 @@ public class SetHornCooldownSubCommand extends CommandAPICommand {
 	
 	private int onCommandPlayer(Player player, CommandArguments arguments) {
         if (!TypeChecker.isCustomGoatHornPlayer(player)) {
-			player.sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize(Lang.PREFIX + Lang.NOT_HOLDING_MODIFIED_GOATHORN.toString()));
+			player.sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize(Lang.PREFIX + Lang.NOT_HOLDING_CUSTOM_GOAT_HORN.toString()));
 			return 0;
 		}
 

@@ -19,9 +19,9 @@ public enum Lang {
     DISC_CONVERTED("disc-converted", "&aConverted disc to new format! &fThis is due to changes in newer Minecraft versions which introduced &ToolTipDisplay&f."),
     INVALID_RANGE("invalid-range","&rYou need to chose a range between 1 and %range_value%"),
     CREATE_CUSTOM_RANGE("create-custom-range", "&7Your range is set to: &a\"%custom_range%\"."),
-    NOT_HOLDING_MODIFIED_GOATHORN("not-holding-modified-goathorn", "&cYou must hold a modified goat horn in your main hand."),
-    INVALID_COOLDOWN("invalid-cooldown","&cYou need to chose a cooldown between 1 and %cooldown_value% (in ticks)"),
-    CREATE_CUSTOM_GOAT_COOLDOWN("create-custom-goat-cooldown", "&7Your goat horn cooldown is set to: &a\"%custom_goat_cooldown%\"."),
+    NOT_HOLDING_CUSTOM_GOAT_HORN("not-holding-custom-goathorn", "&cYou must hold a custom goat horn in your main hand."),
+    INVALID_COOLDOWN("invalid-cooldown","&cYou need to chose a cooldown between 1 and %cooldown_value% (in ticks)."),
+    CREATE_CUSTOM_GOAT_COOLDOWN("create-custom-goat-cooldown", "&7Your goat horn cooldown is set to: &a\"%custom_goat_cooldown%\" ticks."),
     CUSTOM_MUSIC_DISABLED("custom-music-disabled", "&7Custom music discs are disabled in the configuration."),
     CUSTOM_HEAD_DISABLED("custom-head-disabled", "&7Custom player heads are disabled in the configuration."),
     CUSTOM_HORN_DISABLED("custom-horn-disabled", "&7Custom goat horns are disabled in the configuration.");
