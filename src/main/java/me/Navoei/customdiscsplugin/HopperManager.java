@@ -1,54 +1,49 @@
 package me.Navoei.customdiscsplugin;
 
+import me.Navoei.customdiscsplugin.language.Lang;
+
 import io.papermc.paper.datacomponent.DataComponentTypes;
 import io.papermc.paper.datacomponent.item.TooltipDisplay;
-import me.Navoei.customdiscsplugin.language.Lang;
+
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
-import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
-import org.bukkit.block.Block;
+
 import org.bukkit.block.BlockState;
-//import org.bukkit.block.Container;
 import org.bukkit.block.Jukebox;
+import org.bukkit.entity.minecart.HopperMinecart;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryMoveItemEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.world.ChunkLoadEvent;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataContainer;
+import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.inventory.meta.components.JukeboxPlayableComponent;
+import org.bukkit.NamespacedKey;
 import org.bukkit.persistence.PersistentDataType;
 
 import java.nio.file.Path;
 import java.util.Objects;
 import java.util.Optional;
-
-import org.bukkit.entity.minecart.HopperMinecart;
-import org.bukkit.inventory.InventoryHolder;
-
-// Used only if logger is needed
-//import java.util.logging.Logger;
-//import org.bukkit.Bukkit;
+import java.util.logging.Logger;
 
 public class HopperManager implements Listener {
 
     CustomDiscs customDiscs = CustomDiscs.getInstance();
-
     PlayerManager playerManager = PlayerManager.instance();
-    
-    //private static final Logger logger = Bukkit.getLogger(); // or Logger.getLogger("Minecraft");
+    private final Logger pluginLogger = customDiscs.getLogger();
+    private final boolean debugModeResult = CustomDiscs.isDebugMode();
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onJukeboxInsertFromHopper(InventoryMoveItemEvent event) {
-        //logger.warning("Enter : onJukeboxInsertFromHopper");
+        if (debugModeResult) {
+            pluginLogger.info("DEBUG - HopperManager -> Enter : onJukeboxInsertFromHopper");
+        }
         if (event.getDestination().getLocation() == null) return;
         if (!event.getDestination().getType().equals(InventoryType.JUKEBOX)) return;
-        if (!isCustomMusicDisc(event.getItem())) return;
+        if (!TypeChecker.isCustomMusicDisc(event.getItem())) return;
 
         Component songNameComponent = Objects.requireNonNull(event.getItem().getItemMeta().lore()).get(0).asComponent();
         String songName = PlainTextComponentSerializer.plainText().serialize(songNameComponent);
@@ -78,7 +73,9 @@ public class HopperManager implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onJukeboxEjectToHopperMinecart(InventoryMoveItemEvent event) {
-        //logger.warning("Enter : onJukeboxEjectToHopper");
+        if (debugModeResult) {
+            pluginLogger.info("DEBUG - HopperManager -> Enter : onJukeboxEjectToHopper");
+        }
 
         InventoryHolder holderSource = event.getSource().getHolder();
         InventoryHolder holderDestination = event.getDestination().getHolder();
@@ -86,55 +83,39 @@ public class HopperManager implements Listener {
         if (event.getSource().getLocation() == null) return;
         if (!event.getSource().getType().equals(InventoryType.JUKEBOX)) return;
         if (event.getItem().getItemMeta() == null) return;
-        if (!isCustomMusicDisc(event.getItem())) return;
+        if (!TypeChecker.isCustomMusicDisc(event.getItem())) return;
 
         if (holderDestination instanceof HopperMinecart) {
-            stopDisc(((BlockState) holderSource).getBlock());
+            playerManager.stopDisc(((BlockState) holderSource).getBlock());
         }
 
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onChunkLoad(ChunkLoadEvent event) {
-        //logger.warning("Enter : onChunkLoad");
+        if (debugModeResult) {
+            pluginLogger.info("DEBUG - HopperManager -> Enter : onChunkLoad");
+        }
         for (BlockState blockState : event.getChunk().getTileEntities()) {
             if (blockState instanceof Jukebox jukebox) {
                 if (!jukebox.hasRecord()) return;
-                if (!PlayerManager.instance().isAudioPlayerPlaying(blockState.getLocation()) && isCustomMusicDisc(jukebox.getRecord())) {
-                    //Set the block type to force an update.
+                if (!PlayerManager.instance().isAudioPlayerPlaying(blockState.getLocation()) && TypeChecker.isCustomMusicDisc(jukebox.getRecord())) {
                     jukebox.stopPlaying();
                 }
             }
         }
     }
 
-    public void discToHopper(Block block) {
-        if (block == null) return;
-        if (!block.getLocation().getChunk().isLoaded()) return;
-        if (!block.getType().equals(Material.JUKEBOX)) return;
-
-        Jukebox jukebox = (Jukebox) block.getState();
-        jukebox.stopPlaying();
-    }
-
-    private boolean isCustomMusicDisc(ItemStack item) {
-        //logger.warning("Enter : isCustomMusicDisc");
-        return item.getItemMeta().getPersistentDataContainer().has(new NamespacedKey(customDiscs, "customdisc"), PersistentDataType.STRING);
-    }
-
-    private void stopDisc(Block block) {
-        playerManager.stopLocationalAudio(block.getLocation());
-    }
-
     private static HopperManager instance;
 
     public static HopperManager instance() {
-        //logger.warning("Enter : HopperManager Instance");
+        if (CustomDiscs.isDebugMode()) {
+            CustomDiscs.getInstance().getLogger().info("DEBUG - HopperManager -> Enter : HopperManager Instance");
+        }
         if (instance == null) {
             instance = new HopperManager();
         }
         return instance;
     }
-
 
 }

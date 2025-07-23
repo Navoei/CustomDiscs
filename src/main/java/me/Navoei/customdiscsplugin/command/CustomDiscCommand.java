@@ -1,13 +1,18 @@
 package me.Navoei.customdiscsplugin.command;
 
-import dev.jorel.commandapi.CommandAPICommand;
-import dev.jorel.commandapi.executors.CommandArguments;
 import me.Navoei.customdiscsplugin.CustomDiscs;
 import me.Navoei.customdiscsplugin.command.SubCommands.CreateSubCommand;
 import me.Navoei.customdiscsplugin.command.SubCommands.DownloadSubCommand;
+import me.Navoei.customdiscsplugin.command.SubCommands.SetHornCooldownSubCommand;
 import me.Navoei.customdiscsplugin.command.SubCommands.SetRangeSubCommand;
+
+import dev.jorel.commandapi.CommandAPICommand;
+import dev.jorel.commandapi.CommandPermission;
+import dev.jorel.commandapi.executors.CommandArguments;
+
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import net.kyori.adventure.text.format.NamedTextColor;
+
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
@@ -21,10 +26,12 @@ public class CustomDiscCommand extends CommandAPICommand {
 		
 		this.withAliases("cd");
 		this.withFullDescription("The custom discs command.");
-		
+		this.withPermission(CommandPermission.NONE);
+
 		this.withSubcommand(new CreateSubCommand(plugin));
 		this.withSubcommand(new DownloadSubCommand(plugin));
 		this.withSubcommand(new SetRangeSubCommand(plugin));
+		this.withSubcommand(new SetHornCooldownSubCommand(plugin));
 		
 		this.executesPlayer(this::onCommandPlayer);
 		this.executesConsole(this::onCommandConsole);
@@ -43,4 +50,5 @@ public class CustomDiscCommand extends CommandAPICommand {
 		executor.sendMessage(NamedTextColor.RED + "Only players can use this command : '"+arguments+"'!");
 		return 1;
 	}
+
 }

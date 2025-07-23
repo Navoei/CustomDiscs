@@ -1,15 +1,18 @@
 package me.Navoei.customdiscsplugin.event;
 
-import io.papermc.paper.datacomponent.DataComponentTypes;
-import io.papermc.paper.datacomponent.item.TooltipDisplay;
 import me.Navoei.customdiscsplugin.CustomDiscs;
 import me.Navoei.customdiscsplugin.PlayerManager;
 import me.Navoei.customdiscsplugin.VoicePlugin;
 import me.Navoei.customdiscsplugin.language.Lang;
+
+import io.papermc.paper.datacomponent.DataComponentTypes;
+import io.papermc.paper.datacomponent.item.TooltipDisplay;
+
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
+
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.block.Block;
@@ -24,7 +27,6 @@ import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.inventory.meta.components.JukeboxPlayableComponent;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 
@@ -112,7 +114,7 @@ public class JukeBox implements Listener{
             }
 
             if (player.isSneaking() && !itemInvolvedInEvent.getType().equals(Material.AIR)) return;
-            stopDisc(block);
+            playerManager.stopDisc(block);
         }
     }
 
@@ -125,7 +127,7 @@ public class JukeBox implements Listener{
         Jukebox jukebox = (Jukebox) block.getState();
         if (!isCustomMusicDisc(jukebox.getRecord())) return;
 
-        stopDisc(block);
+        playerManager.stopDisc(block);
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
@@ -135,7 +137,7 @@ public class JukeBox implements Listener{
             if (explodedBlock.getType() == Material.JUKEBOX) {
                 Jukebox jukebox = (Jukebox) explodedBlock.getState();
                 if (!isCustomMusicDisc(jukebox.getRecord())) return;
-                stopDisc(explodedBlock);
+                playerManager.stopDisc(explodedBlock);
             }
         }
 
@@ -150,10 +152,6 @@ public class JukeBox implements Listener{
         if (itemStack == null) return false;
         if (itemStack.getItemMeta() == null) return false;
         return itemStack.getItemMeta().getPersistentDataContainer().has(new NamespacedKey(customDiscs, "customdisc"));
-    }
-
-    private void stopDisc(Block block) {
-        playerManager.stopLocationalAudio(block.getLocation());
     }
 
 }
