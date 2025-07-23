@@ -11,7 +11,7 @@
 
 
 A Paper fork of henkelmax's Audio Player. Special thanks to Athar42 for maintaining this plugin. 
-- Play custom music discs, goat horns and player's head using the Simple Voice Chat API. (The voice chat mod is required on the client and server.)
+- Play custom music discs, goat horns and player heads using the Simple Voice Chat API. (The voice chat mod is required on the client and server.)
 - Use ```/customdisc``` or ```/cd``` to view available commands.
 - Music files should go into ```plugins/CustomDiscs/musicdata/```
 - Music files must be in the ```.wav```, ```.flac```, or ```.mp3``` format.
@@ -29,7 +29,7 @@ Permission Nodes (Required to run the commands. Playing discs does not require a
 - ```customdiscs.create``` to create a disc
 - ```customdiscs.download``` to download a file
 - ```customdiscs.range``` to set the range of the disc
-- ```customdiscs.horncooldown``` to set the cooldown (in ticks) for using the modified goat horn
+- ```customdiscs.horncooldown``` to set the cooldown (in ticks) for custom goat horns
 
 Dependencies:
 - This plugin depends on the latest version of ProtocolLib available for your Paper version and SimpleVoiceChatBukkit (latest is recommended - at least version 2.5.31 required). 
