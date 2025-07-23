@@ -3,14 +3,13 @@ package me.Navoei.customdiscsplugin;
 import org.bukkit.Location;
 import org.bukkit.block.Jukebox;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
 
 public class JukeboxStateManager {
 
     static CustomDiscs plugin = CustomDiscs.getInstance();
     static PlayerManager playerManager = PlayerManager.instance();
-    static List<Location> jukeboxLocations = new ArrayList<>();
+    static HashSet<Location> jukeboxLocations = new HashSet<>();
 
         public static void start(Jukebox jukebox) {
             if (jukeboxLocations.contains(jukebox.getLocation()) || !playerManager.isAudioPlayerPlaying(jukebox.getLocation())) return;

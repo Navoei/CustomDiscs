@@ -1,5 +1,7 @@
 package me.Navoei.customdiscsplugin;
 
+import com.destroystokyo.paper.MaterialTags;
+import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -14,7 +16,7 @@ public class TypeChecker {
     // MUSIC DISCS
 
     public static boolean isMusicDisc(ItemStack item) {
-        return item.getType().toString().contains("MUSIC_DISC");
+        return MaterialTags.MUSIC_DISCS.isTagged(item.getType());
     }
 
     /*public static boolean isMusicDiscPlayer(Player p) {
@@ -24,7 +26,7 @@ public class TypeChecker {
     public static boolean isCustomMusicDisc(ItemStack itemStack) {
         if (itemStack == null) return false;
         if (itemStack.getItemMeta() == null) return false;
-        return itemStack.getType().toString().contains("MUSIC_DISC") && itemStack.getItemMeta().getPersistentDataContainer().has(new NamespacedKey(customDiscs, "customdisc"), PersistentDataType.STRING);
+        return MaterialTags.MUSIC_DISCS.isTagged(itemStack.getType()) && itemStack.getItemMeta().getPersistentDataContainer().has(new NamespacedKey(customDiscs, "customdisc"), PersistentDataType.STRING);
     }
 
     /*public static boolean isCustomMusicDiscPlayer(Player p) {
@@ -38,16 +40,16 @@ public class TypeChecker {
     }*/
 
     public static boolean isGoatHornPlayer(Player p) {
-        return p.getInventory().getItemInMainHand().getType().toString().contains("GOAT_HORN");
+        return p.getInventory().getItemInMainHand().getType().equals(Material.GOAT_HORN);
     }
     
     public static boolean isCustomGoatHorn(PlayerInteractEvent e) {
         if (e.getItem()==null) return false;
-        return e.getItem().getType().toString().contains("GOAT_HORN") && e.getItem().getItemMeta().getPersistentDataContainer().has(new NamespacedKey(customDiscs, "customhorn"), PersistentDataType.STRING);
+        return e.getItem().getType().equals(Material.GOAT_HORN) && e.getItem().getItemMeta().getPersistentDataContainer().has(new NamespacedKey(customDiscs, "customhorn"), PersistentDataType.STRING);
     }
 
     public static boolean isCustomGoatHornPlayer(Player p) {
-        return p.getInventory().getItemInMainHand().getType().toString().contains("GOAT_HORN") && p.getInventory().getItemInMainHand().getItemMeta().getPersistentDataContainer().has(new NamespacedKey(customDiscs, "customhorn"), PersistentDataType.STRING);
+        return p.getInventory().getItemInMainHand().getType().equals(Material.GOAT_HORN) && p.getInventory().getItemInMainHand().getItemMeta().getPersistentDataContainer().has(new NamespacedKey(customDiscs, "customhorn"), PersistentDataType.STRING);
     }
 
     // PLAYER HEADS
@@ -57,7 +59,7 @@ public class TypeChecker {
     }*/
 
     public static boolean isHeadPlayer(Player p) {
-        return p.getInventory().getItemInMainHand().getType().toString().contains("PLAYER_HEAD");
+        return p.getInventory().getItemInMainHand().getType().equals(Material.PLAYER_HEAD);
     }
 
     /*public static boolean isCustomHead(ItemStack itemStack) {
@@ -67,7 +69,7 @@ public class TypeChecker {
     }*/
 
     public static boolean isCustomHeadPlayer(Player p) {
-        return p.getInventory().getItemInMainHand().getType().toString().contains("PLAYER_HEAD") && p.getInventory().getItemInMainHand().getItemMeta().getPersistentDataContainer().has(new NamespacedKey(customDiscs, "customhead"), PersistentDataType.STRING);
+        return p.getInventory().getItemInMainHand().getType().equals(Material.PLAYER_HEAD) && p.getInventory().getItemInMainHand().getItemMeta().getPersistentDataContainer().has(new NamespacedKey(customDiscs, "customhead"), PersistentDataType.STRING);
     }
 
 }

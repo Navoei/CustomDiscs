@@ -1,11 +1,5 @@
 package me.Navoei.customdiscsplugin;
 
-import me.Navoei.customdiscsplugin.command.CustomDiscCommand;
-import me.Navoei.customdiscsplugin.event.JukeBox;
-import me.Navoei.customdiscsplugin.event.HeadPlay;
-import me.Navoei.customdiscsplugin.event.HornPlay;
-import me.Navoei.customdiscsplugin.language.Lang;
-
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
@@ -13,6 +7,11 @@ import com.comphenix.protocol.events.ListenerPriority;
 import com.comphenix.protocol.events.PacketAdapter;
 import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.events.PacketEvent;
+import me.Navoei.customdiscsplugin.command.CustomDiscCommand;
+import me.Navoei.customdiscsplugin.event.JukeBox;
+import me.Navoei.customdiscsplugin.event.HeadPlay;
+import me.Navoei.customdiscsplugin.event.HornPlay;
+import me.Navoei.customdiscsplugin.language.Lang;
 
 import de.maxhenkel.voicechat.api.BukkitVoicechatService;
 
@@ -126,9 +125,7 @@ public final class CustomDiscs extends JavaPlugin {
 			hornMaxCooldown = 1;
 		}
 
-
 		ProtocolManager protocolManager = ProtocolLibrary.getProtocolManager();
-		
 		protocolManager.addPacketListener(new PacketAdapter(this, ListenerPriority.NORMAL, PacketType.Play.Server.WORLD_EVENT) {
 			@Override
 			public void onPacketSending(PacketEvent event) {
@@ -137,13 +134,13 @@ public final class CustomDiscs extends JavaPlugin {
 				if (packet.getIntegers().read(0).toString().equals("1010")) {
 					if (!isMusicDiscEnable()) { return; }
 					Jukebox jukebox = (Jukebox) packet.getBlockPositionModifier().read(0).toLocation(event.getPlayer().getWorld()).getBlock().getState();
-					
+
 					if (!jukebox.getRecord().hasItemMeta()) return;
-					
+
 					if (jukebox.getRecord().getItemMeta().getPersistentDataContainer().has(new NamespacedKey(this.plugin, "customdisc"), PersistentDataType.STRING)) {
 						event.setCancelled(true);
 					}
-					
+
 					//Start the jukebox state manager.
 					//This keeps the jukebox powered while custom song is playing,
 					//which perfectly emulates the vanilla behavior of discs.

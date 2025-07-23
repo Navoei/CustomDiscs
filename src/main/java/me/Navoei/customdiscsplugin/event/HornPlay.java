@@ -108,9 +108,9 @@ public class HornPlay implements Listener{
             }
             
             int hornCooldown;
-            NamespacedKey hornCooldownKey = new NamespacedKey(customDiscs, "customhorncoolodwn");
+            NamespacedKey hornCooldownKey = new NamespacedKey(customDiscs, "goat_horn_cooldown");
             if(persistentDataContainer.has(hornCooldownKey, PersistentDataType.INTEGER)) {
-                hornCooldown = Math.min(persistentDataContainer.get(hornCooldownKey, PersistentDataType.INTEGER), CustomDiscs.getInstance().hornMaxCooldown);
+                hornCooldown = Math.min(Optional.ofNullable(persistentDataContainer.get(hornCooldownKey, PersistentDataType.INTEGER)).orElse(0), CustomDiscs.getInstance().hornMaxCooldown);
             } else {
                 hornCooldown = Math.min(CustomDiscs.getInstance().hornCooldown, CustomDiscs.getInstance().hornMaxCooldown);
             }

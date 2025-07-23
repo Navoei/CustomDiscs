@@ -20,6 +20,7 @@ import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 
 import java.util.Objects;
+import java.util.Optional;
 
 public class SetRangeSubCommand extends CommandAPICommand {
 	private final CustomDiscs plugin;
@@ -50,9 +51,9 @@ public class SetRangeSubCommand extends CommandAPICommand {
 			return 1;
 		}
 		
-        Float range = Objects.requireNonNull(arguments.getByClass("range", Float.class));
+        float range = Optional.ofNullable(arguments.getByClass("range", Float.class)).orElse(0f);
 
-		Float configMusicDiscMaxDistance;
+		float configMusicDiscMaxDistance;
 		if (resultIsCustomHorn) {
 			if (!CustomDiscs.isCustomHornEnable()) { player.sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize(Lang.PREFIX + Lang.CUSTOM_HORN_DISABLED.toString())); return 1; }
 			configMusicDiscMaxDistance = this.plugin.customHornMaxDistance;

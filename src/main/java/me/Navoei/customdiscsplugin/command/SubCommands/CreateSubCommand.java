@@ -79,15 +79,13 @@ public class CreateSubCommand extends CommandAPICommand {
 
 		if (!resultIsMusicDisc && !resultIsHorn && !resultIsHead) {
 			player.sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize(Lang.PREFIX + Lang.NOT_HOLDING_CORRECT_ITEM.toString()));
-			return 1;
+			return 0;
 		}
-
-
 
 		String filename = Objects.requireNonNull(arguments.getByClass("filename", String.class));
 		if (filename.contains("../")) {
 			player.sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize(Lang.PREFIX + Lang.INVALID_FILENAME.toString()));
-			return 1;
+			return 0;
 		}
 		
 		File getDirectory = new File(this.plugin.getDataFolder(), "musicdata");
@@ -95,11 +93,11 @@ public class CreateSubCommand extends CommandAPICommand {
 		if (songFile.exists()) {
 			if (!getFileExtension(filename).equals("wav") && !getFileExtension(filename).equals("mp3") && !getFileExtension(filename).equals("flac")) {
 				player.sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize(Lang.PREFIX + Lang.INVALID_FORMAT.toString()));
-				return 1;
+				return 0;
 			}
 		} else {
 			player.sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize(Lang.PREFIX + Lang.FILE_NOT_FOUND.toString()));
-			return 1;
+			return 0;
 		}
 		
 		String song_name = Objects.requireNonNull(arguments.getByClass("song_name", String.class));
@@ -138,7 +136,8 @@ public class CreateSubCommand extends CommandAPICommand {
 			PersistentDataContainer data = meta.getPersistentDataContainer();
 			data.set(new NamespacedKey(this.plugin, "customhorn"), PersistentDataType.STRING, filename);
 			player.getInventory().getItemInMainHand().setItemMeta(meta);
-		} else if (resultIsHead) {
+		} else {
+			//Must be a player head.
 			if (!CustomDiscs.isCustomHeadEnable()) { player.sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize(Lang.PREFIX + Lang.CUSTOM_HEAD_DISABLED.toString())); return 1; }
 			final Component customLoreHead = Component.text().decoration(TextDecoration.ITALIC, false).content(song_name).color(NamedTextColor.GRAY).build();
 			String serialized = GsonComponentSerializer.gson().serialize(customLoreHead);
@@ -154,10 +153,7 @@ public class CreateSubCommand extends CommandAPICommand {
 			data.set(new NamespacedKey(this.plugin, "customhead"), PersistentDataType.STRING, filename);
 			data.set(new NamespacedKey(this.plugin, "headlore"), PersistentDataType.STRING, serialized);
 			player.getInventory().getItemInMainHand().setItemMeta(meta);
-		} else {
-			return 1;
 		}
-
 		player.sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize(Lang.PREFIX + Lang.CREATE_FILENAME.toString().replace("%filename%", filename)));
 		player.sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize(Lang.PREFIX + Lang.CREATE_CUSTOM_NAME.toString().replace("%custom_name%", song_name)));
 		return 1;
