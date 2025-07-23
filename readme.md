@@ -1,7 +1,7 @@
 # Custom Discs v5.0 for Paper 1.21.7 / 1.21.8
 
 > ### ⚠️⚠️⚠️ READ THIS SECTION CAREFULLY! ⚠️⚠️⚠️
-> ### This version introduce some breaking changes and *require at least the build 9 of PaperMC 1.21.7*.
+> ### This version introduces some breaking changes and *requires build 9 of PaperMC 1.21.7*.
 > ### Any earlier version of PaperMC is not guaranteed to function and new features may not function at all!
 > ### ⚠️⚠️⚠️ Please also note that this new release requires you to delete the ```config.yml``` and ```lang.yml``` files (or update them with the new options).
 > ### ⚠️⚠️⚠️ Without this being done, you could experience issues with this plugin.
