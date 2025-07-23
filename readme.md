@@ -3,8 +3,8 @@
 > ### ⚠️⚠️⚠️ READ THIS SECTION CAREFULLY! ⚠️⚠️⚠️
 > ### This version introduces some breaking changes and *requires build 9 of PaperMC 1.21.7*.
 > ### Any earlier version of PaperMC is not guaranteed to function and new features may not function at all!
-> ### ⚠️⚠️⚠️ Please also note that this new release requires you to delete the ```config.yml``` and ```lang.yml``` files (or update them with the new options).
-> ### ⚠️⚠️⚠️ Without this being done, you could experience issues with this plugin.
+> ### Please also note that this new release requires you to delete the ```config.yml``` and ```lang.yml``` files (or update them with the new options).
+> ### Without this being done, you could experience issues with this plugin.
 
 
 ## 🆘 NEW : You can now ask for support on this Discord server ➡️ https://discord.gg/YJpqruvZ97 (but you can still use the "[Issues](https://github.com/Navoei/CustomDiscs/issues)" report section of GitHub)
