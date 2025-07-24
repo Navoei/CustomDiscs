@@ -28,7 +28,7 @@ public class SetHornCooldownSubCommand extends CommandAPICommand {
 		super("goatcooldown");
 		this.plugin = plugin;
 		
-		this.withFullDescription(NamedTextColor.GRAY + "Set the cooldown for a modified goat horn (range from 1 to "+ this.plugin.hornMaxCooldown +" in ticks).");
+		this.withFullDescription(NamedTextColor.GRAY + "Set the cooldown for a custom goat horn (range from 1 to "+ this.plugin.hornMaxCooldown +" in ticks).");
 		this.withUsage("/cd goatcooldown <range>");
 		this.withPermission("customdiscs.horncooldown");
 
