@@ -131,7 +131,6 @@ public class CreateSubCommand extends CommandAPICommand {
 			item.setData(DataComponentTypes.INSTRUMENT, customInstrument);
 
 			ItemStack disc = new ItemStack(player.getInventory().getItemInMainHand());
-			disc.setData(DataComponentTypes.TOOLTIP_DISPLAY, TooltipDisplay.tooltipDisplay().addHiddenComponents(DataComponentTypes.JUKEBOX_PLAYABLE).build());
 			ItemMeta meta = disc.getItemMeta();
 			PersistentDataContainer data = meta.getPersistentDataContainer();
 			data.set(new NamespacedKey(this.plugin, "customhorn"), PersistentDataType.STRING, filename);
