@@ -59,9 +59,9 @@ public class ServerVersionChecker {
 
                 // We then perform a version comparison
                 if (compareVersions(cleanVersion, "folia") < 0) {
-                    pluginLogger.severe("This Paper server version is unsupported. Please update to at least Paper " + REQUIRED_FOLIA_VERSION);
+                    pluginLogger.severe("This Folia server version is unsupported. Please update to at least Folia " + REQUIRED_FOLIA_VERSION);
                 } else {
-                    pluginLogger.info("Paper server version is supported.");
+                    pluginLogger.info("Folia server version is supported.");
                 }
             } else {
                 // For Paper forks servers (mostly), log a severe message about non-support
