@@ -54,6 +54,7 @@ public final class CustomDiscs extends JavaPlugin {
 	public static boolean customHeadPlayingEnable = true;
 	public float customHeadDistance;
 	public float customHeadMaxDistance;
+    public int filename_maximum_length;
 	
 	@Override
 	public void onLoad() {
@@ -92,6 +93,7 @@ public final class CustomDiscs extends JavaPlugin {
 		customHeadPlayingEnable = getConfig().getBoolean("custom-head-playing-enable");
 		customHeadDistance = getConfig().getInt("custom-head-distance");
 		customHeadMaxDistance = getConfig().getInt("custom-head-max-distance");
+        filename_maximum_length = getConfig().getInt("filename-maximum-length");
 
 		// Checking server version and display console message in case the server is not supported
         ServerVersionChecker serverVersionChecker = new ServerVersionChecker(this);

@@ -3,6 +3,9 @@
 # The maximum download size in megabytes.
 max-download-size: 50
 
+# The maximum length the file name (including the file extension) should be when downloaded. Using a too high value could crash the server.
+filename-maximum-length: 100
+
 # The master volume of music discs from 0-1. (You can set values like 0.5 for 50% volume).
 music-disc-volume: 1
 
@@ -61,7 +64,7 @@ custom-head-max-distance: 256
 # [DO NOT EDIT BELOW THIS LINE - Help configuration]
 # Custom Discs Help Page
 help:
-  - "&8-[&6CustomDiscs v5.0 - Help Page&8]-"
+  - "&8-[&6CustomDiscs v5.1.1 - Help Page&8]-"
   - "&aAuthor&7: &6Navoei"
   - "&aContributors&7: &6Athar42 / &6alfw"
   - "&fGit&0Hub&7: &9&ohttps://github.com/Navoei/CustomDiscs"

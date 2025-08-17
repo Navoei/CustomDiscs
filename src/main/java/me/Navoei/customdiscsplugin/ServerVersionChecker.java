@@ -8,7 +8,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class ServerVersionChecker {
-    private static final String REQUIRED_VERSION = "1.21.7-9"; // Set the PaperMC required version
+    private static final String REQUIRED_PAPER_VERSION = "1.21.7-9"; // Set the PaperMC required version
+    private static final String REQUIRED_FOLIA_VERSION = "1.21.8-2"; // Set the Folia required version
     private final Logger pluginLogger;
     private final boolean debugModeResult = CustomDiscs.isDebugMode();
 
@@ -45,8 +46,20 @@ public class ServerVersionChecker {
                 }
 
                 // We then perform a version comparison
-                if (compareVersions(cleanVersion) < 0) {
-                    pluginLogger.severe("This Paper server version is unsupported. Please update to at least Paper " + REQUIRED_VERSION);
+                if (compareVersions(cleanVersion, "paper") < 0) {
+                    pluginLogger.severe("This Paper server version is unsupported. Please update to at least Paper " + REQUIRED_PAPER_VERSION);
+                } else {
+                    pluginLogger.info("Paper server version is supported.");
+                }
+            } else if ("folia".equalsIgnoreCase(serverType)) {
+                String cleanVersion = cleanBuildVersion(buildVersion);
+                if(debugModeResult) {
+                    pluginLogger.info("DEBUG - Extracted Version: " + cleanVersion);
+                }
+
+                // We then perform a version comparison
+                if (compareVersions(cleanVersion, "folia") < 0) {
+                    pluginLogger.severe("This Paper server version is unsupported. Please update to at least Paper " + REQUIRED_FOLIA_VERSION);
                 } else {
                     pluginLogger.info("Paper server version is supported.");
                 }
@@ -68,10 +81,15 @@ public class ServerVersionChecker {
         return versionParts.length >= 2 ? versionParts[0] + "-" + versionParts[1] : version;
     }
 
-    private static int compareVersions(String runningVersion) {
+    private static int compareVersions(String runningVersion, String serverType) {
         // We first start by separating the main version number from the build number
         String[] currentVersion = runningVersion.split("-");
-        String[] requiredVersion = REQUIRED_VERSION.split("-");
+        String[] requiredVersion;
+        if(serverType.equals("folia")) {
+            requiredVersion = REQUIRED_FOLIA_VERSION.split("-");
+        } else {
+            requiredVersion = REQUIRED_PAPER_VERSION.split("-");
+        }
 
         // Then we compare the base version (sub-function to handle it)
         // If we are in the same main version, we pass to the next check, else we exit (-1 = older release ; 1 = newer release)

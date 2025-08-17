@@ -94,8 +94,8 @@ public class HeadPlay implements Listener{
         PersistentDataContainer itemPDC = meta.getPersistentDataContainer();
         if (!itemPDC.has(new NamespacedKey(customDiscs, "customhead"), PersistentDataType.STRING)) return;
 
-        Bukkit.getScheduler().runTaskLater(customDiscs, () -> {
-            Block block = event.getBlockPlaced();
+        Block block = event.getBlockPlaced();
+        Bukkit.getRegionScheduler().runDelayed(customDiscs, block.getLocation(), task -> {
             if (block.getType() != Material.PLAYER_HEAD && block.getType() != Material.PLAYER_WALL_HEAD) return;
 
             Skull skull = (Skull) block.getState();
