@@ -10,6 +10,7 @@ import dev.jorel.commandapi.CommandAPICommand;
 import dev.jorel.commandapi.CommandPermission;
 import dev.jorel.commandapi.executors.CommandArguments;
 
+import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import net.kyori.adventure.text.format.NamedTextColor;
 
@@ -38,10 +39,9 @@ public class CustomDiscCommand extends CommandAPICommand {
 	}
 	
 	private int onCommandPlayer(Player player, CommandArguments arguments) {
-		FileConfiguration config = this.plugin.getConfig();
-		for (String message : config.getStringList("help")) {
-			player.sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize(message));
-		}
+        for (Component message : CustomDiscs.getHelpMessage()) {
+            player.sendMessage(message);
+        }
 		
 		return 1;
 	}

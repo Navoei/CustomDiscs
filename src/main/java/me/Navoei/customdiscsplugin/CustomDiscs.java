@@ -18,6 +18,13 @@ import de.maxhenkel.voicechat.api.BukkitVoicechatService;
 import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandAPIBukkitConfig;
 
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.event.ClickEvent;
+import net.kyori.adventure.text.event.HoverEvent;
+import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.TextColor;
+import net.kyori.adventure.text.format.TextDecoration;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.NamespacedKey;
 import org.bukkit.block.Jukebox;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -37,7 +44,9 @@ public final class CustomDiscs extends JavaPlugin {
 	private VoicePlugin voicechatPlugin;
 	private Logger pluginLogger;
     private static boolean debugMode = false;
-	public static YamlConfiguration LANG;
+    private static Component[] helpMessage;
+    private static final LegacyComponentSerializer LegacyComponentAmpersand = LegacyComponentSerializer.legacyAmpersand();
+    public static YamlConfiguration LANG;
 	public static File LANG_FILE;
 	public static boolean musicDiscEnable = true;
 	public static boolean musicDiscPlayingEnable = true;
@@ -55,7 +64,7 @@ public final class CustomDiscs extends JavaPlugin {
 	public float customHeadDistance;
 	public float customHeadMaxDistance;
     public int filename_maximum_length;
-	
+
 	@Override
 	public void onLoad() {
 		CustomDiscs.instance = this;
@@ -103,6 +112,40 @@ public final class CustomDiscs extends JavaPlugin {
 		if (!(musicData.exists())) {
 			musicData.mkdirs();
 		}
+
+        helpMessage = new Component[]{
+                LegacyComponentAmpersand.deserialize("&8-[&6CustomDiscs v"+ this.getPluginMeta().getVersion() +" - Help Page&8]-"),
+                LegacyComponentAmpersand.deserialize("&aAuthor&7: ")
+                        .append(Component.text("Navoei")
+                        .color(TextColor.color(0xd9a334))
+                        .decorate(TextDecoration.UNDERLINED)
+                        .clickEvent(ClickEvent.openUrl("https://github.com/Navoei"))
+                        .hoverEvent(HoverEvent.showText(Component.text("Click to open Navoei's GitHub page")))),
+                LegacyComponentAmpersand.deserialize("&aContributors&7: ")
+                        .append(Component.text("Athar42")
+                        .color(TextColor.color(0xd9a334))
+                        .decorate(TextDecoration.UNDERLINED)
+                        .clickEvent(ClickEvent.openUrl("https://github.com/Athar42"))
+                        .hoverEvent(HoverEvent.showText(Component.text("Click to open Athar42's GitHub page"))))
+                        .append(Component.text(" / "))
+                        .append(Component.text("alfw")
+                        .color(TextColor.color(0xd9a334))
+                        .decorate(TextDecoration.UNDERLINED)
+                        .clickEvent(ClickEvent.openUrl("https://github.com/alfw"))
+                        .hoverEvent(HoverEvent.showText(Component.text("Click to open alfw's GitHub page")))),
+                LegacyComponentAmpersand.deserialize("&fGit&0Hub&7: ")
+                        .append(Component.text("https://github.com/Navoei/CustomDiscs")
+                        .color(NamedTextColor.BLUE)
+                        .decorate(TextDecoration.UNDERLINED)
+                        .clickEvent(ClickEvent.openUrl("https://github.com/Navoei/CustomDiscs"))
+                        .hoverEvent(HoverEvent.showText(Component.text("Click to open CustomDiscs' GitHub page")))),
+                LegacyComponentAmpersand.deserialize("&aDiscord&7: ")
+                        .append(Component.text("https://discord.gg/YJpqruvZ97")
+                        .color(NamedTextColor.BLUE)
+                        .decorate(TextDecoration.UNDERLINED)
+                        .clickEvent(ClickEvent.openUrl("https://discord.gg/YJpqruvZ97"))
+                        .hoverEvent(HoverEvent.showText(Component.text("Click to join our Discord !"))))
+        };
 		
 		if (service != null) {
 			voicechatPlugin = new VoicePlugin();
@@ -289,4 +332,11 @@ public final class CustomDiscs extends JavaPlugin {
 	 * @return The boolean value of customHeadPlayingEnable.
 	 */
 	public static boolean isCustomHeadPlayingEnable() { return customHeadPlayingEnable; }
+
+    /**
+     * Get the help message.
+     *
+     * @return The text component for the help message.
+     */
+    public static Component[] getHelpMessage() { return helpMessage; }
 }
