@@ -11,11 +11,9 @@ import dev.jorel.commandapi.CommandPermission;
 import dev.jorel.commandapi.executors.CommandArguments;
 
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import net.kyori.adventure.text.format.NamedTextColor;
 
 import org.bukkit.command.ConsoleCommandSender;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
 public class CustomDiscCommand extends CommandAPICommand {
