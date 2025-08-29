@@ -12,6 +12,7 @@ public class ServerVersionChecker {
     private static final String REQUIRED_FOLIA_VERSION = "1.21.8-2"; // Set the Folia required version
     private final Logger pluginLogger;
     private final boolean debugModeResult = CustomDiscs.isDebugMode();
+    public static boolean paperAPIcheck;
 
     public ServerVersionChecker(JavaPlugin plugin) {
         this.pluginLogger = plugin.getLogger();
@@ -20,6 +21,8 @@ public class ServerVersionChecker {
     public void checkVersion() {
         // Get the full server version message output
         String versionMessage = Bukkit.getVersionMessage();
+
+        paperAPIcheck = false;
 
         if (versionMessage == null) {
             pluginLogger.severe("Unable to detect the running server version. Is this a supported PaperMC release?");
@@ -51,6 +54,7 @@ public class ServerVersionChecker {
                 } else {
                     pluginLogger.info("Paper server version is supported.");
                 }
+                paperAPIcheck = true;
             } else if ("folia".equalsIgnoreCase(serverType)) {
                 String cleanVersion = cleanBuildVersion(buildVersion);
                 if(debugModeResult) {
@@ -63,6 +67,7 @@ public class ServerVersionChecker {
                 } else {
                     pluginLogger.info("Folia server version is supported.");
                 }
+                paperAPIcheck = true;
             } else {
                 // For Paper forks servers (mostly), log a severe message about non-support
                 pluginLogger.severe(serverType + " server detected. No support will be made in case of issues!");
@@ -115,5 +120,12 @@ public class ServerVersionChecker {
 
         return 0;
     }
+
+    /**
+     * Return if it's a Paper API based server (Paper or Folia).
+     *
+     * @return The boolean value of isPaperAPI.
+     */
+    public static boolean isPaperAPI() { return paperAPIcheck; }
 
 }

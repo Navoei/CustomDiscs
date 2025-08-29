@@ -17,13 +17,11 @@ import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
 public class CustomDiscCommand extends CommandAPICommand {
-	private final CustomDiscs plugin;
-	
-	public CustomDiscCommand(CustomDiscs plugin) {
+
+    public CustomDiscCommand(CustomDiscs plugin) {
 		super("customdisc");
-		this.plugin = plugin;
-		
-		this.withAliases("cd");
+
+        this.withAliases("cd");
 		this.withFullDescription("The custom discs command.");
 		this.withPermission(CommandPermission.NONE);
 
