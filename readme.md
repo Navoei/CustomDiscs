@@ -7,7 +7,7 @@
 > ### Without this being done, you could experience issues with this plugin.
 
 
-## NEW❗ : You can now ask for support on this Discord server ➡️ https://discord.gg/YJpqruvZ97 (but you can still use the "[Issues](https://github.com/Navoei/CustomDiscs/issues)" report section of GitHub)
+You can now ask for support on Discord: https://discord.gg/YJpqruvZ97 (but you can still use the "[Issues](https://github.com/Navoei/CustomDiscs/issues)" report section of GitHub)
 
 
 A Paper fork of henkelmax's Audio Player. Special thanks to Athar42 for maintaining this plugin. 
