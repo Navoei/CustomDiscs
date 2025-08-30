@@ -1,8 +1,8 @@
-# Custom Discs v5.0 for Paper 1.21.7 / 1.21.8
+# Custom Discs v5.1.1 for Paper and Folia 1.21.7 / 1.21.8
 
 > ### ⚠️⚠️⚠️ READ THIS SECTION CAREFULLY! ⚠️⚠️⚠️
-> ### This version introduces some breaking changes and *requires build 9 of PaperMC 1.21.7*.
-> ### Any earlier version of PaperMC is not guaranteed to function and new features may not function at all!
+> ### This version introduces some breaking changes and *requires build 9 of PaperMC 1.21.7 (and 1.21.8 build 2 of Folia)*.
+> ### Any earlier version of PaperMC/Folia are not guaranteed to function and new features may not function at all!
 > ### Please also note that this new release requires you to delete the ```config.yml``` and ```lang.yml``` files (or update them with the new options).
 > ### Without this being done, you could experience issues with this plugin.
 
@@ -49,6 +49,9 @@ Default Config.yml:
 
 # The maximum download size in megabytes.
 max-download-size: 50
+
+# The maximum length the file name (including the file extension) should be when downloaded. Using a too high value could crash the server.
+filename-maximum-length: 100
 
 # The master volume of music discs from 0-1. (You can set values like 0.5 for 50% volume).
 music-disc-volume: 1
@@ -103,16 +106,6 @@ custom-head-distance: 16
 
 # The max distance from which music discs can be heard in blocks.
 custom-head-max-distance: 256
-
-
-# [DO NOT EDIT BELOW THIS LINE - Help configuration]
-# Custom Discs Help Page
-help:
-  - "&8-[&6CustomDiscs v5.0 - Help Page&8]-"
-  - "&aAuthor&7: &6Navoei"
-  - "&aContributors&7: &6Athar42 / &6alfw"
-  - "&fGit&0Hub&7: &9&ohttps://github.com/Navoei/CustomDiscs"
-  - "&aDiscord&7: &9&ohttps://discord.gg/YJpqruvZ97"
 ```
 
 Default Lang.yml:
@@ -139,6 +132,6 @@ create-custom-goat-cooldown: '&7Your goat horn cooldown is set to: &a"%custom_go
 custom-music-disabled: '&7Custom music discs are disabled in the configuration.'
 custom-head-disabled: '&7Custom player heads are disabled in the configuration.'
 custom-horn-disabled: '&7Custom goat horns are disabled in the configuration.'
+invalid-protocol: '&cOnly HTTP:// and HTTPS:// URL are allowed.'
+invalid-filename-length: '&cThe maximum file name is restricted to %filename_length_value% characters'
 ```
-
-

@@ -77,18 +77,25 @@ public class HopperManager implements Listener {
             pluginLogger.info("DEBUG - HopperManager -> Enter : onJukeboxEjectToHopper");
         }
 
-        InventoryHolder holderSource = event.getSource().getHolder();
-        InventoryHolder holderDestination = event.getDestination().getHolder();
-
+        if (!TypeChecker.isCustomMusicDisc(event.getItem())) return;
         if (event.getSource().getLocation() == null) return;
         if (!event.getSource().getType().equals(InventoryType.JUKEBOX)) return;
-        if (event.getItem().getItemMeta() == null) return;
-        if (!TypeChecker.isCustomMusicDisc(event.getItem())) return;
 
-        if (holderDestination instanceof HopperMinecart) {
-            playerManager.stopDisc(((BlockState) holderSource).getBlock());
+        if (ServerVersionChecker.isPaperAPI()) {
+            if (!(event.getDestination().getHolder(false) instanceof HopperMinecart)) return;
+
+            InventoryHolder holderSource = event.getSource().getHolder(false);
+            if (holderSource instanceof BlockState) {
+                playerManager.stopDisc(((BlockState) holderSource).getBlock());
+            }
+        } else {
+            if (!(event.getDestination().getHolder() instanceof HopperMinecart)) return;
+
+            InventoryHolder holderSource = event.getSource().getHolder();
+            if (holderSource instanceof BlockState) {
+                playerManager.stopDisc(((BlockState) holderSource).getBlock());
+            }
         }
-
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)

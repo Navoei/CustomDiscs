@@ -10,21 +10,18 @@ import dev.jorel.commandapi.CommandAPICommand;
 import dev.jorel.commandapi.CommandPermission;
 import dev.jorel.commandapi.executors.CommandArguments;
 
-import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
+import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 
 import org.bukkit.command.ConsoleCommandSender;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
 public class CustomDiscCommand extends CommandAPICommand {
-	private final CustomDiscs plugin;
-	
-	public CustomDiscCommand(CustomDiscs plugin) {
+
+    public CustomDiscCommand(CustomDiscs plugin) {
 		super("customdisc");
-		this.plugin = plugin;
-		
-		this.withAliases("cd");
+
+        this.withAliases("cd");
 		this.withFullDescription("The custom discs command.");
 		this.withPermission(CommandPermission.NONE);
 
@@ -38,10 +35,9 @@ public class CustomDiscCommand extends CommandAPICommand {
 	}
 	
 	private int onCommandPlayer(Player player, CommandArguments arguments) {
-		FileConfiguration config = this.plugin.getConfig();
-		for (String message : config.getStringList("help")) {
-			player.sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize(message));
-		}
+        for (Component message : CustomDiscs.getHelpMessage()) {
+            player.sendMessage(message);
+        }
 		
 		return 1;
 	}

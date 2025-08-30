@@ -16,3 +16,4 @@ dependencies:
       load: BEFORE
       required: true
       join-classpath: true
+folia-supported: true

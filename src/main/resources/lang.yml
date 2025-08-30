@@ -20,3 +20,5 @@ create-custom-goat-cooldown: '&7Your goat horn cooldown is set to: &a"%custom_go
 custom-music-disabled: '&7Custom music discs are disabled in the configuration.'
 custom-head-disabled: '&7Custom player heads are disabled in the configuration.'
 custom-horn-disabled: '&7Custom goat horns are disabled in the configuration.'
+invalid-protocol: '&cOnly HTTP:// and HTTPS:// URL are allowed.'
+invalid-filename-length: '&cThe maximum file name is restricted to %filename_length_value% characters'

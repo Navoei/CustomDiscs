@@ -51,12 +51,21 @@ public class DownloadSubCommand extends CommandAPICommand {
 	private int onCommandPlayer(Player player, CommandArguments arguments) {
 		final Logger pluginLogger = plugin.getLogger();
 
-		Bukkit.getScheduler().runTaskAsynchronously(this.plugin, () -> {
+        Bukkit.getGlobalRegionScheduler().run(this.plugin, scheduledTask ->  {
 			try {
 				try {
 					URI uri = new URI(Objects.requireNonNull(arguments.getByClass("url", String.class)));
+                    if (!uri.getScheme().equalsIgnoreCase("http") && !uri.getScheme().equalsIgnoreCase("https")) {
+                        player.sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize(Lang.PREFIX + Lang.INVALID_PROTOCOL.toString()));
+                        return;
+                    }
 					URL fileURL = uri.toURL();
-					String filename = Objects.requireNonNull(arguments.getByClass("filename", String.class));
+
+                    String filename = Objects.requireNonNull(arguments.getByClass("filename", String.class));
+                    if (filename.length() > this.plugin.filename_maximum_length) {
+                        player.sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize(Lang.PREFIX + Lang.INVALID_FILENAME_LENGTH.toString().replace("%filename_length_value%", Integer.toString(this.plugin.filename_maximum_length))));
+                        return;
+                    }
 
 					if(debugModeResult) {
 						pluginLogger.info("DEBUG - Download File URL: " + fileURL);
