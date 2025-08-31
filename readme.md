@@ -1,12 +1,5 @@
 # Custom Discs v5.1.1 for Paper and Folia 1.21.7 / 1.21.8
 
-> ### ⚠️⚠️⚠️ READ THIS SECTION CAREFULLY! ⚠️⚠️⚠️
-> ### This version introduces some breaking changes and *requires build 9 of PaperMC 1.21.7 (and 1.21.8 build 2 of Folia)*.
-> ### Any earlier version of PaperMC/Folia are not guaranteed to function and new features may not function at all!
-> ### Please also note that this new release requires you to delete the ```config.yml``` and ```lang.yml``` files (or update them with the new options).
-> ### Without this being done, you could experience issues with this plugin.
-
-
 You can now ask for support on Discord: https://discord.gg/YJpqruvZ97 (but you can still use the "[Issues](https://github.com/Navoei/CustomDiscs/issues)" report section of GitHub)
 
 
