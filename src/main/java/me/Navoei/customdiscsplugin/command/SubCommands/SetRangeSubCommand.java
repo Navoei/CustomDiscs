@@ -1,7 +1,7 @@
 package me.Navoei.customdiscsplugin.command.SubCommands;
 
 import me.Navoei.customdiscsplugin.CustomDiscs;
-import me.Navoei.customdiscsplugin.TypeChecker;
+import me.Navoei.customdiscsplugin.utils.TypeChecker;
 import me.Navoei.customdiscsplugin.language.Lang;
 
 import dev.jorel.commandapi.CommandAPICommand;
@@ -19,7 +19,6 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 
-import java.util.Objects;
 import java.util.Optional;
 
 public class SetRangeSubCommand extends CommandAPICommand {

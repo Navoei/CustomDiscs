@@ -1,6 +1,7 @@
-package me.Navoei.customdiscsplugin;
+package me.Navoei.customdiscsplugin.utils;
 
 import com.destroystokyo.paper.MaterialTags;
+import me.Navoei.customdiscsplugin.CustomDiscs;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;

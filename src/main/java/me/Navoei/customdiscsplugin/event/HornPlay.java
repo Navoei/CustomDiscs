@@ -2,7 +2,7 @@ package me.Navoei.customdiscsplugin.event;
 
 import me.Navoei.customdiscsplugin.CustomDiscs;
 import me.Navoei.customdiscsplugin.PlayerManager;
-import me.Navoei.customdiscsplugin.TypeChecker;
+import me.Navoei.customdiscsplugin.utils.TypeChecker;
 import me.Navoei.customdiscsplugin.VoicePlugin;
 
 import io.papermc.paper.datacomponent.DataComponentTypes;

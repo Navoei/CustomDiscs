@@ -1,7 +1,7 @@
 package me.Navoei.customdiscsplugin.command.SubCommands;
 
 import me.Navoei.customdiscsplugin.CustomDiscs;
-import me.Navoei.customdiscsplugin.TypeChecker;
+import me.Navoei.customdiscsplugin.utils.TypeChecker;
 import me.Navoei.customdiscsplugin.language.Lang;
 
 import dev.jorel.commandapi.CommandAPICommand;

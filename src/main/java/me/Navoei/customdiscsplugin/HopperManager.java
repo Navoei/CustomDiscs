@@ -5,6 +5,8 @@ import me.Navoei.customdiscsplugin.language.Lang;
 import io.papermc.paper.datacomponent.DataComponentTypes;
 import io.papermc.paper.datacomponent.item.TooltipDisplay;
 
+import me.Navoei.customdiscsplugin.utils.ServerVersionChecker;
+import me.Navoei.customdiscsplugin.utils.TypeChecker;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
@@ -111,18 +113,6 @@ public class HopperManager implements Listener {
                 }
             }
         }
-    }
-
-    private static HopperManager instance;
-
-    public static HopperManager instance() {
-        if (CustomDiscs.isDebugMode()) {
-            CustomDiscs.getInstance().getLogger().info("DEBUG - HopperManager -> Enter : HopperManager Instance");
-        }
-        if (instance == null) {
-            instance = new HopperManager();
-        }
-        return instance;
     }
 
 }

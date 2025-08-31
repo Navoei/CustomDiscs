@@ -1,5 +1,6 @@
-package me.Navoei.customdiscsplugin;
+package me.Navoei.customdiscsplugin.utils;
 
+import me.Navoei.customdiscsplugin.CustomDiscs;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -25,7 +26,7 @@ public class ServerVersionChecker {
         paperAPIcheck = false;
 
         if (versionMessage == null) {
-            pluginLogger.severe("Unable to detect the running server version. Is this a supported PaperMC release?");
+            pluginLogger.severe("Unable to detect the server version. Is this a supported PaperMC release?");
             return;
         }
 
@@ -51,9 +52,8 @@ public class ServerVersionChecker {
                 // We then perform a version comparison
                 if (compareVersions(cleanVersion, "paper") < 0) {
                     pluginLogger.severe("This Paper server version is unsupported. Please update to at least Paper " + REQUIRED_PAPER_VERSION);
-                } else {
-                    pluginLogger.info("Paper server version is supported.");
                 }
+
                 paperAPIcheck = true;
             } else if ("folia".equalsIgnoreCase(serverType)) {
                 String cleanVersion = cleanBuildVersion(buildVersion);
@@ -64,13 +64,12 @@ public class ServerVersionChecker {
                 // We then perform a version comparison
                 if (compareVersions(cleanVersion, "folia") < 0) {
                     pluginLogger.severe("This Folia server version is unsupported. Please update to at least Folia " + REQUIRED_FOLIA_VERSION);
-                } else {
-                    pluginLogger.info("Folia server version is supported.");
                 }
+
                 paperAPIcheck = true;
             } else {
                 // For Paper forks servers (mostly), log a severe message about non-support
-                pluginLogger.severe(serverType + " server detected. No support will be made in case of issues!");
+                pluginLogger.severe(serverType + " server detected. No support will be provided!");
             }
         } else {
             pluginLogger.severe("Unable to read the server version. Is this a supported PaperMC release?");
