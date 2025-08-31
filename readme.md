@@ -1,13 +1,11 @@
 # Custom Discs v5.1.1 for Paper and Folia 1.21.7 / 1.21.8
-
-You can now ask for support on Discord: https://discord.gg/YJpqruvZ97 (but you can still use the "[Issues](https://github.com/Navoei/CustomDiscs/issues)" report section of GitHub)
-
-
 A Paper fork of henkelmax's Audio Player. Special thanks to Athar42 for maintaining this plugin. 
 - Play custom music discs, goat horns and player heads using the Simple Voice Chat API. (The voice chat mod is required on the client and server.)
 - Use ```/customdisc``` or ```/cd``` to view available commands.
 - Music files should go into ```plugins/CustomDiscs/musicdata/```
 - Music files must be in the ```.wav```, ```.flac```, or ```.mp3``` format.
+
+Join the discord for support: https://discord.gg/YJpqruvZ97. You can still use the "[Issues](https://github.com/Navoei/CustomDiscs/issues)" section of GitHub.
 
 Downloading Files:
 - To download a file use the command ```/cd download <url> <filename.extension>```.
