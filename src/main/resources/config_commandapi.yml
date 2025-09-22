@@ -1,0 +1,6 @@
+# [Embedded CommandAPI Config]
+
+# Setting this to "true" would allow the internal CommandAPI to run on unsupported server versions.
+# If NMS internals has changed, even setting this to "true", the plugin may not load properly.
+# A concrete example of this would be having the 1.21.6 compatible plugin but using the 1.21.7 or 1.21.8 server release with an older CommandAPI embedded version.
+lenientForMinorVersions: false

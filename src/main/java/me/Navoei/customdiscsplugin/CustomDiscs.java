@@ -69,9 +69,19 @@ public final class CustomDiscs extends JavaPlugin {
 	@Override
 	public void onLoad() {
 		CustomDiscs.instance = this;
-		CommandAPI.onLoad(new CommandAPIBukkitConfig(this).verboseOutput(true));
-		//To get CommandAPI working on newer MC Release - for development
-		//CommandAPI.onLoad(new CommandAPIBukkitConfig(this).verboseOutput(true).beLenientForMinorVersions(true));
+
+        File commandAPIConfigFile = new File(getDataFolder(), "config_commandapi.yml");
+        if (!commandAPIConfigFile.exists()) {
+            saveResource("config_commandapi.yml", false);
+        }
+        YamlConfiguration retrieveCommandAPIConfig = YamlConfiguration.loadConfiguration(commandAPIConfigFile);
+        boolean isLenient = retrieveCommandAPIConfig.getBoolean("lenientForMinorVersions", false);
+        if (isLenient) {
+            CommandAPI.onLoad(new CommandAPIBukkitConfig(this).verboseOutput(true).beLenientForMinorVersions(true));
+        } else {
+            CommandAPI.onLoad(new CommandAPIBukkitConfig(this).verboseOutput(true));
+        }
+
 		new CustomDiscCommand(this).register("customdiscs");
 	}
 	
