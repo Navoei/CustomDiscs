@@ -34,20 +34,21 @@ Dependencies:
 
 Versions support matrix :
 
-| Minecraft version                  | Server type     | Compatible versions          | Latest compatible<br>version                                       |
-|------------------------------------|-----------------|------------------------------|--------------------------------------------------------------------|
-| **1.19**                           | Paper           | 1.1.0 - 2.1                  | [2.1](https://github.com/Navoei/CustomDiscs/releases/tag/v2.1)     |
-| **1.19.1, 1.19.2, 1.19.3**         | Paper           | 2.2 - 2.2.3                  | [2.2.3](https://github.com/Navoei/CustomDiscs/releases/tag/v2.2.3) |
-| **1.19.4**                         | Paper           | 2.3 - 2.3.2                  | [2.3.2](https://github.com/Navoei/CustomDiscs/releases/tag/v2.3.2) |
-| **1.20, 1.20.1**                   | Paper           | 2.4 - 2.4.1                  | [2.4.1](https://github.com/Navoei/CustomDiscs/releases/tag/v2.4.1) |
-| **1.20.2**                         | Paper           | 2.5 - 2.5.1                  | [2.5.1](https://github.com/Navoei/CustomDiscs/releases/tag/v2.5.1) |
-| **1.20.3, 1.20.4, 1.20.5, 1.20.6** | Paper           | 2.6 - 2.6.1                  | [2.6.1](https://github.com/Navoei/CustomDiscs/releases/tag/v2.6.1) |
-| **1.21, 1.21.1**                   | Paper           | 3.0                          | [3.0](https://github.com/Navoei/CustomDiscs/releases/tag/v3.0)     |
-| **1.21.2, 1.21.3**                 | Paper           | 4.1                          | [4.1](https://github.com/Navoei/CustomDiscs/releases/tag/v4.1)     |
-| **1.21.4**                         | Paper           | 4.2 - 4.4                    | [4.4](https://github.com/Navoei/CustomDiscs/releases/tag/v4.4)     |
-| **1.21.5**                         | Paper           | 4.4                          | [4.4](https://github.com/Navoei/CustomDiscs/releases/tag/v4.4)     |
-| **1.21.6, 1.21.7-8**               | Paper           | 4.5                          | [4.5](https://github.com/Navoei/CustomDiscs/releases/tag/v4.5)     |
-| **1.21.7-9, 1.21.8**<br>**1.21.8** | Paper<br>Folia  | 5.0 - 5.1.2<br>5.1.1 - 5.1.2 | [5.1.2](https://github.com/Navoei/CustomDiscs/releases/tag/v5.1.2) |
+| Minecraft version                          | Server type     | Compatible versions          | Latest compatible<br>version                                       |
+|--------------------------------------------|-----------------|------------------------------|--------------------------------------------------------------------|
+| **1.19**                                   | Paper           | 1.1.0 - 2.1                  | [2.1](https://github.com/Navoei/CustomDiscs/releases/tag/v2.1)     |
+| **1.19.1, 1.19.2, 1.19.3**                 | Paper           | 2.2 - 2.2.3                  | [2.2.3](https://github.com/Navoei/CustomDiscs/releases/tag/v2.2.3) |
+| **1.19.4**                                 | Paper           | 2.3 - 2.3.2                  | [2.3.2](https://github.com/Navoei/CustomDiscs/releases/tag/v2.3.2) |
+| **1.20, 1.20.1**                           | Paper           | 2.4 - 2.4.1                  | [2.4.1](https://github.com/Navoei/CustomDiscs/releases/tag/v2.4.1) |
+| **1.20.2**                                 | Paper           | 2.5 - 2.5.1                  | [2.5.1](https://github.com/Navoei/CustomDiscs/releases/tag/v2.5.1) |
+| **1.20.3, 1.20.4, 1.20.5, 1.20.6**         | Paper           | 2.6 - 2.6.1                  | [2.6.1](https://github.com/Navoei/CustomDiscs/releases/tag/v2.6.1) |
+| **1.21, 1.21.1**                           | Paper           | 3.0                          | [3.0](https://github.com/Navoei/CustomDiscs/releases/tag/v3.0)     |
+| **1.21.2, 1.21.3**                         | Paper           | 4.1                          | [4.1](https://github.com/Navoei/CustomDiscs/releases/tag/v4.1)     |
+| **1.21.4**                                 | Paper           | 4.2 - 4.4                    | [4.4](https://github.com/Navoei/CustomDiscs/releases/tag/v4.4)     |
+| **1.21.5**                                 | Paper           | 4.4                          | [4.4](https://github.com/Navoei/CustomDiscs/releases/tag/v4.4)     |
+| **1.21.6, 1.21.7-8**                       | Paper           | 4.5                          | [4.5](https://github.com/Navoei/CustomDiscs/releases/tag/v4.5)     |
+| **1.21.7-9, 1.21.8**<br>**1.21.8**         | Paper<br>Folia  | 5.0 - 5.1.2<br>5.1.1 - 5.1.2 | [5.1.2](https://github.com/Navoei/CustomDiscs/releases/tag/v5.1.2) |
+| **1.21.9, 1.21.10**<br>**1.21.9, 1.21.10** | Paper<br>Folia  | 5.1.2<br>5.1.2               | [5.1.2](https://github.com/Navoei/CustomDiscs/releases/tag/v5.1.2) |
 
 https://user-images.githubusercontent.com/64107368/178426026-c454ac66-5133-4f3a-9af9-7f674e022423.mp4
 

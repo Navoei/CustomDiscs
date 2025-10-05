@@ -16,7 +16,7 @@ import me.Navoei.customdiscsplugin.language.Lang;
 import de.maxhenkel.voicechat.api.BukkitVoicechatService;
 
 import dev.jorel.commandapi.CommandAPI;
-import dev.jorel.commandapi.CommandAPIBukkitConfig;
+import dev.jorel.commandapi.CommandAPIPaperConfig;
 
 import me.Navoei.customdiscsplugin.utils.ServerVersionChecker;
 import net.kyori.adventure.text.Component;
@@ -70,17 +70,7 @@ public final class CustomDiscs extends JavaPlugin {
 	public void onLoad() {
 		CustomDiscs.instance = this;
 
-        File commandAPIConfigFile = new File(getDataFolder(), "config_commandapi.yml");
-        if (!commandAPIConfigFile.exists()) {
-            saveResource("config_commandapi.yml", false);
-        }
-        YamlConfiguration retrieveCommandAPIConfig = YamlConfiguration.loadConfiguration(commandAPIConfigFile);
-        boolean isLenient = retrieveCommandAPIConfig.getBoolean("lenientForMinorVersions", false);
-        if (isLenient) {
-            CommandAPI.onLoad(new CommandAPIBukkitConfig(this).verboseOutput(true).beLenientForMinorVersions(true));
-        } else {
-            CommandAPI.onLoad(new CommandAPIBukkitConfig(this).verboseOutput(true));
-        }
+        CommandAPI.onLoad(new CommandAPIPaperConfig(this).verboseOutput(true).fallbackToLatestNMS(true));
 
 		new CustomDiscCommand(this).register("customdiscs");
 	}
