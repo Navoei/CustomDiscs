@@ -45,13 +45,12 @@ dependencies {
     implementation "de.maxhenkel.voicechat:voicechat-api:${voicechat_api_version}"
     shadow "dev.jorel:commandapi-paper-shade:${command_api_version}"
 
-    compileOnly "com.comphenix.protocol:ProtocolLib:5.3.0"
+    compileOnly "net.dmulloy2:ProtocolLib:5.4.0"
     //compileOnly "com.github.retrooper:packetevents-spigot:2.9.4"
 }
 
 repositories {
     mavenCentral()
-    maven { url = "https://repo.dmulloy2.net/repository/public/" }
     maven {
         name = "henkelmax.public"
         url = 'https://maven.maxhenkel.de/repository/public'
