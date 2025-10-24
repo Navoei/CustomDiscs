@@ -16,7 +16,7 @@ import me.Navoei.customdiscsplugin.language.Lang;
 import de.maxhenkel.voicechat.api.BukkitVoicechatService;
 
 import dev.jorel.commandapi.CommandAPI;
-import dev.jorel.commandapi.CommandAPIBukkitConfig;
+import dev.jorel.commandapi.CommandAPIPaperConfig;
 
 import me.Navoei.customdiscsplugin.utils.ServerVersionChecker;
 import net.kyori.adventure.text.Component;
@@ -69,9 +69,9 @@ public final class CustomDiscs extends JavaPlugin {
 	@Override
 	public void onLoad() {
 		CustomDiscs.instance = this;
-		CommandAPI.onLoad(new CommandAPIBukkitConfig(this).verboseOutput(true));
-		//To get CommandAPI working on newer MC Release - for development
-		//CommandAPI.onLoad(new CommandAPIBukkitConfig(this).verboseOutput(true).beLenientForMinorVersions(true));
+
+        CommandAPI.onLoad(new CommandAPIPaperConfig(this).verboseOutput(true).fallbackToLatestNMS(true));
+
 		new CustomDiscCommand(this).register("customdiscs");
 	}
 	

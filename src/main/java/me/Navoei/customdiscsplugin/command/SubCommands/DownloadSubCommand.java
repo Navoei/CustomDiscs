@@ -51,7 +51,7 @@ public class DownloadSubCommand extends CommandAPICommand {
 	private int onCommandPlayer(Player player, CommandArguments arguments) {
 		final Logger pluginLogger = plugin.getLogger();
 
-        Bukkit.getGlobalRegionScheduler().run(this.plugin, scheduledTask ->  {
+        Bukkit.getAsyncScheduler().runNow(this.plugin, scheduledTask ->  {
 			try {
 				try {
 					URI uri = new URI(Objects.requireNonNull(arguments.getByClass("url", String.class)));

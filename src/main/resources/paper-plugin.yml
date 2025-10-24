@@ -1,0 +1,21 @@
+name: CustomDiscs
+version: '${plugin_version}'
+main: me.Navoei.customdiscsplugin.CustomDiscs
+description: A plugin which uses the Simple Voice Chat API to add custom music discs, goat horns and player heads.
+authors: [ "Navoei" ]
+contributors: ["Athar42", "alfw" ]
+website: https://github.com/Navoei/CustomDiscs
+api-version: '${bukkit_api_version}'
+bootstrapper: me.Navoei.customdiscsplugin.CustomDiscsBootstrap
+folia-supported: true
+
+dependencies:
+  server:
+    voicechat:
+      load: BEFORE
+      required: true
+      join-classpath: true
+    ProtocolLib:
+      load: BEFORE
+      required: true
+      join-classpath: true
