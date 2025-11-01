@@ -18,7 +18,6 @@ import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
-import org.jetbrains.annotations.NotNull;
 import org.jflac.sound.spi.Flac2PcmAudioInputStream;
 import org.jflac.sound.spi.FlacAudioFileReader;
 
@@ -349,7 +348,7 @@ public class PlayerManager {
         return finalInputStream;
     }
 
-    private static @NotNull AudioInputStream getCorrectSampleSizeInBits(AudioInputStream inputStream) {
+    private static AudioInputStream getCorrectSampleSizeInBits(AudioInputStream inputStream) {
         AudioFormat baseFormat = inputStream.getFormat();
         // Decode FLAC to PCM, keeping the original Sample Size in Bits
         AudioFormat decodedFormat = new AudioFormat(AudioFormat.Encoding.PCM_SIGNED, baseFormat.getSampleRate(), baseFormat.getSampleSizeInBits(), baseFormat.getChannels(), (baseFormat.getSampleSizeInBits() / 8) * baseFormat.getChannels(), baseFormat.getFrameRate(), false);

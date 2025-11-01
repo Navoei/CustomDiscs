@@ -1,7 +1,5 @@
 package me.Navoei.customdiscsplugin.utils;
 
-import org.jetbrains.annotations.NotNull;
-
 import javax.sound.sampled.*;
 import java.io.IOException;
 import java.io.InputStream;
@@ -27,7 +25,7 @@ public class PCM16Downscaler extends InputStream {
     }
 
     @Override
-    public int read(byte @NotNull [] readByte, int startOffset, int readLength) throws IOException {
+    public int read(byte [] readByte, int startOffset, int readLength) throws IOException {
         int maxFramesOut = readLength / (2 * channels);
         int maxInputBytes = maxFramesOut * sourceBytesPerSample * channels;
 
