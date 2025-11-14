@@ -9,6 +9,7 @@ import de.maxhenkel.voicechat.api.audiochannel.LocationalAudioChannel;
 import javazoom.spi.mpeg.sampled.convert.MpegFormatConversionProvider;
 import javazoom.spi.mpeg.sampled.file.MpegAudioFileReader;
 
+import me.Navoei.customdiscsplugin.utils.PCM16Downscaler;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -335,21 +336,32 @@ public class PlayerManager {
             AudioInputStream inputStream = AudioSystem.getAudioInputStream(file.toFile());
             finalInputStream = AudioSystem.getAudioInputStream(audioFormat, inputStream);
         } else if (getFileExtension(file.toFile().toString()).equals("mp3")) {
-
             AudioInputStream inputStream = new MpegAudioFileReader().getAudioInputStream(file.toFile());
             AudioFormat baseFormat = inputStream.getFormat();
             AudioFormat decodedFormat = new AudioFormat(AudioFormat.Encoding.PCM_SIGNED, baseFormat.getSampleRate(), 16, baseFormat.getChannels(), baseFormat.getChannels() * 2, baseFormat.getFrameRate(), false);
             AudioInputStream convertedInputStream = new MpegFormatConversionProvider().getAudioInputStream(decodedFormat, inputStream);
             finalInputStream = AudioSystem.getAudioInputStream(audioFormat, convertedInputStream);
-
         } else if (getFileExtension(file.toFile().toString()).equals("flac")) {
-            AudioInputStream inputStream = new FlacAudioFileReader().getAudioInputStream(file.toFile());
-            AudioFormat baseFormat = inputStream.getFormat();
-            AudioFormat decodedFormat = new AudioFormat(AudioFormat.Encoding.PCM_SIGNED, baseFormat.getSampleRate(), 16, baseFormat.getChannels(), baseFormat.getChannels() * 2, baseFormat.getFrameRate(), false);
-            AudioInputStream convertedInputStream = new Flac2PcmAudioInputStream(inputStream, decodedFormat, inputStream.getFrameLength());
-            finalInputStream = AudioSystem.getAudioInputStream(audioFormat, convertedInputStream);
+            AudioInputStream inputStream = getCorrectSampleSizeInBits(new FlacAudioFileReader().getAudioInputStream(file.toFile()));
+            finalInputStream = AudioSystem.getAudioInputStream(audioFormat, inputStream);
         }
         return finalInputStream;
+    }
+
+    private static AudioInputStream getCorrectSampleSizeInBits(AudioInputStream inputStream) {
+        AudioFormat baseFormat = inputStream.getFormat();
+        // Decode FLAC to PCM, keeping the original Sample Size in Bits
+        AudioFormat decodedFormat = new AudioFormat(AudioFormat.Encoding.PCM_SIGNED, baseFormat.getSampleRate(), baseFormat.getSampleSizeInBits(), baseFormat.getChannels(), (baseFormat.getSampleSizeInBits() / 8) * baseFormat.getChannels(), baseFormat.getFrameRate(), false);
+        AudioInputStream decodedBasePcm = new Flac2PcmAudioInputStream(inputStream, decodedFormat, inputStream.getFrameLength());
+        // If the "Sample Size in Bits" is greater than 16, we pass it through our PCM16Downscaler Utils to get a more accurate and compatible audio output else we keep the original one
+        AudioInputStream pcm16ConvertedStream;
+        if (baseFormat.getSampleSizeInBits() > 16) {
+            AudioFormat decodedFinalFormat = new AudioFormat(AudioFormat.Encoding.PCM_SIGNED, baseFormat.getSampleRate(), 16, baseFormat.getChannels(), baseFormat.getChannels() * 2, baseFormat.getFrameRate(), false);
+            pcm16ConvertedStream = new AudioInputStream(new PCM16Downscaler(decodedBasePcm), decodedFinalFormat, decodedBasePcm.getFrameLength());
+        } else {
+            pcm16ConvertedStream = decodedBasePcm;
+        }
+        return pcm16ConvertedStream;
     }
 
     private static short[] readSoundFile(AudioInputStream inputStream) throws IOException {
