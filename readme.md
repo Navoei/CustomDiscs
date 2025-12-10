@@ -1,6 +1,6 @@
 # Custom Discs v5.1.3
 ### For Paper and Folia
-### 1.21.11
+### 1.21.7 to 1.21.11
 
 A Paper fork of henkelmax's Audio Player. Special thanks to Athar42 for maintaining this plugin. 
 - Play custom music discs, goat horns and player heads using the Simple Voice Chat API. (The voice chat mod is required on the client and server.)
