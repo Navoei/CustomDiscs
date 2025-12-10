@@ -71,8 +71,6 @@ public final class CustomDiscs extends JavaPlugin {
 		CustomDiscs.instance = this;
 
         CommandAPI.onLoad(new CommandAPIPaperConfig(this).verboseOutput(true).fallbackToLatestNMS(true));
-
-		new CustomDiscCommand(this).register("customdiscs");
 	}
 	
 	@Override
@@ -80,7 +78,9 @@ public final class CustomDiscs extends JavaPlugin {
 		pluginLogger = getLogger();
 		
 		CommandAPI.onEnable();
-		
+
+        new CustomDiscCommand(this).register("customdiscs");
+
 		BukkitVoicechatService service = getServer().getServicesManager().load(BukkitVoicechatService.class);
 		
 		this.saveDefaultConfig();
