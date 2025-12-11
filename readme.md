@@ -2,6 +2,8 @@
 ### For Paper and Folia
 ### 1.21.7 to 1.21.11
 
+[![GitHub Total Downloads](https://img.shields.io/github/downloads/Navoei/CustomDiscs/total?style=plastic&label=GitHub%20Downloads&color=success "Click here to download the plugin")](https://modrinth.com/plugin/customdiscs-plugin) &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [![Modrinth Downloads](https://img.shields.io/modrinth/dt/customdiscs-plugin?style=plastic&label=Modrinth%20Downloads&color=success "Click here to download the plugin")](https://modrinth.com/plugin/customdiscs-plugin)
+
 A Paper fork of henkelmax's Audio Player. Special thanks to Athar42 for maintaining this plugin. 
 - Play custom music discs, goat horns and player heads using the Simple Voice Chat API. (The voice chat mod is required on the client and server.)
 - Use ```/customdisc``` or ```/cd``` to view available commands.
