@@ -4,7 +4,7 @@
 
 [![GitHub Total Downloads](https://img.shields.io/github/downloads/Navoei/CustomDiscs/total?style=plastic&label=GitHub%20Downloads&color=success "Click here to download the plugin")](https://modrinth.com/plugin/customdiscs-plugin) &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [![Modrinth Downloads](https://img.shields.io/modrinth/dt/customdiscs-plugin?style=plastic&label=Modrinth%20Downloads&color=success "Click here to download the plugin")](https://modrinth.com/plugin/customdiscs-plugin)
 
-A Paper fork of henkelmax's Audio Player. Special thanks to Athar42 for maintaining this plugin. 
+A Paper fork of henkelmax's Audio Player. Special thanks to Athar42 for maintaining this plugin.
 - Play custom music discs, goat horns and player heads using the Simple Voice Chat API. (The voice chat mod is required on the client and server.)
 - Use ```/customdisc``` or ```/cd``` to view available commands.
 - Music files should go into ```plugins/CustomDiscs/musicdata/```
@@ -34,7 +34,7 @@ Permission Nodes (Required to run the commands. Playing discs does not require a
 - ```customdiscs.horncooldown``` to set the cooldown (in ticks) for custom goat horns
 
 Dependencies:
-- This plugin depends on the latest version of ProtocolLib available for your Paper version and SimpleVoiceChatBukkit (latest is recommended - at least version 2.6.1 required). 
+- This plugin depends on the latest version of ProtocolLib available for your Paper version and SimpleVoiceChatBukkit (latest is recommended - at least version 2.6.1 required).
 
 
 Versions support matrix :
@@ -54,7 +54,7 @@ Versions support matrix :
 | **1.21.6, 1.21.7-8**                       | Paper           | 4.5                            | [4.5](https://github.com/Navoei/CustomDiscs/releases/tag/v4.5)        |
 | **1.21.7-9, 1.21.8**<br>**1.21.8**         | Paper<br>Folia  | 5.0 - 5.1.3<br>5.1.1 - 5.1.3   | [5.1.3](https://modrinth.com/plugin/customdiscs-plugin/version/5.1.3) |
 | **1.21.9, 1.21.10**<br>**1.21.9, 1.21.10** | Paper<br>Folia  | 5.1.2 - 5.1.3<br>5.1.2 - 5.1.3 | [5.1.3](https://modrinth.com/plugin/customdiscs-plugin/version/5.1.3) |
-| **1.21.11**<br>**1.21.11**                 | Paper<br>Folia  | 5.1.3<br>5.1.3                 | [5.1.3](https://modrinth.com/plugin/customdiscs-plugin/version/5.1.3) |
+| **1.21.11**<br>**1.21.11**                 | Paper<br>Folia  | 5.1.3 - 5.1.4<br>5.1.3 - 5.1.4                 | [5.1.4](https://modrinth.com/plugin/customdiscs-plugin/version/5.1.4) |
 
 https://user-images.githubusercontent.com/64107368/178426026-c454ac66-5133-4f3a-9af9-7f674e022423.mp4
 
