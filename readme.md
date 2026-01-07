@@ -10,7 +10,7 @@ A Paper fork of henkelmax's Audio Player. Special thanks to Athar42 for maintain
 - Music files should go into ```plugins/CustomDiscs/musicdata/```
 - Music files must be in the ```.wav```, ```.flac```, or ```.mp3``` format.
 
-Join the discord for support: https://discord.gg/YJpqruvZ97. You can still use the "[Issues](https://github.com/Navoei/CustomDiscs/issues)" section of GitHub.
+Join the discord for support: https://discord.gg/YJpqruvZ97. The issues section in this repository has been closed.
 
 Downloading Files:
 - To download a file use the command ```/cd download <url> <filename.extension>```.
