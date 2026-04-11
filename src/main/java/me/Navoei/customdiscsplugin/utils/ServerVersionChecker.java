@@ -12,6 +12,7 @@ import java.util.regex.Pattern;
 public class ServerVersionChecker {
     private static final String REQUIRED_PAPER_VERSION = "1.21.7-9"; // Set the PaperMC required version
     private static final String REQUIRED_FOLIA_VERSION = "1.21.8-2"; // Set the Folia required version
+    private static final String REQUIRED_PURPUR_VERSION = "1.21.11"; // Set the Purpur required Minecraft version
     private final Logger pluginLogger;
     public static boolean paperAPIcheck;
 
@@ -20,59 +21,49 @@ public class ServerVersionChecker {
     }
 
     public void checkVersion() {
-        // Get the full server version message output
+        String serverType = Bukkit.getName();
+        String minecraftVersion = Bukkit.getMinecraftVersion();
         String versionMessage = Bukkit.getVersionMessage();
+        String buildVersion = extractBuildVersion(versionMessage);
 
         paperAPIcheck = false;
 
-        if (versionMessage == null) {
-            pluginLogger.severe("Unable to detect the server version. Is this a supported PaperMC release?");
+        if (serverType == null || minecraftVersion == null) {
+            pluginLogger.severe("Unable to detect the server version. Is this a supported Paper/Purpur/Folia release?");
             return;
         }
 
-        // Extract server type and version
-        Matcher serverInfoExtracted = Pattern.compile("This server is running (\\S+) version (\\S+)").matcher(versionMessage);
+        if(CustomDiscs.isDebugMode()) {
+            pluginLogger.info("DEBUG - Detected Server Type: " + serverType);
+            pluginLogger.info("DEBUG - Minecraft Version: " + minecraftVersion);
+            pluginLogger.info("DEBUG - Server Full Version: " + versionMessage);
+            if (buildVersion != null) {
+                pluginLogger.info("DEBUG - Build Version: " + buildVersion);
+            }
+        }
 
-        if (serverInfoExtracted.find()) {
-            String serverType = serverInfoExtracted.group(1); // Extract the server type (Should be "Paper", but can be forks like "Purpur", "Spigot", ...)
-            String buildVersion = serverInfoExtracted.group(2); // Extract the full version info (For example : 1.21.7-9-main@5661fbb)
-
-            if(CustomDiscs.isDebugMode()) {
-                pluginLogger.info("DEBUG - Detected Server Type: " + serverType);
-                pluginLogger.info("DEBUG - Server Full Version: " + versionMessage);
+        // Check official server support and version floor.
+        if ("paper".equalsIgnoreCase(serverType)) {
+            if (isBelowRequiredVersion(minecraftVersion, buildVersion, REQUIRED_PAPER_VERSION)) {
+                pluginLogger.severe("This Paper server version is unsupported. Please update to at least Paper " + REQUIRED_PAPER_VERSION);
             }
 
-            // As we only officially support Paper, we look up for it specifically
-            if ("paper".equalsIgnoreCase(serverType)) {
-                String cleanVersion = cleanBuildVersion(buildVersion);
-                if(CustomDiscs.isDebugMode()) {
-                    pluginLogger.info("DEBUG - Extracted Version: " + cleanVersion);
-                }
-
-                // We then perform a version comparison
-                if (compareVersions(cleanVersion, "paper") < 0) {
-                    pluginLogger.severe("This Paper server version is unsupported. Please update to at least Paper " + REQUIRED_PAPER_VERSION);
-                }
-
-                paperAPIcheck = true;
-            } else if ("folia".equalsIgnoreCase(serverType)) {
-                String cleanVersion = cleanBuildVersion(buildVersion);
-                if(CustomDiscs.isDebugMode()) {
-                    pluginLogger.info("DEBUG - Extracted Version: " + cleanVersion);
-                }
-
-                // We then perform a version comparison
-                if (compareVersions(cleanVersion, "folia") < 0) {
-                    pluginLogger.severe("This Folia server version is unsupported. Please update to at least Folia " + REQUIRED_FOLIA_VERSION);
-                }
-
-                paperAPIcheck = true;
-            } else {
-                // For Paper forks servers (mostly), log a severe message about non-support
-                pluginLogger.severe(serverType + " server detected. No support will be provided!");
+            paperAPIcheck = true;
+        } else if ("folia".equalsIgnoreCase(serverType)) {
+            if (isBelowRequiredVersion(minecraftVersion, buildVersion, REQUIRED_FOLIA_VERSION)) {
+                pluginLogger.severe("This Folia server version is unsupported. Please update to at least Folia " + REQUIRED_FOLIA_VERSION);
             }
+
+            paperAPIcheck = true;
+        } else if ("purpur".equalsIgnoreCase(serverType)) {
+            if (compareVersionParts(minecraftVersion, REQUIRED_PURPUR_VERSION) < 0) {
+                pluginLogger.severe("This Purpur server version is unsupported. Please update to at least Purpur " + REQUIRED_PURPUR_VERSION);
+            }
+
+            paperAPIcheck = true;
         } else {
-            pluginLogger.severe("Unable to read the server version. Is this a supported PaperMC release?");
+            // For unsupported server implementations, log a severe message.
+            pluginLogger.severe(serverType + " server detected. No support will be provided!");
         }
     }
 
@@ -85,23 +76,50 @@ public class ServerVersionChecker {
         return versionParts.length >= 2 ? versionParts[0] + "-" + versionParts[1] : version;
     }
 
-    private static int compareVersions(String runningVersion, String serverType) {
+    private static String extractBuildVersion(String versionMessage) {
+        if (versionMessage == null) {
+            return null;
+        }
+
+        Matcher serverInfoExtracted = Pattern.compile("This server is running \\S+ version (\\S+)").matcher(versionMessage);
+        return serverInfoExtracted.find() ? serverInfoExtracted.group(1) : null;
+    }
+
+    /**
+     * Extract the minecraft version from a full build version.
+     * Example: "1.21.11-2454-ver/..." -> "1.21.11"
+     */
+    private static String cleanMinecraftVersion(String version) {
+        int separatorIndex = version.indexOf('-');
+        return separatorIndex == -1 ? version : version.substring(0, separatorIndex);
+    }
+
+    private static int compareBuildVersions(String runningVersion, String requiredVersionString) {
         // We first start by separating the main version number from the build number
         String[] currentVersion = runningVersion.split("-");
-        String[] requiredVersion;
-        if(serverType.equals("folia")) {
-            requiredVersion = REQUIRED_FOLIA_VERSION.split("-");
-        } else {
-            requiredVersion = REQUIRED_PAPER_VERSION.split("-");
-        }
+        String[] requiredVersion = requiredVersionString.split("-");
 
         // Then we compare the base version (sub-function to handle it)
         // If we are in the same main version, we pass to the next check, else we exit (-1 = older release ; 1 = newer release)
         int result = compareVersionParts(currentVersion[0], requiredVersion[0]);
         if (result != 0) return result;
 
+        if (currentVersion.length < 2 || requiredVersion.length < 2) {
+            return 0;
+        }
+
         // And finally, we compare the build number (only if we are at the same main base version, to ensure we get the minimal build)
         return Integer.compare(Integer.parseInt(currentVersion[1]), Integer.parseInt(requiredVersion[1]));
+    }
+
+    private static boolean isBelowRequiredVersion(String minecraftVersion, String buildVersion, String requiredVersionString) {
+        if (buildVersion != null) {
+            String cleanVersion = cleanBuildVersion(buildVersion);
+            return compareBuildVersions(cleanVersion, requiredVersionString) < 0;
+        }
+
+        String requiredMinecraftVersion = cleanMinecraftVersion(requiredVersionString);
+        return compareVersionParts(minecraftVersion, requiredMinecraftVersion) < 0;
     }
 
     private static int compareVersionParts(String currentVersionPart, String requiredVersionPart) {
@@ -110,8 +128,8 @@ public class ServerVersionChecker {
         String[] requiredVersionArray = requiredVersionPart.split("\\.");
 
         for (int i = 0; i < 3; i++) {
-            int currentVersion = Integer.parseInt(currentVersionArray[i]);
-            int requiredVersion = Integer.parseInt(requiredVersionArray[i]);
+            int currentVersion = i < currentVersionArray.length ? Integer.parseInt(currentVersionArray[i]) : 0;
+            int requiredVersion = i < requiredVersionArray.length ? Integer.parseInt(requiredVersionArray[i]) : 0;
 
             if (currentVersion < requiredVersion) return -1;
             if (currentVersion > requiredVersion) return 1;
@@ -121,7 +139,7 @@ public class ServerVersionChecker {
     }
 
     /**
-     * Return if it's a Paper API based server (Paper or Folia).
+     * Return if it's a Paper API based server (Paper, Purpur or Folia).
      *
      * @return The boolean value of isPaperAPI.
      */

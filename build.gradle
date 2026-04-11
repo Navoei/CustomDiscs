@@ -37,6 +37,10 @@ dependencies {
 
     implementation 'org.jflac:jflac-codec:1.5.2'
     shadow 'org.jflac:jflac-codec:1.5.2'
+    implementation 'org.apache.commons:commons-compress:1.28.0'
+    shadow 'org.apache.commons:commons-compress:1.28.0'
+    implementation 'org.tukaani:xz:1.10'
+    shadow 'org.tukaani:xz:1.10'
 
     implementation "io.papermc.paper:paper-api:${bukkit_version}"
     implementation "de.maxhenkel.voicechat:voicechat-api:${voicechat_api_version}"

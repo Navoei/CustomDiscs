@@ -6,7 +6,7 @@ prefix: CustomDiscs
 authors: [ "Navoei" ]
 contributors: ["Athar42", "alfw" ]
 website: https://github.com/Navoei/CustomDiscs
-description: A plugin which uses the Simple Voice Chat API to add custom music discs, goat horns and player heads. (Paper-only)
+description: A plugin which uses the Simple Voice Chat API to add custom music discs, goat horns and player heads. (Paper/Purpur/Folia)
 
 permissions:
   customdiscs.*:

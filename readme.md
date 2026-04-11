@@ -1,5 +1,5 @@
 # Custom Discs v5.3.0
-### For Paper and Folia
+### For Paper, Purpur and Folia
 ### 1.21.7 to 1.21.11
 
 [![GitHub Total Downloads](https://img.shields.io/github/downloads/Navoei/CustomDiscs/total?style=plastic&label=GitHub%20Downloads&color=success "Click here to download the plugin")](https://modrinth.com/plugin/customdiscs-plugin) &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [![Modrinth Downloads](https://img.shields.io/modrinth/dt/customdiscs-plugin?style=plastic&label=Modrinth%20Downloads&color=success "Click here to download the plugin")](https://modrinth.com/plugin/customdiscs-plugin)
@@ -13,7 +13,7 @@ ProtocolLib is no longer used — it can be safely removed if no other plugin ne
 
 ---
 
-A Paper fork of henkelmax's Audio Player. Special thanks to Athar42 for maintaining this plugin.
+A Paper/Purpur fork of henkelmax's Audio Player. Special thanks to Athar42 for maintaining this plugin.
 
 Play custom music discs, goat horns and player heads using the [Simple Voice Chat](https://modrinth.com/plugin/simple-voice-chat) API.
 
@@ -43,7 +43,7 @@ Join our Discord for support: https://discord.gg/rJtBRmRFCr
 
 ## Downloading Files
 
-Use the command `/cd download <url> <filename.extension>` to download an audio file directly to the server.
+Use the command `/cd download <url> [filename.extension]` to download audio directly to the server.
 
 > **Always write the URL between double quotes.**\
 > Without this, you'll get a command error.
@@ -58,6 +58,19 @@ Any URL that starts an immediate file download when opened in a browser.
 
 - The file extension in `<filename.extension>` must match the actual format of the file. Providing a wrong extension (e.g. naming a `.wav` file as `.mp3`) will cause an `UnsupportedAudioFileException` in the server console.
 - **Google Drive** — Convert your sharing link to a direct download link: https://lonedev6.github.io/gddl/
+
+### YouTube URL
+
+You can provide a YouTube link directly. The plugin uses `yt-dlp` + `ffmpeg` and saves as `.mp3`.
+
+```
+/cd download "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+```
+
+- If `filename` is omitted, the video title is used as the file name.
+- If `filename` is provided, that name is used and the result is saved as `.mp3`.
+- By default, missing `yt-dlp`/`ffmpeg` are auto-downloaded into `plugins/CustomDiscs/tools/` on Linux x64 and Windows x64.
+- You can still set custom binary paths via `yt-dlp-path` and `ffmpeg-path` in `config.yml`.
 
 ### Filebin
 
@@ -142,6 +155,22 @@ max-download-size: 50
 
 # The maximum length the file name (including the file extension) should be when downloaded. Using a too high value could crash the server.
 filename-maximum-length: 100
+
+# Enable YouTube links in /cd download using yt-dlp + ffmpeg.
+youtube-download-enable: true
+
+# Automatically download yt-dlp/ffmpeg into plugins/CustomDiscs/tools when missing.
+# Supported by auto-install: Linux x64 and Windows x64.
+youtube-auto-install-tools: true
+
+# Executable path/name for yt-dlp.
+yt-dlp-path: yt-dlp
+
+# Executable path/name for ffmpeg.
+ffmpeg-path: ffmpeg
+
+# Timeout for yt-dlp/ffmpeg commands in seconds.
+youtube-process-timeout-seconds: 300
 
 # The master volume of music discs from 0-1. (You can set values like 0.5 for 50% volume).
 music-disc-volume: 1
@@ -242,6 +271,13 @@ file-too-large: '&cThe file is larger than %max_download_size%MB.'
 successful-download: '&aFile successfully downloaded to &7%file_path%&a.'
 create-disc: '&aCreate a disc by doing &7/cd create %filename% "Custom Lore"&a.'
 download-error: '&cAn error has occurred while downloading.'
+download-filename-required: '&cYou must provide a filename for non-YouTube URLs.'
+youtube-download-disabled: '&7YouTube download is disabled in the configuration.'
+youtube-tools-missing: '&cYouTube download requires yt-dlp (%yt_dlp_path%) and ffmpeg (%ffmpeg_path%).'
+youtube-tools-installing: '&7Installing yt-dlp and ffmpeg... this may take a moment.'
+youtube-tools-installed: '&aInstalled yt-dlp and ffmpeg: &7%yt_dlp_path% &a| &7%ffmpeg_path%'
+youtube-tools-install-failed: '&cFailed to auto-install yt-dlp/ffmpeg. Check console logs and network access.'
+youtube-tools-unsupported-platform: '&cAuto-install is only supported on Linux/Windows x64. Please configure yt-dlp-path and ffmpeg-path manually.'
 now-playing: '&6Now playing: %song_name%'
 disc-converted: '&aConverted disc to new format! &fThis is due to changes in newer Minecraft versions which introduced &7ToolTipDisplay&f.'
 invalid-range: '&cYou need to chose a range between 1 and %range_value%'
@@ -268,6 +304,8 @@ update-available: '&eA new version of CustomDiscs is available: &6%latest_versio
 ---
 
 ## Version Support Matrix
+
+Purpur follows the Paper support window and is officially supported on **1.21.11+** for the current 5.x branch.
 
 | Minecraft version                  | Paper                                                                         | Folia                                                                                             |
 |------------------------------------|-------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------|

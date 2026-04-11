@@ -6,6 +6,22 @@ max-download-size: 50
 # The maximum length the file name (including the file extension) should be when downloaded. Using a too high value could crash the server.
 filename-maximum-length: 100
 
+# Enable YouTube links in /cd download using yt-dlp + ffmpeg.
+youtube-download-enable: true
+
+# Automatically download yt-dlp/ffmpeg into plugins/CustomDiscs/tools when missing.
+# Supported by auto-install: Linux x64 and Windows x64.
+youtube-auto-install-tools: true
+
+# Executable path/name for yt-dlp.
+yt-dlp-path: yt-dlp
+
+# Executable path/name for ffmpeg.
+ffmpeg-path: ffmpeg
+
+# Timeout for yt-dlp/ffmpeg commands in seconds.
+youtube-process-timeout-seconds: 300
+
 # The master volume of music discs from 0-1. (You can set values like 0.5 for 50% volume).
 music-disc-volume: 1
 
