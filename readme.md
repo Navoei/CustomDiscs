@@ -1,6 +1,6 @@
-# Custom Discs v5.3.0
-### For Paper and Folia
-### 1.21.7 to 1.21.11
+# Custom Discs v6.0.0
+### For Paper, Folia and Forks (Purpur, Leaf, ...)
+### 1.21.7 to 26.1.2
 
 [![GitHub Total Downloads](https://img.shields.io/github/downloads/Navoei/CustomDiscs/total?style=plastic&label=GitHub%20Downloads&color=success "Click here to download the plugin")](https://modrinth.com/plugin/customdiscs-plugin) &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [![Modrinth Downloads](https://img.shields.io/modrinth/dt/customdiscs-plugin?style=plastic&label=Modrinth%20Downloads&color=success "Click here to download the plugin")](https://modrinth.com/plugin/customdiscs-plugin)
 
@@ -11,9 +11,15 @@
 **Since version 5.2.0, [PacketEvents](https://modrinth.com/plugin/packetevents) (v2.11.2+) is required.**\
 ProtocolLib is no longer used — it can be safely removed if no other plugin needs it.
 
+## ⚠️ Java 25 required
+
+**Starting with version 6.0.0, this plugin requires Java 25 or newer to run on your server.**
+
 ---
 
 A Paper fork of henkelmax's Audio Player. Special thanks to Athar42 for maintaining this plugin.
+
+> Any Paper forks should be supported. In case of issues, reach us on our [Discord server](https://discord.gg/rJtBRmRFCr).
 
 Play custom music discs, goat horns and player heads using the [Simple Voice Chat](https://modrinth.com/plugin/simple-voice-chat) API.
 
@@ -269,7 +275,7 @@ update-available: '&eA new version of CustomDiscs is available: &6%latest_versio
 
 ## Version Support Matrix
 
-| Minecraft version                  | Paper                                                                         | Folia                                                                                             |
+| Minecraft version                  | Paper & Forks (Purpur, Leaf, ...)                                             | Folia & Forks                                                                                     |
 |------------------------------------|-------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------|
 | **1.19**                           | 1.1.0 – [2.1](https://github.com/Navoei/CustomDiscs/releases/tag/v2.1)        | —                                                                                                 |
 | **1.19.1, 1.19.2, 1.19.3**         | 2.2 – [2.2.3](https://github.com/Navoei/CustomDiscs/releases/tag/v2.2.3)      | —                                                                                                 |
@@ -282,9 +288,10 @@ update-available: '&eA new version of CustomDiscs is available: &6%latest_versio
 | **1.21.4**                         | 4.2 – [4.4](https://github.com/Navoei/CustomDiscs/releases/tag/v4.4)          | —                                                                                                 |
 | **1.21.5**                         | [4.4](https://github.com/Navoei/CustomDiscs/releases/tag/v4.4)                | —                                                                                                 |
 | **1.21.6, 1.21.7-8**               | [4.5](https://github.com/Navoei/CustomDiscs/releases/tag/v4.5)                | —                                                                                                 |
-| **1.21.7-9, 1.21.8**               | 5.0 – [5.3.0](https://modrinth.com/plugin/customdiscs-plugin/version/5.3.0)   | (only since 1.21.8) 5.1.1 – [5.3.0](https://modrinth.com/plugin/customdiscs-plugin/version/5.3.0) |
-| **1.21.9, 1.21.10**                | 5.1.2 – [5.3.0](https://modrinth.com/plugin/customdiscs-plugin/version/5.3.0) | 5.1.2 – [5.3.0](https://modrinth.com/plugin/customdiscs-plugin/version/5.3.0)                     |
-| **1.21.11**                        | 5.1.3 – [5.3.0](https://modrinth.com/plugin/customdiscs-plugin/version/5.3.0) | 5.1.3 – [5.3.0](https://modrinth.com/plugin/customdiscs-plugin/version/5.3.0)                     |
+| **1.21.7-9, 1.21.8**               | 5.0 – [6.0.0](https://modrinth.com/plugin/customdiscs-plugin/version/6.0.0)   | (only since 1.21.8) 5.1.1 – [6.0.0](https://modrinth.com/plugin/customdiscs-plugin/version/6.0.0) |
+| **1.21.9, 1.21.10**                | 5.1.2 – [6.0.0](https://modrinth.com/plugin/customdiscs-plugin/version/6.0.0) | 5.1.2 – [6.0.0](https://modrinth.com/plugin/customdiscs-plugin/version/6.0.0)                     |
+| **1.21.11**                        | 5.1.3 – [6.0.0](https://modrinth.com/plugin/customdiscs-plugin/version/6.0.0) | 5.1.3 – [6.0.0](https://modrinth.com/plugin/customdiscs-plugin/version/6.0.0)                     |
+| **26.1, 26.1.1, 26.1.2**           | [6.0.0](https://modrinth.com/plugin/customdiscs-plugin/version/6.0.0)         | [6.0.0](https://modrinth.com/plugin/customdiscs-plugin/version/6.0.0)                             |
 
 ---
 

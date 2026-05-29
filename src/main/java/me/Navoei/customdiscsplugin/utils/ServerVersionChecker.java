@@ -4,14 +4,14 @@ import me.Navoei.customdiscsplugin.CustomDiscs;
 
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
-
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class ServerVersionChecker {
-    private static final String REQUIRED_PAPER_VERSION = "1.21.7-9"; // Set the PaperMC required version
-    private static final String REQUIRED_FOLIA_VERSION = "1.21.8-2"; // Set the Folia required version
+    private static final String REQUIRED_PAPER_VERSION = "1.21.7-9"; // Set the PaperMC minimal required version
+    private static final String REQUIRED_FOLIA_VERSION = "1.21.8-2"; // Set the Folia minimal required version
+    private static final String REQUIRED_PAPER_FORK_VERSION = "1.21.7"; // Set the Paper API's fork minimal required version
     private final Logger pluginLogger;
     public static boolean paperAPIcheck;
 
@@ -68,8 +68,22 @@ public class ServerVersionChecker {
 
                 paperAPIcheck = true;
             } else {
-                // For Paper forks servers (mostly), log a severe message about non-support
-                pluginLogger.severe(serverType + " server detected. No support will be provided!");
+                // Testing if the standard PaperAPI class exist : If true it's a fork
+                try {
+                    Class.forName("io.papermc.paper.ServerBuildInfo");
+
+                    paperAPIcheck = true;
+
+                    // We only check the MC base version for compatibility as we can't rely on full build number
+                    String cleanVersionNoPatch = buildVersion.split("-")[0];
+                    if (compareVersionParts(cleanVersionNoPatch, REQUIRED_PAPER_FORK_VERSION) < 0) {
+                        pluginLogger.severe(serverType + " (Paper fork) server version is unsupported. Please update to at least Minecraft release " + REQUIRED_PAPER_FORK_VERSION);
+                    }
+
+                } catch (ClassNotFoundException ignored) {
+                    // If not a Paper fork (no Paper API detected) we issue a severe message about non-support
+                    pluginLogger.severe(serverType + " server detected. No support will be provided!");
+                }
             }
         } else {
             pluginLogger.severe("Unable to read the server version. Is this a supported PaperMC release?");
@@ -121,7 +135,7 @@ public class ServerVersionChecker {
     }
 
     /**
-     * Return if it's a Paper API based server (Paper or Folia).
+     * Return if it's a Paper API based server (Paper or Folia, or any Paper fork).
      *
      * @return The boolean value of isPaperAPI.
      */
