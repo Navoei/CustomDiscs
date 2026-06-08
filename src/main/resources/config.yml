@@ -15,6 +15,11 @@ music-disc-volume: 1
 # unrestricted: unlimited subdirectory depth (e.g., musicdata/rock/metal/song.mp3)
 subdirectory-depth: none
 
+# Default language for player messages.
+# Must match a file name in the langs/ folder (e.g. "en", "fr", "de", "ru").
+# Players whose client language has no matching file will fall back to this selected language.
+default-lang: en
+
 # Debug Mode - To display some more logging information and Stack Trace informations
 debugMode: false
 
@@ -83,4 +88,4 @@ update-checker:
   channel: release
 
 # Do not modify this value — it is used for automatic config migration.
-config-version: 1
+config-version: 2

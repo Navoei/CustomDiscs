@@ -59,7 +59,7 @@ public class RevertSubCommand extends CommandAPICommand {
 			return 1;
 		}
 
-		player.sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize(Lang.PREFIX + Lang.REVERT_NOT_CUSTOM.toString()));
+		player.sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize(Lang.PREFIX.forPlayer(player) + Lang.REVERT_NOT_CUSTOM.forPlayer(player)));
 		return 0;
 	}
 
@@ -68,7 +68,7 @@ public class RevertSubCommand extends CommandAPICommand {
 		freshItem.setData(DataComponentTypes.TOOLTIP_DISPLAY, TooltipDisplay.tooltipDisplay().build());
 		player.getInventory().setItemInMainHand(freshItem);
 
-		player.sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize(Lang.PREFIX + Lang.REVERT_SUCCESS.toString()));
+		player.sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize(Lang.PREFIX.forPlayer(player) + Lang.REVERT_SUCCESS.forPlayer(player)));
 	}
 
 	private void revertHorn(Player player, ItemStack heldItem) {
@@ -86,7 +86,7 @@ public class RevertSubCommand extends CommandAPICommand {
 		}
 		player.getInventory().setItemInMainHand(freshItem);
 
-		player.sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize(Lang.PREFIX + Lang.REVERT_SUCCESS.toString()));
+		player.sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize(Lang.PREFIX.forPlayer(player) + Lang.REVERT_SUCCESS.forPlayer(player)));
 	}
 
 	private void revertHead(Player player, ItemStack heldItem) {
@@ -101,7 +101,7 @@ public class RevertSubCommand extends CommandAPICommand {
 		}
 		player.getInventory().setItemInMainHand(freshItem);
 
-		player.sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize(Lang.PREFIX + Lang.REVERT_SUCCESS.toString()));
+		player.sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize(Lang.PREFIX.forPlayer(player) + Lang.REVERT_SUCCESS.forPlayer(player)));
 	}
 
 	private boolean isValidInstrumentKey(String instrumentKey) {

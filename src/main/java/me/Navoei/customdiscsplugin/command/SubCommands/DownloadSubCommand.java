@@ -65,14 +65,14 @@ public class DownloadSubCommand extends CommandAPICommand {
 					URI uri = new URI(urlString);
 					if (uri.getScheme() == null) return;
                     if (!uri.getScheme().equalsIgnoreCase("http") && !uri.getScheme().equalsIgnoreCase("https")) {
-                        sender.sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize(Lang.PREFIX + Lang.INVALID_PROTOCOL.toString()));
+                        sender.sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize(Lang.PREFIX.forSender(sender) + Lang.INVALID_PROTOCOL.forSender(sender)));
                         return;
                     }
 					URL fileURL = uri.toURL();
 
                     String filename = Objects.requireNonNull(arguments.getByClass("filename", String.class));
                     if (filename.length() > this.plugin.filenameMaximumLength) {
-                        sender.sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize(Lang.PREFIX + Lang.INVALID_FILENAME_LENGTH.toString().replace("%filename_length_value%", Integer.toString(this.plugin.filenameMaximumLength))));
+                        sender.sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize(Lang.PREFIX.forSender(sender) + Lang.INVALID_FILENAME_LENGTH.forSender(sender).replace("%filename_length_value%", Integer.toString(this.plugin.filenameMaximumLength))));
                         return;
                     }
 
@@ -82,18 +82,18 @@ public class DownloadSubCommand extends CommandAPICommand {
 					}
 
 					if (!plugin.isMusicdataPathSafe(filename)) {
-						sender.sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize(Lang.PREFIX + Lang.INVALID_FILENAME.toString()));
+						sender.sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize(Lang.PREFIX.forSender(sender) + Lang.INVALID_FILENAME.forSender(sender)));
 						return;
 					}
 					if (!plugin.isMusicdataDepthAllowed(filename)) {
 						Lang depthMessage = "none".equals(plugin.subdirectoryDepth) ? Lang.SUBDIRECTORY_NOT_ALLOWED : Lang.SUBDIRECTORY_DEPTH_EXCEEDED;
-						sender.sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize(Lang.PREFIX + depthMessage.toString()));
+						sender.sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize(Lang.PREFIX.forSender(sender) + depthMessage.forSender(sender)));
 						return;
 					}
 
 					String fileExtension = getFileExtension(filename);
 					if (!fileExtension.equals("wav") && !fileExtension.equals("mp3") && !fileExtension.equals("flac")) {
-						sender.sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize(Lang.PREFIX + Lang.INVALID_FORMAT.toString()));
+						sender.sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize(Lang.PREFIX.forSender(sender) + Lang.INVALID_FORMAT.forSender(sender)));
 						return;
 					}
 
@@ -102,7 +102,7 @@ public class DownloadSubCommand extends CommandAPICommand {
 					if (downloadFileLocation.exists()) {
 						finalFilename = getAvailableFilename(filename);
 						downloadFileLocation = Path.of(this.plugin.getDataFolder().getPath(), "musicdata", finalFilename).toFile();
-						sender.sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize(Lang.PREFIX + Lang.FILE_ALREADY_EXISTS.toString().replace("%filename%", filename).replace("%new_filename%", finalFilename)));
+						sender.sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize(Lang.PREFIX.forSender(sender) + Lang.FILE_ALREADY_EXISTS.forSender(sender).replace("%filename%", filename).replace("%new_filename%", finalFilename)));
 					}
 
 					File parentDirectory = downloadFileLocation.getParentFile();
@@ -110,7 +110,7 @@ public class DownloadSubCommand extends CommandAPICommand {
 						parentDirectory.mkdirs();
 					}
 
-					sender.sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize(Lang.PREFIX + Lang.DOWNLOADING_FILE.toString()));
+					sender.sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize(Lang.PREFIX.forSender(sender) + Lang.DOWNLOADING_FILE.forSender(sender)));
 
 					int maxDownloadSize = this.plugin.getConfig().getInt("max-download-size", 50);
 
@@ -132,17 +132,17 @@ public class DownloadSubCommand extends CommandAPICommand {
 								FilebinUtils.downloadFilebinFile(fileInfo.downloadUrl(), downloadFileLocation, maxDownloadSize);
 							}
 						} catch (FilebinUtils.FileTooLargeException e) {
-							sender.sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize(Lang.PREFIX + Lang.FILE_TOO_LARGE.toString().replace("%max_download_size%", String.valueOf(maxDownloadSize))));
+							sender.sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize(Lang.PREFIX.forSender(sender) + Lang.FILE_TOO_LARGE.forSender(sender).replace("%max_download_size%", String.valueOf(maxDownloadSize))));
 							return;
 						} catch (FilebinUtils.NoAudioFilesException e) {
-							sender.sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize(Lang.PREFIX + Lang.FILEBIN_NO_AUDIO.toString()));
+							sender.sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize(Lang.PREFIX.forSender(sender) + Lang.FILEBIN_NO_AUDIO.forSender(sender)));
 							pluginLogger.warning("No valid audio file found in Filebin bin: " + urlString);
 							if (CustomDiscs.isDebugMode()) {
 								pluginLogger.severe("Exception output: " + e);
 							}
 							return;
 						} catch (IOException e) {
-							sender.sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize(Lang.PREFIX + Lang.FILEBIN_API_ERROR.toString()));
+							sender.sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize(Lang.PREFIX.forSender(sender) + Lang.FILEBIN_API_ERROR.forSender(sender)));
 							pluginLogger.warning("Filebin download failed for: " + urlString);
 							if (CustomDiscs.isDebugMode()) {
 								pluginLogger.severe("Exception output: " + e);
@@ -154,24 +154,24 @@ public class DownloadSubCommand extends CommandAPICommand {
 						if (connection != null) {
 							long fileSizeInMB = connection.getContentLengthLong() / 1048576;
 							if (fileSizeInMB > maxDownloadSize) {
-								sender.sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize(Lang.PREFIX + Lang.FILE_TOO_LARGE.toString().replace("%max_download_size%", String.valueOf(maxDownloadSize))));
+								sender.sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize(Lang.PREFIX.forSender(sender) + Lang.FILE_TOO_LARGE.forSender(sender).replace("%max_download_size%", String.valueOf(maxDownloadSize))));
 								return;
 							}
 						}
 						FileUtils.copyURLToFile(fileURL, downloadFileLocation);
 					}
 
-					sender.sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize(Lang.PREFIX + Lang.SUCCESSFUL_DOWNLOAD.toString().replace("%file_path%", "plugins/CustomDiscs/musicdata/" + finalFilename)));
-					sender.sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize(Lang.PREFIX + Lang.CREATE_DISC.toString().replace("%filename%", finalFilename)));
+					sender.sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize(Lang.PREFIX.forSender(sender) + Lang.SUCCESSFUL_DOWNLOAD.forSender(sender).replace("%file_path%", "plugins/CustomDiscs/musicdata/" + finalFilename)));
+					sender.sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize(Lang.PREFIX.forSender(sender) + Lang.CREATE_DISC.forSender(sender).replace("%filename%", finalFilename)));
 				} catch (URISyntaxException | MalformedURLException e) {
-					sender.sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize(Lang.PREFIX + Lang.DOWNLOAD_ERROR.toString()));
+					sender.sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize(Lang.PREFIX.forSender(sender) + Lang.DOWNLOAD_ERROR.forSender(sender)));
 					pluginLogger.warning("A download error occurred.");
 					if(CustomDiscs.isDebugMode()) {
 						pluginLogger.log(Level.SEVERE, "Exception output: ", e);
 					}
 				}
 			} catch (IOException e) {
-				sender.sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize(Lang.PREFIX + Lang.DOWNLOAD_ERROR.toString()));
+				sender.sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize(Lang.PREFIX.forSender(sender) + Lang.DOWNLOAD_ERROR.forSender(sender)));
 				pluginLogger.warning("A download error occurred.");
 				if(CustomDiscs.isDebugMode()) {
 					pluginLogger.log(Level.SEVERE, "Exception output: ", e);

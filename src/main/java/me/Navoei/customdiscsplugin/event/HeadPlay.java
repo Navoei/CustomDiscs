@@ -3,13 +3,11 @@ package me.Navoei.customdiscsplugin.event;
 import me.Navoei.customdiscsplugin.CustomDiscs;
 import me.Navoei.customdiscsplugin.PlayerManager;
 import me.Navoei.customdiscsplugin.VoicePlugin;
-import me.Navoei.customdiscsplugin.language.Lang;
 import me.Navoei.customdiscsplugin.utils.TypeChecker;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
-import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 
 import org.bukkit.block.Block;
@@ -84,10 +82,8 @@ public class HeadPlay implements Listener{
             if (soundFilePath.toFile().exists()) {
                 Component songNameComponent = Optional.ofNullable(persistentDataContainer.get(headLoreKey, PersistentDataType.STRING)).map(GsonComponentSerializer.gson()::deserialize).orElse(Component.text("Unknown Song", NamedTextColor.GRAY));
                 String songName = PlainTextComponentSerializer.plainText().serialize(songNameComponent);
-                Component customActionBarSongPlaying = LegacyComponentSerializer.legacyAmpersand().deserialize(Lang.NOW_PLAYING.toString().replace("%song_name%", songName));
-
                 assert VoicePlugin.voicechatServerApi != null;
-                playerManager.playAudioHead(VoicePlugin.voicechatServerApi, soundFilePath, noteBlock, customActionBarSongPlaying, range);
+                playerManager.playAudioHead(VoicePlugin.voicechatServerApi, soundFilePath, noteBlock, songName, range);
             } else {
                 event.setCancelled(true);
                 throw new FileNotFoundException("Sound file is missing!");

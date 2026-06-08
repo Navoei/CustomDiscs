@@ -1,7 +1,6 @@
 package me.Navoei.customdiscsplugin.event;
 
 import me.Navoei.customdiscsplugin.CustomDiscs;
-import me.Navoei.customdiscsplugin.language.Lang;
 import me.Navoei.customdiscsplugin.PlayerManager;
 import me.Navoei.customdiscsplugin.utils.TypeChecker;
 import me.Navoei.customdiscsplugin.VoicePlugin;
@@ -10,7 +9,6 @@ import io.papermc.paper.datacomponent.DataComponentTypes;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
-import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 
 import org.bukkit.Material;
@@ -123,16 +121,14 @@ public class HornPlay implements Listener{
 
                 MusicInstrument instrument = heldItem.getDataOrDefault(DataComponentTypes.INSTRUMENT, null);
                 if (instrument != null) {
-                    Component songNameComponent = instrument.description(); // This is the one you're asking for
+                    Component songNameComponent = instrument.description();
                     songName = PlainTextComponentSerializer.plainText().serialize(songNameComponent);
                 } else {
                     songName = "Unknown sound";
                 }
 
-                Component customActionBarSongPlaying = LegacyComponentSerializer.legacyAmpersand().deserialize(Lang.NOW_PLAYING.toString().replace("%song_name%", songName));
-
                 assert VoicePlugin.voicechatServerApi != null;
-                playerManager.playAudioHorn(VoicePlugin.voicechatServerApi, soundFilePath, player, customActionBarSongPlaying.asComponent(), range);
+                playerManager.playAudioHorn(VoicePlugin.voicechatServerApi, soundFilePath, player, songName, range);
                 player.setCooldown(Material.GOAT_HORN, hornCooldown);
             } else {
                 player.sendMessage(NamedTextColor.RED + "Sound file not found.");

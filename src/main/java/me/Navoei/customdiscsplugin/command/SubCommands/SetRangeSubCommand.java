@@ -46,27 +46,27 @@ public class SetRangeSubCommand extends CommandAPICommand {
 		boolean resultIsCustomHead = TypeChecker.isCustomHeadPlayer(player);
 
 		if (!resultIsCustomDisc && !resultIsCustomHorn && !resultIsCustomHead) {
-			player.sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize(Lang.PREFIX + Lang.NOT_HOLDING_CORRECT_ITEM.toString()));
+			player.sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize(Lang.PREFIX.forPlayer(player) + Lang.NOT_HOLDING_CORRECT_ITEM.forPlayer(player)));
 			return 1;
 		}
-		
+
         float range = Optional.ofNullable(arguments.getByClass("range", Float.class)).orElse(0f);
 
 		float itemMaxRange;
 		if (resultIsCustomHorn) {
-			if (!CustomDiscs.isCustomHornEnable()) { player.sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize(Lang.PREFIX + Lang.CUSTOM_HORN_DISABLED.toString())); return 1; }
+			if (!CustomDiscs.isCustomHornEnable()) { player.sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize(Lang.PREFIX.forPlayer(player) + Lang.CUSTOM_HORN_DISABLED.forPlayer(player))); return 1; }
 			itemMaxRange = this.plugin.customHornMaxDistance;
 		} else if (resultIsCustomHead) {
-			if (!CustomDiscs.isCustomHeadEnable()) { player.sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize(Lang.PREFIX + Lang.CUSTOM_HEAD_DISABLED.toString())); return 1; }
+			if (!CustomDiscs.isCustomHeadEnable()) { player.sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize(Lang.PREFIX.forPlayer(player) + Lang.CUSTOM_HEAD_DISABLED.forPlayer(player))); return 1; }
 			itemMaxRange = this.plugin.customHeadMaxDistance;
 		} else {
-			if (!CustomDiscs.isMusicDiscEnable()) { player.sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize(Lang.PREFIX + Lang.CUSTOM_MUSIC_DISABLED.toString())); return 1; }
+			if (!CustomDiscs.isMusicDiscEnable()) { player.sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize(Lang.PREFIX.forPlayer(player) + Lang.CUSTOM_MUSIC_DISABLED.forPlayer(player))); return 1; }
 			itemMaxRange = this.plugin.musicDiscMaxDistance;
 		}
 
 
 		if ( range < 1 || range > itemMaxRange) {
-            player.sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize(Lang.PREFIX + Lang.INVALID_RANGE.toString().replace("%range_value%", Float.toString(itemMaxRange))));
+            player.sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize(Lang.PREFIX.forPlayer(player) + Lang.INVALID_RANGE.forPlayer(player).replace("%range_value%", Float.toString(itemMaxRange))));
             return 1;
         }
 
@@ -75,7 +75,7 @@ public class SetRangeSubCommand extends CommandAPICommand {
 		persistentDataContainer.set(new NamespacedKey(this.plugin, "range"), PersistentDataType.FLOAT, range);
 		player.getInventory().getItemInMainHand().setItemMeta(itemMeta);
 
-        player.sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize(Lang.PREFIX + Lang.CREATE_CUSTOM_RANGE.toString().replace("%custom_range%", Float.toString(range))));
+        player.sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize(Lang.PREFIX.forPlayer(player) + Lang.CREATE_CUSTOM_RANGE.forPlayer(player).replace("%custom_range%", Float.toString(range))));
 
 		return 1;
 	}

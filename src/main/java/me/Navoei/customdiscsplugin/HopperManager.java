@@ -1,6 +1,5 @@
 package me.Navoei.customdiscsplugin;
 
-import me.Navoei.customdiscsplugin.language.Lang;
 import me.Navoei.customdiscsplugin.utils.ServerVersionChecker;
 import me.Navoei.customdiscsplugin.utils.TypeChecker;
 
@@ -8,7 +7,6 @@ import io.papermc.paper.datacomponent.DataComponentTypes;
 import io.papermc.paper.datacomponent.item.TooltipDisplay;
 
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 
 import org.bukkit.block.BlockState;
@@ -60,10 +58,8 @@ public class HopperManager implements Listener {
         if (discLore == null || discLore.isEmpty()) return;
         Component songNameComponent = discLore.getFirst().asComponent();
         String songName = PlainTextComponentSerializer.plainText().serialize(songNameComponent);
-        Component customActionBarSongPlaying = LegacyComponentSerializer.legacyAmpersand().deserialize(Lang.NOW_PLAYING.toString().replace("%song_name%", songName));
-
         String soundFileName = discMeta.getPersistentDataContainer().get(new NamespacedKey(plugin, "customdisc"), PersistentDataType.STRING);
-        
+
         PersistentDataContainer persistentDataContainer = discMeta.getPersistentDataContainer();
         float range = CustomDiscs.getInstance().musicDiscDistance;
         NamespacedKey customSoundRangeKey = new NamespacedKey(plugin, "range");
@@ -80,7 +76,7 @@ public class HopperManager implements Listener {
         Path soundFilePath = Path.of(plugin.getDataFolder().getPath(), "musicdata", soundFileName);
         JukeboxStateManager.markJukeboxPending(destinationInventory.getLocation().getBlock().getLocation());
         assert VoicePlugin.voicechatServerApi != null;
-        playerManager.playAudio(VoicePlugin.voicechatServerApi, soundFilePath, destinationInventory.getLocation().getBlock(), customActionBarSongPlaying, range);
+        playerManager.playAudio(VoicePlugin.voicechatServerApi, soundFilePath, destinationInventory.getLocation().getBlock(), songName, range);
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)

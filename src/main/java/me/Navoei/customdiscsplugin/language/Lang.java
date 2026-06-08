@@ -1,6 +1,11 @@
 package me.Navoei.customdiscsplugin.language;
 
+import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Player;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public enum Lang {
     PREFIX("prefix", "&8[&6CustomDiscs&8]&r"),
@@ -39,31 +44,41 @@ public enum Lang {
 
     private final String path;
     private final String def;
-    private static YamlConfiguration LANG;
+    private static Map<String, YamlConfiguration> langConfigs = new HashMap<>();
+    private static String defaultLang = "en";
 
-    /**
-     * Lang enum constructor.
-     * @param path The string path.
-     * @param start The default string.
-     */
     Lang(String path, String start) {
         this.path = path;
         this.def = start;
     }
 
-    /**
-     * Set the {@code YamlConfiguration} to use.
-     * @param config The config to set.
-     */
-    public static void setFile(YamlConfiguration config) {
-        LANG = config;
+    public static void setLangs(Map<String, YamlConfiguration> langs, String defaultLang) {
+        langConfigs = langs;
+        Lang.defaultLang = defaultLang;
     }
 
+    private String getString(String langCode) {
+        YamlConfiguration langConfig = langConfigs.get(langCode);
+        if (langConfig == null) langConfig = langConfigs.get(defaultLang);
+        String message = langConfig != null ? langConfig.getString(this.path, this.def) : this.def;
+        return (this == PREFIX) ? message + " " : message;
+    }
+
+    /** Returns the message in the server default language. Used for console output. */
     @Override
     public String toString() {
-        if (this == PREFIX)
-            return LANG.getString(this.path, def) + " ";
-        return LANG.getString(this.path, def);
+        return getString(defaultLang);
+    }
+
+    /** Returns the message in the player's client language, falling back to the server default. */
+    public String forPlayer(Player player) {
+        return getString(player.locale().getLanguage());
+    }
+
+    /** Returns the message in the sender's language (player locale if player, server default if console). */
+    public String forSender(CommandSender sender) {
+        if (sender instanceof Player player) return forPlayer(player);
+        return toString();
     }
 
     /**

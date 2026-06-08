@@ -40,18 +40,18 @@ public class SetHornCooldownSubCommand extends CommandAPICommand {
 	
 	private int onCommandPlayer(Player player, CommandArguments arguments) {
         if (!TypeChecker.isCustomGoatHornPlayer(player)) {
-			player.sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize(Lang.PREFIX + Lang.NOT_HOLDING_CUSTOM_GOAT_HORN.toString()));
+			player.sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize(Lang.PREFIX.forPlayer(player) + Lang.NOT_HOLDING_CUSTOM_GOAT_HORN.forPlayer(player)));
 			return 0;
 		}
 
 		if (TypeChecker.isCustomGoatHornPlayer(player)) {
-			if (!CustomDiscs.isMusicDiscEnable()) { player.sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize(Lang.PREFIX + Lang.CUSTOM_HORN_DISABLED.toString())); return 1; }
+			if (!CustomDiscs.isMusicDiscEnable()) { player.sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize(Lang.PREFIX.forPlayer(player) + Lang.CUSTOM_HORN_DISABLED.forPlayer(player))); return 1; }
 		}
 
         int goatCooldown = Optional.ofNullable(arguments.getByClass("goatcooldown", Integer.class)).orElse(0);
 
         if (goatCooldown <= 0 || goatCooldown > this.plugin.hornMaxCooldown) {
-                player.sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize(Lang.PREFIX + Lang.INVALID_COOLDOWN.toString().replace("%cooldown_value%", Integer.toString(this.plugin.hornMaxCooldown))));
+                player.sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize(Lang.PREFIX.forPlayer(player) + Lang.INVALID_COOLDOWN.forPlayer(player).replace("%cooldown_value%", Integer.toString(this.plugin.hornMaxCooldown))));
                 return 0;
         }
 
@@ -62,7 +62,7 @@ public class SetHornCooldownSubCommand extends CommandAPICommand {
         persistentDataContainer.set(new NamespacedKey(this.plugin, "goat_horn_cooldown"), PersistentDataType.INTEGER, Math.min(goatCooldown, CustomDiscs.getInstance().hornMaxCooldown));
         player.getInventory().getItemInMainHand().setItemMeta(itemMeta);
 
-        player.sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize(Lang.PREFIX + Lang.CREATE_CUSTOM_GOAT_COOLDOWN.toString().replace("%custom_goat_cooldown%", Integer.toString(goatCooldown))));
+        player.sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize(Lang.PREFIX.forPlayer(player) + Lang.CREATE_CUSTOM_GOAT_COOLDOWN.forPlayer(player).replace("%custom_goat_cooldown%", Integer.toString(goatCooldown))));
                 
 		return 1;
 	}
