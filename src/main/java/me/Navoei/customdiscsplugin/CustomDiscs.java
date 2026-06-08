@@ -42,6 +42,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import javax.annotation.Nullable;
 import java.io.*;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -54,7 +55,7 @@ import java.util.logging.Logger;
 
 public final class CustomDiscs extends JavaPlugin {
 	static CustomDiscs instance;
-	private static final int CONFIG_VERSION = 1;
+	private static final int CONFIG_VERSION = 2;
 
 	// For my own memo (Athar) - Implemented during development cycle where keys changed, isn't needed for now by could be in the future, so keeping it just in case.
 	// Mapping Keys/Values for when a default value need to be overridden upon update.
@@ -74,8 +75,7 @@ public final class CustomDiscs extends JavaPlugin {
     private static boolean debugMode = false;
     private static Component[] helpMessage;
     private static final LegacyComponentSerializer LegacyComponentAmpersand = LegacyComponentSerializer.legacyAmpersand();
-    public static YamlConfiguration LANG;
-	public static File LANG_FILE;
+    private static final List<String> BUNDLED_LANGS = List.of("en", "fr", "de", "ru", "es", "pt", "zh", "pl", "nl", "it", "tr", "cs", "hu", "ko", "tt");
 	public static final List<String> VALID_HORN_INSTRUMENTS = List.of("ponder_goat_horn", "sing_goat_horn", "seek_goat_horn", "feel_goat_horn", "admire_goat_horn", "call_goat_horn", "yearn_goat_horn", "dream_goat_horn");
 	public static boolean musicDiscEnable = true;
 	public static boolean musicDiscPlayingEnable = true;
@@ -120,7 +120,7 @@ public final class CustomDiscs extends JavaPlugin {
 		
 		this.saveDefaultConfig();
 		migrateConfig();
-		loadLang();
+		loadLangs();
 		loadConfigValues();
 
 		// Checking server version and display console message in case the server is not officially supported by us
@@ -174,13 +174,13 @@ public final class CustomDiscs extends JavaPlugin {
 			pluginLogger.info("Failed to register CustomDiscs plugin");
 		}
 
-		registerListeners();
-
 		if (getConfig().getBoolean("update-checker.enabled", true)) {
 			String updateChannel = getConfig().getString("update-checker.channel", "release");
 			updateChecker = new UpdateChecker(this, updateChannel);
 			updateChecker.start();
 		}
+
+		registerListeners();
 
 		PacketEvents.getAPI().getEventManager().registerListener(new PacketListenerAbstract(PacketListenerPriority.NORMAL) {
 			@Override
@@ -322,7 +322,7 @@ public final class CustomDiscs extends JavaPlugin {
 				if (!player.isOp() && !player.hasPermission("customdiscs.update")) return;
 
 				String currentVersion = getPluginMeta().getVersion();
-				Component playerUpdateMessage = LegacyComponentAmpersand.deserialize(Lang.PREFIX + Lang.UPDATE_AVAILABLE.toString().replace("%latest_version%", latestVersion).replace("%current_version%", currentVersion));
+				Component playerUpdateMessage = LegacyComponentAmpersand.deserialize(Lang.PREFIX.forPlayer(player) + Lang.UPDATE_AVAILABLE.forPlayer(player).replace("%latest_version%", latestVersion).replace("%current_version%", currentVersion));
 				Component linkUpdateMessage = LegacyComponentAmpersand.deserialize("&8[&6CustomDiscs&8]&r &7➜ ").append(Component.text(UpdateChecker.MODRINTH_PAGE_URL).color(NamedTextColor.AQUA).decorate(TextDecoration.UNDERLINED).clickEvent(ClickEvent.openUrl(UpdateChecker.MODRINTH_PAGE_URL)).hoverEvent(HoverEvent.showText(Component.text("Click to open the Modrinth page"))));
 				player.sendMessage(playerUpdateMessage);
 				player.sendMessage(linkUpdateMessage);
@@ -337,7 +337,7 @@ public final class CustomDiscs extends JavaPlugin {
 	public void reloadPlugin() {
 		reloadConfig();
 		loadConfigValues();
-		loadLang();
+		loadLangs();
 		HandlerList.unregisterAll(this);
 		registerListeners();
 	}
@@ -360,66 +360,85 @@ public final class CustomDiscs extends JavaPlugin {
 	}
         
 	/**
-	 * Load the lang.yml file.
+	 * Load all language files from the langs/ folder.
+	 * Also migrates the old original lang.yml into langs/en.yml if present and needed (from older release).
+	 * Also copies bundled lang files from the JAR for any missing languages and update (rebuild) existing ones (if needed).
 	 */
-	public void loadLang() {
-		File langFile = new File(getDataFolder(), "lang.yml");
-		if (!langFile.exists()) {
+	public void loadLangs() {
+		String defaultLang = getConfig().getString("default-lang", "en");
+
+		File langsDir = new File(getDataFolder(), "langs");
+		langsDir.mkdirs();
+
+		// Migrate old lang.yml file if existing first
+		File oldOriginalLangFile = new File(getDataFolder(), "lang.yml");
+		File enNewLangFile = new File(langsDir, "en.yml");
+		if (!enNewLangFile.exists() && oldOriginalLangFile.exists()) {
 			try {
-				getDataFolder().mkdir();
-				langFile.createNewFile();
-				InputStream defaultConfigStream = this.getResource("lang.yml");
-				if (defaultConfigStream != null) {
-					copyInputStreamToFile(defaultConfigStream, langFile);
-					YamlConfiguration defaultLangConfig = YamlConfiguration.loadConfiguration(langFile);
-					defaultLangConfig.save(langFile);
-					Lang.setFile(defaultLangConfig);
-				}
+				Files.move(oldOriginalLangFile.toPath(), enNewLangFile.toPath());
+				pluginLogger.info("Migrated lang.yml into langs/en.yml");
 			} catch (IOException e) {
-				pluginLogger.severe("Failed to create lang.yml for CustomDiscs.");
-				pluginLogger.severe("Now disabling...");
-				this.setEnabled(false); // Without it loaded, we can't send them messages
-				if (isDebugMode()) {
-					pluginLogger.log(Level.SEVERE, "Exception output: ", e);
+				pluginLogger.warning("Could not migrate lang.yml into langs/en.yml: " + e.getMessage());
+			}
+		}
+
+		// Create all lang files if they don't exist
+		for (String lang : BUNDLED_LANGS) {
+			if (!new File(langsDir, lang + ".yml").exists()) {
+				try {
+					saveResource("langs/" + lang + ".yml", false);
+				} catch (Exception e) {
+					pluginLogger.warning("Could not extract bundled lang file: " + lang + ".yml");
 				}
 			}
 		}
-		YamlConfiguration existingLangConfig = YamlConfiguration.loadConfiguration(langFile);
-		YamlConfiguration rebuiltLangConfig = new YamlConfiguration();
-		for (Lang langEntry : Lang.values()) {
-			String existingValue = existingLangConfig.getString(langEntry.getPath());
-			rebuiltLangConfig.set(langEntry.getPath(), existingValue != null ? existingValue : langEntry.getDefault());
-		}
-		Lang.setFile(rebuiltLangConfig);
-		LANG = rebuiltLangConfig;
-		LANG_FILE = langFile;
-		try {
-			rebuiltLangConfig.save(getLangFile());
-		} catch (IOException e) {
-			pluginLogger.warning("Failed to save lang.yml for CustomDiscs");
-			pluginLogger.warning("Now disabling...");
-			if (isDebugMode()) {
-				pluginLogger.log(Level.SEVERE, "Exception output: ", e);
+
+		// Load and rebuild/update all *.yml files in langs/
+		Map<String, YamlConfiguration> loadedLangs = new HashMap<>();
+		File[] langFiles = langsDir.listFiles((dir, name) -> name.endsWith(".yml"));
+		if (langFiles != null) {
+			for (File langFile : langFiles) {
+				// Load existing file from disk
+				String langCode = langFile.getName().replace(".yml", "");
+				YamlConfiguration existingConfig = YamlConfiguration.loadConfiguration(langFile);
+
+				// Load bundled reference from JAR (fallback for missing keys)
+				YamlConfiguration referenceConfig = null;
+				if (BUNDLED_LANGS.contains(langCode)) {
+					InputStream resourceStream = getResource("langs/" + langCode + ".yml");
+					if (resourceStream != null) {
+						referenceConfig = YamlConfiguration.loadConfiguration(new InputStreamReader(resourceStream));
+					}
+				}
+
+				// Rebuild order: on disk/admin value > plugin bundled reference file > hardcoded default (en)
+				YamlConfiguration rebuilt = new YamlConfiguration();
+				for (Lang entry : Lang.values()) {
+					String message = existingConfig.getString(entry.getPath());
+					if (message == null && referenceConfig != null) {
+						message = referenceConfig.getString(entry.getPath());
+					}
+					rebuilt.set(entry.getPath(), message != null ? message : entry.getDefault());
+				}
+				try {
+					rebuilt.save(langFile);
+				} catch (IOException e) {
+					pluginLogger.warning("Failed to save lang file: " + langFile.getName());
+				}
+				loadedLangs.put(langCode, rebuilt);
 			}
 		}
-	}
-	
-	/**
-	 * Gets the lang.yml config.
-	 *
-	 * @return The lang.yml config.
-	 */
-	public YamlConfiguration getLang() {
-		return LANG;
-	}
-	
-	/**
-	 * Get the lang.yml file.
-	 *
-	 * @return The lang.yml file.
-	 */
-	public File getLangFile() {
-		return LANG_FILE;
+
+		// Validate default language (failsafe to avoid any NPE)
+		if (loadedLangs.isEmpty()) {
+			pluginLogger.severe("No language files could be loaded from langs/ folder. Messages will use default English values.");
+			defaultLang = null;
+		} else if (!loadedLangs.containsKey(defaultLang)) {
+			pluginLogger.warning("default-lang '" + defaultLang + "' not found in langs/. Falling back to hardcoded English defaults.");
+			defaultLang = null;
+		}
+
+		Lang.setLangs(loadedLangs, defaultLang);
 	}
 	
 	public static void copyInputStreamToFile(InputStream input, File file) {

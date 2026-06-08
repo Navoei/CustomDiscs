@@ -1,5 +1,6 @@
 package me.Navoei.customdiscsplugin;
 
+import me.Navoei.customdiscsplugin.language.Lang;
 import me.Navoei.customdiscsplugin.utils.PCM16Downscaler;
 
 import de.maxhenkel.voicechat.api.ServerPlayer;
@@ -14,6 +15,7 @@ import javazoom.spi.mpeg.sampled.file.MpegAudioFileReader;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 
 import org.bukkit.Location;
 import org.bukkit.block.Block;
@@ -54,7 +56,7 @@ public class PlayerManager {
         });
     }
 
-    public void playAudio(VoicechatServerApi api, Path soundFilePath, Block block, Component actionbarComponent, float range) {
+    public void playAudio(VoicechatServerApi api, Path soundFilePath, Block block, String songName, float range) {
         UUID id = UUID.nameUUIDFromBytes(block.getLocation().toString().getBytes());
 
         LocationalAudioChannel audioChannel = api.createLocationalAudioChannel(id, api.fromServerLevel(block.getWorld()), api.createPosition(block.getLocation().getX() + 0.5d, block.getLocation().getY() + 0.5d, block.getLocation().getZ() + 0.5d));
@@ -67,9 +69,10 @@ public class PlayerManager {
         Collection<ServerPlayer> playersInRange = api.getPlayersInRange(api.fromServerLevel(block.getWorld()), audioChannel.getLocation(), range);
 
         if (CustomDiscs.isMusicDiscPlayingEnable()) {
+            String displayName = (songName == null || songName.isBlank()) ? "Unknown" : songName;
             for (ServerPlayer serverPlayer : playersInRange) {
                 Player bukkitPlayer = (Player) serverPlayer.getPlayer();
-                bukkitPlayer.sendActionBar(actionbarComponent);
+                bukkitPlayer.sendActionBar(LegacyComponentSerializer.legacyAmpersand().deserialize(Lang.NOW_PLAYING.forPlayer(bukkitPlayer).replace("%song_name%", displayName)));
             }
         }
 
@@ -122,7 +125,7 @@ public class PlayerManager {
 
     }
 
-    public void playAudioHorn(VoicechatServerApi api, Path soundFilePath, Player hornPlayer, Component actionbarComponent, float range) {
+    public void playAudioHorn(VoicechatServerApi api, Path soundFilePath, Player hornPlayer, String songName, float range) {
         UUID id = UUID.nameUUIDFromBytes(hornPlayer.getLocation().toString().getBytes());
 
         LocationalAudioChannel audioChannel = api.createLocationalAudioChannel(id, api.fromServerLevel(hornPlayer.getWorld()), api.createPosition(hornPlayer.getLocation().getX() + 0.5d, hornPlayer.getLocation().getY() + 0.5d, hornPlayer.getLocation().getZ() + 0.5d));
@@ -135,9 +138,10 @@ public class PlayerManager {
         Collection<ServerPlayer> playersInRange = api.getPlayersInRange(api.fromServerLevel(hornPlayer.getWorld()), audioChannel.getLocation(), range);
 
         if (CustomDiscs.isCustomHornPlayingEnable()) {
+            String displayName = (songName == null || songName.isBlank()) ? "Unknown" : songName;
             for (ServerPlayer serverPlayer : playersInRange) {
                 Player bukkitPlayer = (Player) serverPlayer.getPlayer();
-                bukkitPlayer.sendActionBar(actionbarComponent);
+                bukkitPlayer.sendActionBar(LegacyComponentSerializer.legacyAmpersand().deserialize(Lang.NOW_PLAYING.forPlayer(bukkitPlayer).replace("%song_name%", displayName)));
             }
         }
 
@@ -190,7 +194,7 @@ public class PlayerManager {
 
     }
 
-    public void playAudioHead(VoicechatServerApi api, Path soundFilePath, Block block, Component actionbarComponent, float range) {
+    public void playAudioHead(VoicechatServerApi api, Path soundFilePath, Block block, String songName, float range) {
         UUID id = UUID.nameUUIDFromBytes(block.getLocation().toString().getBytes());
 
         LocationalAudioChannel audioChannel = api.createLocationalAudioChannel(id, api.fromServerLevel(block.getWorld()), api.createPosition(block.getLocation().getX() + 0.5d, block.getLocation().getY() + 0.5d, block.getLocation().getZ() + 0.5d));
@@ -203,9 +207,10 @@ public class PlayerManager {
         Collection<ServerPlayer> playersInRange = api.getPlayersInRange(api.fromServerLevel(block.getWorld()), audioChannel.getLocation(), range);
 
         if (CustomDiscs.isCustomHeadPlayingEnable()) {
+            String displayName = (songName == null || songName.isBlank()) ? "Unknown" : songName;
             for (ServerPlayer serverPlayer : playersInRange) {
                 Player bukkitPlayer = (Player) serverPlayer.getPlayer();
-                bukkitPlayer.sendActionBar(actionbarComponent);
+                bukkitPlayer.sendActionBar(LegacyComponentSerializer.legacyAmpersand().deserialize(Lang.NOW_PLAYING.forPlayer(bukkitPlayer).replace("%song_name%", displayName)));
             }
         }
 

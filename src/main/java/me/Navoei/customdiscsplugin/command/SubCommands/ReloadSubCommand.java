@@ -38,7 +38,7 @@ public class ReloadSubCommand extends CommandAPICommand {
 
 	private int executeReload(CommandSender sender) {
 		plugin.reloadPlugin();
-		sender.sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize(Lang.PREFIX + Lang.RELOAD_SUCCESS.toString()));
+		sender.sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize(Lang.PREFIX.forSender(sender) + Lang.RELOAD_SUCCESS.forSender(sender)));
 		plugin.getLogger().info("Configuration reloaded by " + sender.getName());
 		return 1;
 	}

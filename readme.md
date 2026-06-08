@@ -1,4 +1,4 @@
-# Custom Discs v6.0.0
+# Custom Discs v6.0.1
 ### For Paper, Folia and Forks (Purpur, Leaf, ...)
 ### 1.21.7 to 26.1.2
 
@@ -126,9 +126,60 @@ All custom data (sound file, lore, range, cooldown) is then removed.
 
 ---
 
+## Languages
+
+Language files are located in `plugins/CustomDiscs/langs/`.\
+Each player receives the messages in their own **client language** automatically — no configuration needed per player!
+
+### Available languages
+
+The following languages are included by default:
+
+| Code | Language       | Code | Language    |
+|------|----------------|------|-------------|
+| `en` | English        | `nl` | Dutch       |
+| `fr` | French         | `it` | Italian     |
+| `de` | German         | `tr` | Turkish     |
+| `ru` | Russian        | `cs` | Czech       |
+| `es` | Spanish        | `hu` | Hungarian   |
+| `pt` | Portuguese (BR/PT) | `ko` | Korean  |
+| `zh` | Chinese (Simplified/Traditional) | `tt` | Tatar |
+| `pl` | Polish         |      |             |
+
+> `pt` covers both `pt_BR` and `pt_PT`.\
+> `zh` covers both `zh_CN` and `zh_TW`.
+
+> **Found a translation error or just want your language added?**\
+> Reach us on our [Discord](https://discord.gg/rJtBRmRFCr) or submit a [Pull Request on GitHub](https://github.com/Navoei/CustomDiscs/pulls) — your contributions are always welcome!
+
+### Server default language
+
+Set the fallback language used for console output and when a player's language has no matching file:
+
+```yaml
+# config.yml
+default-lang: en
+```
+
+### Adding a custom language
+
+Create a new file in `plugins/CustomDiscs/langs/` named after the [ISO 639-1](https://en.wikipedia.org/wiki/List_of_ISO_639_language_codes) two-letter language code "Set 1" (e.g. `ja.yml` for Japanese).\
+Copy the contents of `en.yml` and translate the values.\
+Use `/cd reload` to load it without restarting the whole server.
+
+### Notice on updates behaviour
+
+When the plugin is updated with new messages:
+- **Bundled language files** (`en`, `fr`, `de`, …): new messages are automatically added to your existing files using the plugin original translation.\
+Keys that you have already customised are **never** overwritten.
+- **Custom language files** (made by you): new messages are added using the default English language.\
+So keep an eye in your own lang if you don't wan't to have a mix with the default values.
+
+---
+
 ## Reloading the configuration
 
-Use `/cd reload` to reload `config.yml` and `lang.yml` without restarting the server.
+Use `/cd reload` to reload `config.yml` and all language files in `langs/` without restarting the server.
 
 ```
 /cd reload
@@ -157,6 +208,11 @@ music-disc-volume: 1
 # single: one level of subdirectory allowed (e.g., musicdata/rock/song.mp3)
 # unrestricted: unlimited subdirectory depth (e.g., musicdata/rock/metal/song.mp3)
 subdirectory-depth: none
+
+# Default language for player messages.
+# Must match a file name in the langs/ folder (e.g. "en", "fr", "de", "ru").
+# Players whose client language has no matching file will fall back to this selected language.
+default-lang: en
 
 # Debug Mode - To display some more logging information and Stack Trace informations
 debugMode: false
@@ -226,49 +282,7 @@ update-checker:
   channel: release
 
 # Do not modify this value — it is used for automatic config migration.
-config-version: 1
-```
-
----
-
-## Language
-
-**lang.yml**
-
-```yaml
-prefix: '&8[&6CustomDiscs&8]&r'
-invalid-filename: '&cThis is an invalid filename!'
-invalid-format: '&cFile must be in wav, flac, or mp3 format!'
-file-not-found: '&cFile not found!'
-not-holding-correct-item: '&cYou must either hold a disc, goat horn or player head in your main hand.'
-create-filename: '&7Your filename is: &a"%filename%".'
-create-custom-name: '&7Your custom name is: &a"%custom_name%".'
-downloading-file: '&7Downloading file...'
-file-too-large: '&cThe file is larger than %max_download_size%MB.'
-successful-download: '&aFile successfully downloaded to &7%file_path%&a.'
-create-disc: '&aCreate a disc by doing &7/cd create %filename% "Custom Lore"&a.'
-download-error: '&cAn error has occurred while downloading.'
-now-playing: '&6Now playing: %song_name%'
-disc-converted: '&aConverted disc to new format! &fThis is due to changes in newer Minecraft versions which introduced &7ToolTipDisplay&f.'
-invalid-range: '&cYou need to chose a range between 1 and %range_value%'
-create-custom-range: '&7Your range is set to: &a"%custom_range%".'
-not-holding-custom-goathorn: '&cYou must hold a custom goat horn in your main hand.'
-invalid-cooldown: '&cYou need to chose a cooldown between 1 and %cooldown_value% (in ticks).'
-create-custom-goat-cooldown: '&7Your goat horn cooldown is set to: &a"%custom_goat_cooldown%" ticks.'
-custom-music-disabled: '&7Custom music discs are disabled in the configuration.'
-custom-head-disabled: '&7Custom player heads are disabled in the configuration.'
-custom-horn-disabled: '&7Custom goat horns are disabled in the configuration.'
-invalid-protocol: '&cOnly HTTP:// and HTTPS:// URL are allowed.'
-invalid-filename-length: '&cThe maximum file name is restricted to %filename_length_value% characters.'
-filebin-no-audio: '&cNo supported audio file (wav/mp3/flac) found in this Filebin bin.'
-filebin-api-error: '&cFailed to access Filebin API. The bin may not exist or is unavailable.'
-file-already-exists: '&eA file named &7%filename%&e already exists, saving as &7%new_filename%&e instead.'
-subdirectory-not-allowed: '&cSubdirectories are not allowed in musicdata.'
-subdirectory-depth-exceeded: '&cOnly one level of subdirectory is allowed in musicdata.'
-revert-success: '&aItem successfully reverted.'
-revert-not-custom: '&cThe item in your hand is not a custom disc, horn or head.'
-reload-success: '&aConfiguration reloaded successfully.'
-update-available: '&eA new version of CustomDiscs is available: &6%latest_version% &7(current: %current_version%)'
+config-version: 2
 ```
 
 ---
@@ -288,10 +302,10 @@ update-available: '&eA new version of CustomDiscs is available: &6%latest_versio
 | **1.21.4**                         | 4.2 – [4.4](https://github.com/Navoei/CustomDiscs/releases/tag/v4.4)          | —                                                                                                 |
 | **1.21.5**                         | [4.4](https://github.com/Navoei/CustomDiscs/releases/tag/v4.4)                | —                                                                                                 |
 | **1.21.6, 1.21.7-8**               | [4.5](https://github.com/Navoei/CustomDiscs/releases/tag/v4.5)                | —                                                                                                 |
-| **1.21.7-9, 1.21.8**               | 5.0 – [6.0.0](https://modrinth.com/plugin/customdiscs-plugin/version/6.0.0)   | (only since 1.21.8) 5.1.1 – [6.0.0](https://modrinth.com/plugin/customdiscs-plugin/version/6.0.0) |
-| **1.21.9, 1.21.10**                | 5.1.2 – [6.0.0](https://modrinth.com/plugin/customdiscs-plugin/version/6.0.0) | 5.1.2 – [6.0.0](https://modrinth.com/plugin/customdiscs-plugin/version/6.0.0)                     |
-| **1.21.11**                        | 5.1.3 – [6.0.0](https://modrinth.com/plugin/customdiscs-plugin/version/6.0.0) | 5.1.3 – [6.0.0](https://modrinth.com/plugin/customdiscs-plugin/version/6.0.0)                     |
-| **26.1, 26.1.1, 26.1.2**           | [6.0.0](https://modrinth.com/plugin/customdiscs-plugin/version/6.0.0)         | [6.0.0](https://modrinth.com/plugin/customdiscs-plugin/version/6.0.0)                             |
+| **1.21.7-9, 1.21.8**               | 5.0 – [6.0.1](https://modrinth.com/plugin/customdiscs-plugin/version/6.0.1)   | (only since 1.21.8) 5.1.1 – [6.0.1](https://modrinth.com/plugin/customdiscs-plugin/version/6.0.1) |
+| **1.21.9, 1.21.10**                | 5.1.2 – [6.0.1](https://modrinth.com/plugin/customdiscs-plugin/version/6.0.1) | 5.1.2 – [6.0.1](https://modrinth.com/plugin/customdiscs-plugin/version/6.0.1)                     |
+| **1.21.11**                        | 5.1.3 – [6.0.1](https://modrinth.com/plugin/customdiscs-plugin/version/6.0.1) | 5.1.3 – [6.0.1](https://modrinth.com/plugin/customdiscs-plugin/version/6.0.1)                     |
+| **26.1, 26.1.1, 26.1.2**           | [6.0.1](https://modrinth.com/plugin/customdiscs-plugin/version/6.0.1)         | [6.0.1](https://modrinth.com/plugin/customdiscs-plugin/version/6.0.1)                             |
 
 ---
 

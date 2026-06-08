@@ -70,7 +70,7 @@ public class JukeBox implements Listener{
 
             if (!event.getItem().hasData(DataComponentTypes.TOOLTIP_DISPLAY) || !event.getItem().getData(DataComponentTypes.TOOLTIP_DISPLAY).hiddenComponents().contains(DataComponentTypes.JUKEBOX_PLAYABLE)) {
                 event.getItem().setData(DataComponentTypes.TOOLTIP_DISPLAY, TooltipDisplay.tooltipDisplay().addHiddenComponents(DataComponentTypes.JUKEBOX_PLAYABLE).build());
-                Component textComponent = LegacyComponentSerializer.legacyAmpersand().deserialize(Lang.PREFIX + Lang.DISC_CONVERTED.toString());
+                Component textComponent = LegacyComponentSerializer.legacyAmpersand().deserialize(Lang.PREFIX.forPlayer(player) + Lang.DISC_CONVERTED.forPlayer(player));
                 player.sendMessage(textComponent);
             }
 
@@ -79,11 +79,10 @@ public class JukeBox implements Listener{
             if (soundFilePath.toFile().exists()) {
                 Component songNameComponent = Objects.requireNonNull(discMeta.lore()).get(0).asComponent();
                 String songName = PlainTextComponentSerializer.plainText().serialize(songNameComponent);
-                Component customActionBarSongPlaying = LegacyComponentSerializer.legacyAmpersand().deserialize(Lang.NOW_PLAYING.toString().replace("%song_name%", songName));
 
                 JukeboxStateManager.markJukeboxPending(block.getLocation());
                 assert VoicePlugin.voicechatServerApi != null;
-                playerManager.playAudio(VoicePlugin.voicechatServerApi, soundFilePath, block, customActionBarSongPlaying, range);
+                playerManager.playAudio(VoicePlugin.voicechatServerApi, soundFilePath, block, songName, range);
             } else {
                 player.sendMessage(NamedTextColor.RED + "Sound file not found.");
                 event.setCancelled(true);
