@@ -125,7 +125,9 @@ public final class CustomDiscs extends JavaPlugin {
 		loadLangs();
 		loadConfigValues();
 
-		saveResource("models.yml", false);
+		if (!new File(getDataFolder(), "models.yml").exists()) {
+			saveResource("models.yml", false);
+		}
 		if (isCustomModelDataEnable()) {
 			ModelSelectorManager.loadModels(getDataFolder(), pluginLogger);
 		}

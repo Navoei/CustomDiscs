@@ -375,11 +375,11 @@ config-version: 3
 | **1.21.4**                         | 4.2 – [4.4](https://github.com/Navoei/CustomDiscs/releases/tag/v4.4)          | —                                                                                                 |
 | **1.21.5**                         | [4.4](https://github.com/Navoei/CustomDiscs/releases/tag/v4.4)                | —                                                                                                 |
 | **1.21.6, 1.21.7-8**               | [4.5](https://github.com/Navoei/CustomDiscs/releases/tag/v4.5)                | —                                                                                                 |
-| **1.21.7-9, 1.21.8**               | 5.0 – [6.0.2](https://modrinth.com/plugin/customdiscs-plugin/version/6.0.2)   | (only since 1.21.8) 5.1.1 – [6.0.2](https://modrinth.com/plugin/customdiscs-plugin/version/6.0.2) |
-| **1.21.9, 1.21.10**                | 5.1.2 – [6.0.2](https://modrinth.com/plugin/customdiscs-plugin/version/6.0.2) | 5.1.2 – [6.0.2](https://modrinth.com/plugin/customdiscs-plugin/version/6.0.2)                     |
-| **1.21.11**                        | 5.1.3 – [6.0.2](https://modrinth.com/plugin/customdiscs-plugin/version/6.0.2) | 5.1.3 – [6.0.2](https://modrinth.com/plugin/customdiscs-plugin/version/6.0.2)                     |
-| **26.1, 26.1.1, 26.1.2**           | 6.0.0 - [6.0.2](https://modrinth.com/plugin/customdiscs-plugin/version/6.0.2)         | 6.0.0 - [6.0.2](https://modrinth.com/plugin/customdiscs-plugin/version/6.0.2)                             |
-| **26.2**           | 6.0.0 - [6.0.2](https://modrinth.com/plugin/customdiscs-plugin/version/6.0.2)         | 6.0.0 - [6.0.2](https://modrinth.com/plugin/customdiscs-plugin/version/6.0.2)                             |
+| **1.21.7-9, 1.21.8**               | 5.0 – [6.0.3](https://modrinth.com/plugin/customdiscs-plugin/version/6.0.3)   | (only since 1.21.8) 5.1.1 – [6.0.3](https://modrinth.com/plugin/customdiscs-plugin/version/6.0.3) |
+| **1.21.9, 1.21.10**                | 5.1.2 – [6.0.3](https://modrinth.com/plugin/customdiscs-plugin/version/6.0.3) | 5.1.2 – [6.0.3](https://modrinth.com/plugin/customdiscs-plugin/version/6.0.3)                     |
+| **1.21.11**                        | 5.1.3 – [6.0.3](https://modrinth.com/plugin/customdiscs-plugin/version/6.0.3) | 5.1.3 – [6.0.3](https://modrinth.com/plugin/customdiscs-plugin/version/6.0.3)                     |
+| **26.1, 26.1.1, 26.1.2**           | 6.0.0 - [6.0.3](https://modrinth.com/plugin/customdiscs-plugin/version/6.0.3)         | 6.0.0 - [6.0.3](https://modrinth.com/plugin/customdiscs-plugin/version/6.0.3)                             |
+| **26.2**           | 6.0.0 - [6.0.3](https://modrinth.com/plugin/customdiscs-plugin/version/6.0.3)         | 6.0.0 - [6.0.3](https://modrinth.com/plugin/customdiscs-plugin/version/6.0.3)                             |
 
 ---
 
