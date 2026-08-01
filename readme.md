@@ -1,4 +1,4 @@
-# Custom Discs v6.0.2
+# Custom Discs v6.0.3
 ### For Paper, Folia and Forks (Purpur, Leaf, ...)
 ### 1.21.7 to 26.2
 
