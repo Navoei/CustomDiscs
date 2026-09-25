@@ -28,7 +28,7 @@ public class SetRangeSubCommand extends CommandAPICommand {
 		super("range");
 		this.plugin = plugin;
 		
-		this.withFullDescription(NamedTextColor.GRAY + "Set the range of the custom item in hand (disc: 1–" + (int) this.plugin.musicDiscMaxDistance + ", horn: 1–" + (int) this.plugin.customHornMaxDistance + ", head: 1–" + (int) this.plugin.customHeadMaxDistance + ").");
+		this.withFullDescription(NamedTextColor.GRAY + "Set the range of the custom item in hand (disc: 1-" + (int) this.plugin.musicDiscMaxDistance + ", horn: 1-" + (int) this.plugin.customHornMaxDistance + ", head: 1-" + (int) this.plugin.customHeadMaxDistance + ").");
 		this.withUsage("/cd range <range>");
 		this.withPermission("customdiscs.range");
 

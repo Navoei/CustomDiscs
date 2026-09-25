@@ -29,7 +29,7 @@ public class SetHornCooldownSubCommand extends CommandAPICommand {
 		this.plugin = plugin;
 		
 		this.withFullDescription(NamedTextColor.GRAY + "Set the cooldown for a custom goat horn (range from 1 to "+ this.plugin.hornMaxCooldown +" in ticks).");
-		this.withUsage("/cd goatcooldown <range>");
+		this.withUsage("/cd goatcooldown <cooldown>");
 		this.withPermission("customdiscs.horncooldown");
 
 		this.withArguments(new IntegerArgument("goatcooldown"));
@@ -45,7 +45,7 @@ public class SetHornCooldownSubCommand extends CommandAPICommand {
 		}
 
 		if (TypeChecker.isCustomGoatHornPlayer(player)) {
-			if (!CustomDiscs.isMusicDiscEnable()) { player.sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize(Lang.PREFIX.forPlayer(player) + Lang.CUSTOM_HORN_DISABLED.forPlayer(player))); return 1; }
+			if (!CustomDiscs.isCustomHornEnable()) { player.sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize(Lang.PREFIX.forPlayer(player) + Lang.CUSTOM_HORN_DISABLED.forPlayer(player))); return 1; }
 		}
 
         int goatCooldown = Optional.ofNullable(arguments.getByClass("goatcooldown", Integer.class)).orElse(0);

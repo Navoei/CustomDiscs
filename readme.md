@@ -1,6 +1,6 @@
-# Custom Discs v6.0.3
+# Custom Discs v6.0.4
 ### For Paper, Folia and Forks (Purpur, Leaf, ...)
-### 1.21.7 to 26.2
+### 1.21.7 to 26.3
 
 [![GitHub Total Downloads](https://img.shields.io/github/downloads/Navoei/CustomDiscs/total?style=plastic&label=GitHub%20Downloads&color=success "Click here to download the plugin")](https://modrinth.com/plugin/customdiscs-plugin) &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [![Modrinth Downloads](https://img.shields.io/modrinth/dt/customdiscs-plugin?style=plastic&label=Modrinth%20Downloads&color=success "Click here to download the plugin")](https://modrinth.com/plugin/customdiscs-plugin)
 
@@ -8,7 +8,7 @@
 
 ## ⚠️ Dependency notice — PacketEvents required
 
-**Since version 5.2.0, [PacketEvents](https://modrinth.com/plugin/packetevents) (v2.11.2+) is required.**\
+**Since version 5.2.0, [PacketEvents](https://modrinth.com/plugin/packetevents) (v2.12.1+) is required.**\
 ProtocolLib is no longer used — it can be safely removed if no other plugin needs it.
 
 ## ⚠️ Java 25 required
@@ -42,7 +42,7 @@ Join our Discord for support: https://discord.gg/rJtBRmRFCr
 | Plugin | Required | Notes                              |
 |--------|----------|------------------------------------|
 | [Simple Voice Chat](https://modrinth.com/plugin/simple-voice-chat) | ✅ Required | v2.6.1 minimum                     |
-| [PacketEvents](https://modrinth.com/plugin/packetevents) | ✅ Required | Since v5.2.0 — tested with v2.11.2 |
+| [PacketEvents](https://modrinth.com/plugin/packetevents) | ✅ Required | Since v5.2.0 — tested with v2.12.1 |
 | [ProtocolLib](https://github.com/dmulloy2/ProtocolLib) | ⛔ Up to v5.1.4 only | No longer required as of v5.2.0    |
 
 ---
@@ -94,7 +94,7 @@ Downloads a specific file from the bin.
 | `customdiscs.*` | Grants all CustomDiscs permissions                                   |
 | `customdiscs.create` | Create a custom disc, goat horn or player head                       |
 | `customdiscs.download` | Download a file from a URL                                           |
-| `customdiscs.range` | Set the audio range of a disc                                        |
+| `customdiscs.range` | Set the audio range of a custom disc, goat horn or player head       |
 | `customdiscs.horncooldown` | Set the cooldown for custom goat horns                               |
 | `customdiscs.revert` | Revert a custom item back to its original vanilla state              |
 | `customdiscs.setmodel` | Apply a Custom Model Data to a custom item                   |
@@ -117,6 +117,17 @@ The range must be between 1 and the maximum value set in `config.yml` for the re
 
 ---
 
+## Setting the goat horn cooldown
+
+Use `/cd goatcooldown <value>` while holding a custom goat horn to set its cooldown, in ticks (1 second is 20 ticks).\
+The value must be between 1 and the maximum value set in `config.yml` for the setting `horn-max-cooldown` (default: 6000).
+
+```
+/cd goatcooldown 200
+```
+
+---
+
 ## Reverting a custom item
 
 Use `/cd revert` while holding a custom disc, goat horn, or player head to revert it back to its original vanilla state.\
@@ -132,7 +143,7 @@ All custom data (sound file, lore, range, cooldown) is then removed.
 
 Custom Model Data lets you apply a custom visual to custom discs, goat horns, and player heads by setting an integer value that your Resource Pack maps to a different model or texture of your choice.
 
-> This feature requires a Resource Pack installed on the client. The plugin only applies the numeric value of the custom model defined in your Resource Pack for the specific item CustomDiscs handle.
+> This feature requires a Resource Pack installed on the client. The plugin only applies the numeric value of the custom model defined in your Resource Pack for the specific item CustomDiscs handles.
 >
 > No support of any kind will be provided for creating or configuring a Resource Pack.
 
@@ -168,7 +179,7 @@ disc:
       name: "Magic Music"
   music_disc_11:
     - value: 1
-      name: "Mistery song"
+      name: "Mystery song"
 
 horn:
   goat_horn:
@@ -239,13 +250,13 @@ When the plugin is updated with new messages:
 - **Bundled language files** (`en`, `fr`, `de`, ...): new messages are automatically added to your existing files using the plugin original translation.\
 Keys that you have already customised are **never** overwritten.
 - **Custom language files** (made by you): new messages are added using the default English language.\
-So keep an eye in your own lang if you don't wan't to have a mix with the default values.
+So keep an eye in your own lang if you don't want to have a mix with the default values.
 
 ---
 
 ## Reloading the configuration
 
-Use `/cd reload` to reload `config.yml` and all language files in `langs/` without restarting the server.
+Use `/cd reload` to reload `config.yml`, all language files in `langs/` and `models.yml` (if the Custom Model Data feature is enabled) without restarting the server.
 
 ```
 /cd reload
@@ -364,22 +375,23 @@ config-version: 3
 
 | Minecraft version                  | Paper & Forks (Purpur, Leaf, ...)                                             | Folia & Forks                                                                                     |
 |------------------------------------|-------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------|
-| **1.19**                           | 1.1.0 – [2.1](https://github.com/Navoei/CustomDiscs/releases/tag/v2.1)        | —                                                                                                 |
-| **1.19.1, 1.19.2, 1.19.3**         | 2.2 – [2.2.3](https://github.com/Navoei/CustomDiscs/releases/tag/v2.2.3)      | —                                                                                                 |
-| **1.19.4**                         | 2.3 – [2.3.2](https://github.com/Navoei/CustomDiscs/releases/tag/v2.3.2)      | —                                                                                                 |
-| **1.20, 1.20.1**                   | 2.4 – [2.4.1](https://github.com/Navoei/CustomDiscs/releases/tag/v2.4.1)      | —                                                                                                 |
-| **1.20.2**                         | 2.5 – [2.5.1](https://github.com/Navoei/CustomDiscs/releases/tag/v2.5.1)      | —                                                                                                 |
-| **1.20.3, 1.20.4, 1.20.5, 1.20.6** | 2.6 – [2.6.1](https://github.com/Navoei/CustomDiscs/releases/tag/v2.6.1)      | —                                                                                                 |
+| **1.19**                           | 1.1.0 - [2.1](https://github.com/Navoei/CustomDiscs/releases/tag/v2.1)        | —                                                                                                 |
+| **1.19.1, 1.19.2, 1.19.3**         | 2.2 - [2.2.3](https://github.com/Navoei/CustomDiscs/releases/tag/v2.2.3)      | —                                                                                                 |
+| **1.19.4**                         | 2.3 - [2.3.2](https://github.com/Navoei/CustomDiscs/releases/tag/v2.3.2)      | —                                                                                                 |
+| **1.20, 1.20.1**                   | 2.4 - [2.4.1](https://github.com/Navoei/CustomDiscs/releases/tag/v2.4.1)      | —                                                                                                 |
+| **1.20.2**                         | 2.5 - [2.5.1](https://github.com/Navoei/CustomDiscs/releases/tag/v2.5.1)      | —                                                                                                 |
+| **1.20.3, 1.20.4, 1.20.5, 1.20.6** | 2.6 - [2.6.1](https://github.com/Navoei/CustomDiscs/releases/tag/v2.6.1)      | —                                                                                                 |
 | **1.21, 1.21.1**                   | [3.0](https://github.com/Navoei/CustomDiscs/releases/tag/v3.0)                | —                                                                                                 |
 | **1.21.2, 1.21.3**                 | [4.1](https://github.com/Navoei/CustomDiscs/releases/tag/v4.1)                | —                                                                                                 |
-| **1.21.4**                         | 4.2 – [4.4](https://github.com/Navoei/CustomDiscs/releases/tag/v4.4)          | —                                                                                                 |
+| **1.21.4**                         | 4.2 - [4.4](https://github.com/Navoei/CustomDiscs/releases/tag/v4.4)          | —                                                                                                 |
 | **1.21.5**                         | [4.4](https://github.com/Navoei/CustomDiscs/releases/tag/v4.4)                | —                                                                                                 |
 | **1.21.6, 1.21.7-8**               | [4.5](https://github.com/Navoei/CustomDiscs/releases/tag/v4.5)                | —                                                                                                 |
-| **1.21.7-9, 1.21.8**               | 5.0 – [6.0.3](https://modrinth.com/plugin/customdiscs-plugin/version/6.0.3)   | (only since 1.21.8) 5.1.1 – [6.0.3](https://modrinth.com/plugin/customdiscs-plugin/version/6.0.3) |
-| **1.21.9, 1.21.10**                | 5.1.2 – [6.0.3](https://modrinth.com/plugin/customdiscs-plugin/version/6.0.3) | 5.1.2 – [6.0.3](https://modrinth.com/plugin/customdiscs-plugin/version/6.0.3)                     |
-| **1.21.11**                        | 5.1.3 – [6.0.3](https://modrinth.com/plugin/customdiscs-plugin/version/6.0.3) | 5.1.3 – [6.0.3](https://modrinth.com/plugin/customdiscs-plugin/version/6.0.3)                     |
-| **26.1, 26.1.1, 26.1.2**           | 6.0.0 - [6.0.3](https://modrinth.com/plugin/customdiscs-plugin/version/6.0.3)         | 6.0.0 - [6.0.3](https://modrinth.com/plugin/customdiscs-plugin/version/6.0.3)                             |
-| **26.2**           | 6.0.0 - [6.0.3](https://modrinth.com/plugin/customdiscs-plugin/version/6.0.3)         | 6.0.0 - [6.0.3](https://modrinth.com/plugin/customdiscs-plugin/version/6.0.3)                             |
+| **1.21.7-9, 1.21.8**               | 5.0 - [6.0.4](https://modrinth.com/plugin/customdiscs-plugin/version/6.0.4)   | (only since 1.21.8) 5.1.1 - [6.0.4](https://modrinth.com/plugin/customdiscs-plugin/version/6.0.4) |
+| **1.21.9, 1.21.10**                | 5.1.2 - [6.0.4](https://modrinth.com/plugin/customdiscs-plugin/version/6.0.4) | 5.1.2 - [6.0.4](https://modrinth.com/plugin/customdiscs-plugin/version/6.0.4)                     |
+| **1.21.11**                        | 5.1.3 - [6.0.4](https://modrinth.com/plugin/customdiscs-plugin/version/6.0.4) | 5.1.3 - [6.0.4](https://modrinth.com/plugin/customdiscs-plugin/version/6.0.4)                     |
+| **26.1, 26.1.1, 26.1.2**           | 6.0.0 - [6.0.4](https://modrinth.com/plugin/customdiscs-plugin/version/6.0.4)         | 6.0.0 - [6.0.4](https://modrinth.com/plugin/customdiscs-plugin/version/6.0.4)                             |
+| **26.2**           | 6.0.0 - [6.0.4](https://modrinth.com/plugin/customdiscs-plugin/version/6.0.4)         | 6.0.0 - [6.0.4](https://modrinth.com/plugin/customdiscs-plugin/version/6.0.4)                             |
+| **26.3**           | [6.0.4](https://modrinth.com/plugin/customdiscs-plugin/version/6.0.4)         | [6.0.4](https://modrinth.com/plugin/customdiscs-plugin/version/6.0.4)                             |
 
 ---
 
